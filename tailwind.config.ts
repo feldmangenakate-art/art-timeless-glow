@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Outfit"', 'system-ui', 'sans-serif'],
+        display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        mono: ['"Courier Prime"', 'Courier New', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,12 +52,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gold: {
-          500: "#D4AF37",
-          400: "#E0C068",
-          300: "#ECD48A",
-          600: "#B89530",
-        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -71,7 +66,7 @@ export default {
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 1px)",
-        sm: "calc(var(--radius) - 2px)",
+        sm: "1px",
       },
       keyframes: {
         "accordion-down": {
@@ -86,16 +81,11 @@ export default {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
-        "pulse-gold": {
-          "0%, 100%": { opacity: "0.4" },
-          "50%": { opacity: "0.8" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.6s ease-out",
-        "pulse-gold": "pulse-gold 3s ease-in-out infinite",
+        "fade-in": "fade-in 0.5s ease-out",
       },
     },
   },
