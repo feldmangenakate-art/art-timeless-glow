@@ -26,61 +26,58 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
 
   return (
     <>
-      {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[55]"
+        className="fixed inset-0 bg-foreground/40 z-[55]"
         onClick={onClose}
       />
 
-      {/* Panel */}
       <motion.div
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ type: "spring", damping: 25, stiffness: 120 }}
-        className="fixed bottom-0 left-0 right-0 bg-muted border-t border-primary/20 z-[60] overflow-y-auto"
+        className="fixed bottom-0 left-0 right-0 bg-background border-t-2 border-primary/30 z-[60] overflow-y-auto paper-texture"
         style={{ height: "70vh" }}
       >
         <div className="max-w-5xl mx-auto p-8 md:p-12">
           {/* Header */}
           <div className="flex items-start justify-between mb-8">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: civ.color }} />
-                <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-sans">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: civ.color }} />
+                <span className="tape-label text-muted-foreground">
                   {civ.dates}
                 </span>
               </div>
-              <h2 className="font-display text-3xl md:text-4xl tracking-tight text-foreground">
-                {civ.name}
+              <h2 className="font-display text-5xl md:text-6xl tracking-wide text-primary">
+                {civ.name.toUpperCase()}
               </h2>
-              <p className="font-sans font-light text-sm text-primary/60 mt-1">{civ.region}</p>
+              <p className="font-mono text-xs text-muted-foreground mt-2 uppercase tracking-[0.1em]">{civ.region}</p>
             </div>
             <button
               onClick={onClose}
-              className="text-muted-foreground hover:text-foreground transition-colors p-2"
+              className="text-muted-foreground hover:text-primary transition-colors p-2"
             >
-              <X className="w-5 h-5" strokeWidth={1} />
+              <X className="w-5 h-5" strokeWidth={1.5} />
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Main content */}
             <div className="md:col-span-2 space-y-8">
-              <p className="font-sans font-light text-foreground/80 leading-relaxed">
+              <p className="font-mono text-sm text-foreground/80 leading-relaxed">
                 {civ.description}
               </p>
 
               <div>
-                <h3 className="text-[10px] uppercase tracking-[0.2em] text-primary/60 font-sans font-medium mb-4">
+                <div className="tape-label text-muted-foreground mb-4">
                   Key Works
-                </h3>
+                </div>
                 <ul className="space-y-2">
                   {civ.works.map((work, i) => (
-                    <li key={i} className="font-sans font-light text-sm text-foreground/70 pl-4 border-l border-primary/20">
+                    <li key={i} className="font-mono text-xs text-foreground/70 pl-4 border-l-2 border-primary/30">
                       {work}
                     </li>
                   ))}
@@ -88,57 +85,42 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
               </div>
             </div>
 
-            {/* Sidebar facts */}
-            <div className="space-y-6 border-l border-primary/10 pl-6">
-              <div className="flex items-start gap-3">
-                <Clock className="w-4 h-4 text-primary/40 mt-0.5 shrink-0" strokeWidth={1} />
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-sans mb-1">Duration</p>
-                  <p className="font-sans font-light text-sm text-foreground/80">{civ.duration}</p>
+            <div className="space-y-5 border-l-2 border-border/15 pl-6">
+              {[
+                { icon: Clock, label: "Duration", value: civ.duration },
+                { icon: MapPin, label: "Location", value: civ.region },
+                { icon: Sparkles, label: "Defining Quality", value: civ.quality },
+                { icon: Landmark, label: "Legacy", value: civ.legacy },
+              ].map((fact) => (
+                <div key={fact.label} className="flex items-start gap-3">
+                  <fact.icon className="w-4 h-4 text-primary/50 mt-0.5 shrink-0" strokeWidth={1.5} />
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-mono font-bold mb-1">{fact.label}</p>
+                    <p className="font-mono text-xs text-foreground/70">{fact.value}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-primary/40 mt-0.5 shrink-0" strokeWidth={1} />
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-sans mb-1">Location</p>
-                  <p className="font-sans font-light text-sm text-foreground/80">{civ.region}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Sparkles className="w-4 h-4 text-primary/40 mt-0.5 shrink-0" strokeWidth={1} />
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-sans mb-1">Defining Quality</p>
-                  <p className="font-sans font-light text-sm text-foreground/80">{civ.quality}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Landmark className="w-4 h-4 text-primary/40 mt-0.5 shrink-0" strokeWidth={1} />
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-sans mb-1">Legacy</p>
-                  <p className="font-sans font-light text-sm text-foreground/80">{civ.legacy}</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-12 pt-6 border-t border-primary/10">
+          <div className="flex items-center justify-between mt-12 pt-6 border-t-2 border-border/15">
             {prev ? (
               <button
                 onClick={() => onSelect(prev)}
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
               >
-                <ChevronLeft className="w-4 h-4" strokeWidth={1} />
-                <span className="font-sans text-xs uppercase tracking-[0.15em]">{prev.name}</span>
+                <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
+                <span className="font-mono text-xs uppercase tracking-[0.1em] font-bold">{prev.name}</span>
               </button>
             ) : <div />}
             {next ? (
               <button
                 onClick={() => onSelect(next)}
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
               >
-                <span className="font-sans text-xs uppercase tracking-[0.15em]">{next.name}</span>
-                <ChevronRight className="w-4 h-4" strokeWidth={1} />
+                <span className="font-mono text-xs uppercase tracking-[0.1em] font-bold">{next.name}</span>
+                <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
               </button>
             ) : <div />}
           </div>

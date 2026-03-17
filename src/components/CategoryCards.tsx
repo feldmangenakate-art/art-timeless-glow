@@ -30,17 +30,17 @@ const CATEGORIES = [
 
 export default function CategoryCards() {
   return (
-    <section className="px-8 py-16 animate-fade-in" style={{ animationDelay: "0.5s" }}>
-      <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section className="px-8 py-16 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+      <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {CATEGORIES.map((cat) => (
           <Link
             key={cat.path}
             to={cat.path}
-            className="group border border-primary/10 rounded-sm p-6 bg-card hover:border-primary/30 transition-all duration-500"
+            className="group border border-border/15 p-5 bg-card hover:border-primary/30 transition-colors duration-300"
           >
-            <cat.icon className="w-5 h-5 text-primary/50 group-hover:text-primary transition-colors duration-500 mb-4" strokeWidth={1} />
-            <h3 className="font-display text-base text-foreground mb-1">{cat.name}</h3>
-            <p className="font-sans font-light text-xs text-muted-foreground">{cat.description}</p>
+            <cat.icon className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors duration-300 mb-3" strokeWidth={1.5} />
+            <h3 className="font-display text-xl tracking-wide text-foreground mb-1">{cat.name}</h3>
+            <p className="font-mono text-[11px] text-muted-foreground">{cat.description}</p>
           </Link>
         ))}
       </div>

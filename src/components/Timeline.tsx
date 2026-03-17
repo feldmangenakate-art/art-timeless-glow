@@ -3,10 +3,10 @@ import { CIVILIZATIONS, type Civilization } from "@/data/civilizations";
 
 const ERAS = [
   { label: "Prehistoric", start: -35000, end: -3500, color: "#8B7050" },
-  { label: "Ancient", start: -3500, end: 476, color: "#C4823A" },
-  { label: "Medieval", start: 476, end: 1400, color: "#607090" },
-  { label: "Early Modern", start: 1400, end: 1800, color: "#C9A84C" },
-  { label: "Modern", start: 1800, end: 2025, color: "#C47080" },
+  { label: "Ancient", start: -3500, end: 476, color: "#8B5E3C" },
+  { label: "Medieval", start: 476, end: 1400, color: "#6B6B80" },
+  { label: "Early Modern", start: 1400, end: 1800, color: "#8B7D3C" },
+  { label: "Modern", start: 1800, end: 2025, color: "#8B4050" },
 ];
 
 function getTimelinePos(year: number): number {
@@ -25,17 +25,20 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="px-8 py-20">
+    <section className="px-8 py-16">
       <div className="max-w-6xl mx-auto">
-        <h2 className="font-display text-3xl tracking-tight text-foreground mb-2">
-          The Timeline
+        <div className="tape-label text-muted-foreground mb-2">
+          35,000 BC — Present
+        </div>
+        <h2 className="font-display text-5xl tracking-wide text-foreground mb-3">
+          THE TIMELINE
         </h2>
-        <p className="font-sans font-light text-sm text-muted-foreground mb-12">
-          35,000 BC to present — scroll to explore
+        <p className="font-mono text-xs text-muted-foreground mb-12">
+          Scroll to explore · Click a civilization to learn more
         </p>
 
         <div ref={scrollRef} className="overflow-x-auto pb-8">
-          <div className="relative min-w-[1000px] h-60">
+          <div className="relative min-w-[1000px] h-64">
             {/* Era bands */}
             {ERAS.map((era) => {
               const left = getTimelinePos(era.start);
@@ -43,15 +46,15 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
               return (
                 <div
                   key={era.label}
-                  className="absolute top-0 h-6 flex items-center justify-center"
+                  className="absolute top-0 h-7 flex items-center justify-center"
                   style={{
                     left: `${left}%`,
                     width: `${right - left}%`,
-                    backgroundColor: `${era.color}15`,
-                    borderBottom: `1px solid ${era.color}30`,
+                    backgroundColor: `${era.color}18`,
+                    borderBottom: `2px solid ${era.color}40`,
                   }}
                 >
-                  <span className="text-[9px] uppercase tracking-[0.15em] font-sans font-medium" style={{ color: `${era.color}99` }}>
+                  <span className="text-[9px] uppercase tracking-[0.15em] font-mono font-bold" style={{ color: `${era.color}` }}>
                     {era.label}
                   </span>
                 </div>
@@ -59,20 +62,20 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
             })}
 
             {/* Main timeline line */}
-            <div className="absolute top-1/2 left-0 right-0 h-px bg-primary/20" />
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-border/30" />
 
-            {/* Scale break marker at 12% */}
+            {/* Scale break marker */}
             <div className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center" style={{ left: "12%" }}>
-              <div className="flex flex-col items-center gap-1 mb-2 -translate-y-8">
-                <div className="w-px h-6 border-l border-dashed border-primary/30" />
+              <div className="flex flex-col items-center gap-1 -translate-y-10">
+                <div className="w-px h-8 border-l-2 border-dashed border-border/40" />
                 <div className="flex flex-col gap-0.5">
-                  <div className="w-1 h-1 rounded-full bg-primary/40" />
-                  <div className="w-1 h-1 rounded-full bg-primary/40" />
-                  <div className="w-1 h-1 rounded-full bg-primary/40" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/50" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/50" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/50" />
                 </div>
               </div>
-              <p className="absolute top-full mt-6 text-[8px] uppercase tracking-[0.15em] text-primary/40 font-sans whitespace-nowrap">
-                Scale Compression: 30,000 Years
+              <p className="absolute top-full mt-8 tape-label text-[8px] text-muted-foreground whitespace-nowrap">
+                Scale Break: 30,000 Years
               </p>
             </div>
 
@@ -94,22 +97,20 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                   }}
                   onClick={() => onSelect(civ)}
                 >
-                  {/* Label */}
                   <span
-                    className={`absolute whitespace-nowrap text-[10px] uppercase tracking-[0.2em] font-sans transition-colors duration-300 ${
-                      isSelected ? "text-primary" : "text-primary/50 group-hover:text-primary"
+                    className={`absolute whitespace-nowrap text-[10px] uppercase tracking-[0.12em] font-mono font-bold transition-colors duration-200 ${
+                      isSelected ? "text-primary" : "text-foreground/50 group-hover:text-primary"
                     }`}
-                    style={isAbove ? { bottom: "20px" } : { top: "20px" }}
+                    style={isAbove ? { bottom: "22px" } : { top: "22px" }}
                   >
                     {civ.name}
                   </span>
 
-                  {/* Dot */}
                   <div
-                    className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 border-2 ${
                       isSelected
-                        ? "gold-glow scale-150"
-                        : "group-hover:shadow-[0_0_15px_rgba(212,175,55,0.8)] group-hover:scale-150"
+                        ? "scale-150 border-primary"
+                        : "border-transparent group-hover:border-primary group-hover:scale-125"
                     }`}
                     style={{ backgroundColor: civ.color }}
                   />
@@ -122,8 +123,8 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
               const pos = getTimelinePos(year);
               return (
                 <div key={year} className="absolute flex flex-col items-center" style={{ left: `${pos}%`, bottom: "0" }}>
-                  <div className="w-px h-3 bg-primary/15" />
-                  <span className="text-[9px] text-muted-foreground font-sans mt-1">
+                  <div className="w-px h-3 bg-border/30" />
+                  <span className="text-[9px] text-muted-foreground font-mono mt-1">
                     {year < 0 ? `${Math.abs(year)} BC` : year === 0 ? "0" : `${year} AD`}
                   </span>
                 </div>
