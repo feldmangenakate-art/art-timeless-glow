@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Raleway', 'system-ui', 'sans-serif'],
         mono: ['"Courier Prime"', 'Courier New', 'monospace'],
       },
       colors: {

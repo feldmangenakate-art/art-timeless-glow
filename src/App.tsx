@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Navigation from "@/components/Navigation";
 import Index from "./pages/Index";
 import TimelinePage from "./pages/TimelinePage";
+import MasterworksPage from "./pages/MasterworksPage";
+import MasterworkDetailPage from "./pages/MasterworkDetailPage";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
@@ -22,7 +24,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/timeline" element={<TimelinePage />} />
           <Route path="/geography" element={<ComingSoon />} />
-          <Route path="/masterworks" element={<ComingSoon />} />
+          <Route path="/masterworks" element={<MasterworksPage />} />
+          <Route path="/masterworks/:id" element={<MasterworkDetailPage />} />
           <Route path="/artists" element={<ComingSoon />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

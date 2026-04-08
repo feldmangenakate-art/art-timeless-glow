@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "art-timeless-glow",
+      "runtimeExecutable": "/opt/homebrew/Cellar/node/25.9.0_1/bin/node",
+      "runtimeArgs": ["/Users/ekaterinabortnikova/art-timeless-glow/node_modules/.bin/vite", "--port", "8080"],
+      "port": 8080
+    }
+  ]
+}
