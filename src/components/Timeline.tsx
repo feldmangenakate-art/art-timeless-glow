@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CIVILIZATIONS, type Civilization } from "@/data/civilizations";
 
 const ERAS = [
@@ -9,18 +10,27 @@ const ERAS = [
   { label: "Modern", start: 1800, end: 2025, color: "#8B4050" },
 ];
 
-// 3-segment non-linear scale:
-// Prehistoric  (35,000 BC – 3,500 BC) →  0–12%
-// Ancient      ( 3,500 BC –   500 AD) → 12–30%
-// Medieval+    (   500 AD –  2025 AD) → 30–100%
-function getTimelinePos(year: number): number {
+const ERA_LINKS: Record<string, string> = {
+  "Prehistoric":  "/civilization/prehistoric",
+  "Ancient":      "/civilization/mesopotamia",
+  "Medieval":     "/civilization/byzantine",
+  "Early Modern": "/civilization/renaissance",
+  "Modern":       "/civilization/modern",
+};
+
+function toPct(year: number): number {
   if (year <= -3500) {
-    return ((year - (-35000)) / (-3500 - (-35000))) * 12;
+    return ((year - (-35000)) / (-3500 - (-35000))) * 7;
   }
-  if (year <= 500) {
-    return 12 + ((year - (-3500)) / (500 - (-3500))) * 18;
+  else if (year <= 500) {
+    return 7 + ((year - (-3500)) / (500 - (-3500))) * 33;
   }
-  return 30 + ((year - 500) / (2025 - 500)) * 70;
+  else if (year <= 1600) {
+    return 40 + ((year - 500) / (1600 - 500)) * 25;
+  }
+  else {
+    return 62 + ((year - 1600) / (2025 - 1600)) * 38;
+  }
 }
 
 const ERA_H = 24;     // height of era band strip in px
@@ -38,6 +48,7 @@ interface LabelPlacement {
   pos: number;
   side: "above" | "below";
   level: number; // 1=16px, 2=32px, 3=48px from line
+  offsetPx?: number; // optional horizontal nudge in px
 }
 
 function computeLabelPlacements(positions: number[]): LabelPlacement[] {
@@ -84,17 +95,43 @@ interface TimelineProps {
 }
 
 export default function Timeline({ onSelect, selectedId }: TimelineProps) {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hoveredEra, setHoveredEra] = useState<string | null>(null);
+
+  // Visual-only dot position overrides (does not affect panel data)
+  const DOT_YEAR_OVERRIDES: Record<string, number> = {
+    byzantine: 600,
+    islamic: 750,
+    medieval: 1100,
+  };
 
   const positions = CIVILIZATIONS.map((civ) =>
-    getTimelinePos((civ.start + civ.end) / 2)
+    toPct(DOT_YEAR_OVERRIDES[civ.id] ?? (civ.start + civ.end) / 2)
   );
 
   const labelPlacements = computeLabelPlacements(positions);
+  // Force specific label sides to prevent overlaps
+  const overrideSides: Record<string, { side: "above" | "below"; offsetPx?: number }> = {
+    impressionism: { side: "above" },
+    modern:        { side: "below" },
+    islamic:       { side: "above" },
+    byzantine:     { side: "below" },
+    medieval:      { side: "below", offsetPx: -20 },
+  };
+  for (const placement of labelPlacements) {
+    const id = CIVILIZATIONS[placement.civIndex].id;
+    if (overrideSides[id]) {
+      placement.side = overrideSides[id].side;
+      if (overrideSides[id].offsetPx !== undefined) placement.offsetPx = overrideSides[id].offsetPx;
+    }
+  }
 
-  // Container must hold 3 levels below the line + year markers
-  const CONTAINER_H = LINE_TOP + 3 * LEVEL_PX + 32;
+  // Tick marks sit below all 3 dot-label levels + 8px gap
+  const TICK_TOP = LINE_TOP + 3 * LEVEL_PX + 8;
+  // Container must hold tick marks + tick bar (8px) + text (~12px)
+  const CONTAINER_H = TICK_TOP + 24;
 
   return (
     <section className="px-8 py-2">
@@ -117,33 +154,44 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
           style={{ height: `${CONTAINER_H}px`, overflow: "visible" }}
         >
 
-          {/* Era bands */}
+          {/* Era bands — isolated wrapper prevents overflow past container edges */}
+          <div className="absolute left-0 right-0 top-0" style={{ height: `${ERA_H}px`, overflow: "hidden" }}>
           {ERAS.map((era) => {
-            const left = getTimelinePos(era.start);
-            const right = getTimelinePos(era.end);
+            const left = Math.max(0, toPct(era.start));
+            const right = toPct(era.end);
             const width = right - left;
             const isNarrow = width < 7;
+
+            const isEraHovered = hoveredEra === era.label;
 
             return (
               <div
                 key={era.label}
                 className="absolute flex items-center justify-center overflow-visible"
+                onClick={() => navigate(ERA_LINKS[era.label])}
+                onMouseEnter={() => setHoveredEra(era.label)}
+                onMouseLeave={() => setHoveredEra(null)}
                 style={{
                   left: `${left}%`,
                   width: `${width}%`,
                   top: 0,
                   height: `${ERA_H}px`,
-                  backgroundColor: `${era.color}20`,
+                  backgroundColor: isEraHovered ? `${era.color}35` : `${era.color}20`,
                   borderBottom: `1px solid ${era.color}40`,
                   borderRight: `1px solid ${era.color}20`,
+                  cursor: "pointer",
+                  transition: "background-color 0.2s ease",
                 }}
               >
                 <span
                   className="uppercase font-mono font-semibold whitespace-nowrap select-none"
                   style={{
-                    color: C_ERA,
+                    color: isEraHovered ? era.color : C_ERA,
                     fontSize: isNarrow ? "0px" : "7px",
                     letterSpacing: "1.5px",
+                    textDecoration: isEraHovered && !isNarrow ? "underline" : "none",
+                    textUnderlineOffset: "2px",
+                    transition: "color 0.2s ease",
                   }}
                 >
                   {era.label}
@@ -153,9 +201,12 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                   <span
                     className="absolute uppercase font-mono font-semibold whitespace-nowrap select-none"
                     style={{
-                      color: C_ERA,
+                      color: isEraHovered ? era.color : C_ERA,
                       fontSize: "7px",
                       letterSpacing: "1.5px",
+                      textDecoration: isEraHovered ? "underline" : "none",
+                      textUnderlineOffset: "2px",
+                      transition: "color 0.2s ease",
                       left: `${width + 1}%`,
                       top: "50%",
                       transform: "translateY(-50%)",
@@ -167,6 +218,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
               </div>
             );
           })}
+          </div>
 
           {/* Timeline line */}
           <div
@@ -179,7 +231,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
           />
 
           {/* Always-visible dot labels */}
-          {labelPlacements.map(({ civIndex, pos, side, level }) => {
+          {labelPlacements.map(({ civIndex, pos, side, level, offsetPx = 0 }) => {
             const civ = CIVILIZATIONS[civIndex];
             const isSelected = selectedId === civ.id;
             const isHovered = hoveredId === civ.id;
@@ -201,7 +253,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                 style={{
                   left: `${pos}%`,
                   top: `${labelTop}px`,
-                  transform: "translateX(-50%)",
+                  transform: `translateX(calc(-50% + ${offsetPx}px))`,
                   zIndex: 3,
                 }}
               >
@@ -272,8 +324,8 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
           })}
 
           {/* Year markers */}
-          {[-3500, 0, 500, 1000, 1500, 2000].map((year) => {
-            const pos = getTimelinePos(year);
+          {[-3500, 0, 500, 1000, 1500].map((year) => {
+            const pos = toPct(year);
             return (
               <div
                 key={year}
@@ -281,7 +333,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                 style={{
                   left: pos > 97 ? "auto" : `${pos}%`,
                   right: pos > 97 ? "0" : undefined,
-                  top: `${LINE_TOP + 4}px`,
+                  top: `${TICK_TOP}px`,
                   transform: pos > 97 ? undefined : "translateX(-50%)",
                 }}
               >

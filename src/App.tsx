@@ -8,6 +8,10 @@ import Index from "./pages/Index";
 import TimelinePage from "./pages/TimelinePage";
 import MasterworksPage from "./pages/MasterworksPage";
 import MasterworkDetailPage from "./pages/MasterworkDetailPage";
+import ArtistsPage from "./pages/ArtistsPage";
+import ArtistDetailPage from "./pages/ArtistDetailPage";
+import MovementPage from "./pages/MovementPage";
+import CivilizationPage from "./pages/CivilizationPage";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
@@ -26,7 +30,10 @@ const App = () => (
           <Route path="/geography" element={<ComingSoon />} />
           <Route path="/masterworks" element={<MasterworksPage />} />
           <Route path="/masterworks/:id" element={<MasterworkDetailPage />} />
-          <Route path="/artists" element={<ComingSoon />} />
+          <Route path="/artists" element={<ArtistsPage />} />
+          <Route path="/artists/:id" element={<ArtistDetailPage />} />
+          <Route path="/movement/:id" element={<MovementPage />} />
+          <Route path="/civilization/:id" element={<CivilizationPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

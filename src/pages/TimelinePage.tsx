@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Timeline from "@/components/Timeline";
 import DetailPanel from "@/components/DetailPanel";
 import { CIVILIZATIONS, type Civilization } from "@/data/civilizations";
 
-const RENAISSANCE = CIVILIZATIONS.find((c) => c.id === "renaissance")!;
+const PREHISTORIC = CIVILIZATIONS.find((c) => c.id === "prehistoric")!;
 
 export default function TimelinePage() {
-  const [selected, setSelected] = useState<Civilization>(RENAISSANCE);
+  const location = useLocation();
+  const [selected, setSelected] = useState<Civilization>(() => {
+    const state = location.state as { highlightDot?: string } | null;
+    return CIVILIZATIONS.find((c) => c.id === state?.highlightDot) ?? PREHISTORIC;
+  });
 
   return (
     <main className="min-h-screen pt-16 flex flex-col">
@@ -14,12 +19,12 @@ export default function TimelinePage() {
         <h1
           style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 700,
-            fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
-            lineHeight: 1.05,
+            fontWeight: 400,
+            fontSize: "3.75rem",
+            lineHeight: 1.0,
             color: "#2A1E10",
             marginBottom: "0.75rem",
-            letterSpacing: "-0.01em",
+            letterSpacing: "0.025em",
           }}
         >
           The Timeline of Art
@@ -52,7 +57,7 @@ export default function TimelinePage() {
       <div className="flex-1">
         <DetailPanel
           civ={selected}
-          onClose={() => setSelected(RENAISSANCE)}
+          onClose={() => setSelected(PREHISTORIC)}
           onSelect={setSelected}
         />
       </div>

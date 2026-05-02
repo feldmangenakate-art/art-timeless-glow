@@ -1,7 +1,14 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ChevronLeft } from "lucide-react";
 import { MASTERWORKS } from "@/data/masterworks";
+import { RENAISSANCE_ARTISTS } from "@/data/artists-renaissance";
+import { BAROQUE_ARTISTS } from "@/data/artists-baroque";
+import { CENTURY_18_19_ARTISTS } from "@/data/artists-18th-19th";
+import { MODERN_ARTISTS } from "@/data/artists-modern";
+
+const ALL_ARTISTS = [...RENAISSANCE_ARTISTS, ...BAROQUE_ARTISTS, ...CENTURY_18_19_ARTISTS, ...MODERN_ARTISTS];
 
 const GOLD = "#C9A84C";
 const WARM_WHITE = "#F0EAD6";
@@ -9,9 +16,19 @@ const WARM_WHITE = "#F0EAD6";
 export default function MasterworkDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const idx = MASTERWORKS.findIndex((m) => m.id === id);
   const work = MASTERWORKS[idx];
+
+  useEffect(() => { window.scrollTo(0, 0); }, [id]);
+
+  const locationState = location.state as { from?: string; artistName?: string; artistId?: string } | null;
+  const cameFromArtist = locationState?.from === "artist";
+  const cameFromMasterworks = locationState?.from === "masterworks";
+
+  // Find the artist associated with this work (for secondary link)
+  const associatedArtist = ALL_ARTISTS.find((a) => a.masterworksIds.includes(id ?? ""));
 
   if (!work) {
     return (
@@ -37,15 +54,65 @@ export default function MasterworkDetailPage() {
       {/* Back nav — fixed so always visible while scrolling */}
       <div style={{ position: "fixed", top: "72px", left: "32px", zIndex: 50 }}>
         <button
-          onClick={() => navigate("/masterworks")}
+          onClick={() => cameFromArtist
+            ? navigate(`/artists/${locationState?.artistId}`)
+            : navigate("/masterworks")
+          }
           className="flex items-center gap-2 transition-colors duration-200"
           style={{ color: `${WARM_WHITE}50`, fontFamily: "'Raleway', system-ui, sans-serif", fontWeight: 300, fontSize: "0.8rem" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = GOLD)}
           onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}50`)}
         >
           <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
-          Masterworks
+          {cameFromArtist ? `Back to ${locationState?.artistName}` : "Back to Masterworks"}
         </button>
+
+        {/* Secondary quiet link */}
+        {cameFromArtist ? (
+          <button
+            onClick={() => navigate("/masterworks")}
+            style={{
+              display: "block",
+              marginTop: "4px",
+              fontFamily: "'Raleway', system-ui, sans-serif",
+              fontSize: "11px",
+              fontWeight: 300,
+              letterSpacing: "0.08em",
+              color: `${WARM_WHITE}28`,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = `${WARM_WHITE}55`)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}28`)}
+          >
+            Also in: Masterworks ↗
+          </button>
+        ) : (associatedArtist && (cameFromMasterworks || !locationState)) ? (
+          <button
+            onClick={() => navigate(`/artists/${associatedArtist.id}`)}
+            style={{
+              display: "block",
+              marginTop: "4px",
+              fontFamily: "'Raleway', system-ui, sans-serif",
+              fontSize: "11px",
+              fontWeight: 300,
+              letterSpacing: "0.08em",
+              color: `${WARM_WHITE}28`,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = `${WARM_WHITE}55`)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}28`)}
+          >
+            Also in: {associatedArtist.name} ↗
+          </button>
+        ) : null}
       </div>
 
       {/* Main content */}
@@ -115,11 +182,11 @@ export default function MasterworkDetailPage() {
             {/* Title */}
             <h1 style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              fontWeight: 700,
-              fontSize: "clamp(1.8rem, 4vw, 3rem)",
+              fontWeight: 400,
+              fontSize: "3.75rem",
               color: WARM_WHITE,
-              lineHeight: 1.1,
-              letterSpacing: "0.01em",
+              lineHeight: 1.0,
+              letterSpacing: "0.025em",
               margin: 0,
             }}>
               {work.title}

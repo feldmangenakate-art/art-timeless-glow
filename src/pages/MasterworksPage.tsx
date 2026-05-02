@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MASTERWORKS } from "@/data/masterworks";
@@ -9,14 +8,6 @@ const MUTED = "rgba(42,30,16,0.45)";
 
 export default function MasterworksPage() {
   const navigate = useNavigate();
-  const [activeEra, setActiveEra] = useState("All");
-
-  // Get unique eras preserving order of first appearance
-  const eras = ["All", ...Array.from(new Set(MASTERWORKS.map((m) => m.era)))];
-
-  const filtered = activeEra === "All"
-    ? MASTERWORKS
-    : MASTERWORKS.filter((m) => m.era === activeEra);
 
   return (
     <main style={{ background: "#EDE8DF", minHeight: "100vh" }} className="pt-16">
@@ -25,27 +16,23 @@ export default function MasterworksPage() {
       <section className="px-8 pt-10 pb-4 max-w-6xl mx-auto text-center">
         <button
           onClick={() => navigate("/")}
-          className="font-mono uppercase tracking-widest mb-6 block transition-colors duration-200 mx-auto"
+          className="font-mono uppercase tracking-widest mb-6 block transition-colors duration-200"
           style={{ fontSize: "9px", color: MUTED, letterSpacing: "0.15em" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = GOLD)}
           onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
         >
           ← Home
         </button>
-        <h1 className="font-display tracking-wide" style={{
-          fontSize: "clamp(3rem, 8vw, 6rem)",
-          color: DARK,
-          lineHeight: 1.0,
-          marginBottom: "1.25rem",
-          textTransform: "uppercase",
-        }}>
+        <h1 className="font-display text-6xl tracking-wide" style={{ color: DARK, marginBottom: "1.25rem", lineHeight: 1.0 }}>
           Masterworks
         </h1>
-        <p className="font-mono" style={{
-          color: MUTED,
-          fontSize: "0.8rem",
-          letterSpacing: "0.04em",
-          lineHeight: 1.8,
+        <p style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontWeight: 400,
+          fontStyle: "italic",
+          fontSize: "16px",
+          color: "#8a7a6a",
+          lineHeight: 1.5,
         }}>
           {MASTERWORKS.length} works · from ancient Egypt to the present day
         </p>
@@ -58,57 +45,23 @@ export default function MasterworksPage() {
         margin: "0 2rem 1.5rem",
       }} />
 
-      {/* Era filter */}
-      <section className="px-8 pb-6 max-w-6xl mx-auto">
-        <div className="flex gap-2 flex-wrap">
-          {eras.map((era) => {
-            const isActive = activeEra === era;
-            const eraWork = MASTERWORKS.find((m) => m.era === era);
-            const eraColor = eraWork?.eraColor ?? GOLD;
-            return (
-              <button
-                key={era}
-                onClick={() => setActiveEra(era)}
-                className="font-mono uppercase tracking-widest transition-all duration-200"
-                style={{
-                  fontSize: "9px",
-                  padding: "4px 10px",
-                  borderRadius: "2px",
-                  border: isActive
-                    ? `1px solid ${era === "All" ? GOLD : eraColor}`
-                    : "1px solid rgba(42,30,16,0.12)",
-                  background: isActive
-                    ? era === "All" ? `rgba(201,168,76,0.12)` : `${eraColor}18`
-                    : "transparent",
-                  color: isActive
-                    ? era === "All" ? GOLD : eraColor
-                    : MUTED,
-                  cursor: "pointer",
-                }}
-              >
-                {era}
-              </button>
-            );
-          })}
-        </div>
-      </section>
 
       {/* Grid */}
       <section className="px-8 pb-16 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((work, i) => (
+          {MASTERWORKS.map((work, i) => (
             <motion.div
               key={work.id}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.03 }}
               whileHover={{ y: -3 }}
-              onClick={() => navigate(`/masterworks/${work.id}`)}
+              onClick={() => navigate(`/masterworks/${work.id}`, { state: { from: "masterworks" } })}
               className="cursor-pointer overflow-hidden"
               style={{
                 background: "#F8F4EE",
                 borderRadius: "3px",
-                borderTop: `3px solid ${work.eraColor}`,
+                borderTop: `2px solid ${work.eraColor}`,
                 boxShadow: "0 1px 4px rgba(42,30,16,0.07)",
                 transition: "box-shadow 0.2s",
               }}
@@ -124,10 +77,14 @@ export default function MasterworksPage() {
                 <img
                   src={work.image}
                   alt={work.title}
+                  loading="lazy"
+                  width={360}
+                  height={200}
                   style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.85,
+                    transform: work.id === "mona-lisa" ? "scale(1.28)" : work.id === "the-kiss-klimt" ? "scale(1.6) translateY(22%)" : undefined,
                     objectPosition: (({
                       "venus-de-milo": "75% top",
-                      "mona-lisa": "center 18%",
+                      "mona-lisa": "center 22%",
                       "laocoon": "center top",
                       "girl-pearl-earring": "center 20%",
                       "anatomy-lesson": "center top",
@@ -135,7 +92,8 @@ export default function MasterworksPage() {
                       "fighting-temeraire": "center 20%",
                       "bar-at-folies": "50% 35%",
                       "starry-night": "center top",
-                      "las-meninas": "center 40%",
+                      "las-meninas": "center 75%",
+                      "liberty-leading": "center 25%",
                       "night-watch": "center 30%",
                       "self-portrait-durer": "center 15%",
                       "venus-of-urbino": "20% center",
@@ -146,10 +104,11 @@ export default function MasterworksPage() {
                       "marilyn-diptych": "center top",
                       "comedian": "center center",
                       "for-love-of-god": "center center",
-                      "the-kiss-klimt": "center 30%",
+                      "the-kiss-klimt": "50% 0%",
                       "demoiselles-avignon": "center 25%",
                       "two-fridas": "center 25%",
                       "american-gothic": "center 20%",
+                      "david": "center 30%",
                     } as Record<string, string>)[work.id] ?? "center center")
                   }}
                   onError={(e) => {
@@ -168,7 +127,7 @@ export default function MasterworksPage() {
               </div>
 
               {/* Info */}
-              <div style={{ padding: "14px 16px 16px" }}>
+              <div style={{ padding: "14px 16px 16px", background: "#F5F0E8" }}>
                 <p className="font-mono uppercase tracking-widest mb-1.5" style={{ fontSize: "8px", color: work.eraColor }}>
                   {work.era}
                 </p>

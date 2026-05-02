@@ -4,8 +4,8 @@
     {
       "name": "art-timeless-glow",
       "runtimeExecutable": "/opt/homebrew/Cellar/node/25.9.0_1/bin/node",
-      "runtimeArgs": ["/Users/ekaterinabortnikova/art-timeless-glow/node_modules/.bin/vite", "--port", "8080"],
-      "port": 8080
+      "runtimeArgs": ["/Users/ekaterinabortnikova/art-timeless-glow/node_modules/.bin/vite", "--port", "8081"],
+      "port": 8081
     }
   ]
 }
