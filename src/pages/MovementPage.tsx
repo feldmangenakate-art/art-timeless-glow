@@ -227,7 +227,7 @@ export default function MovementPage() {
           {/* Title */}
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             color: DARK,
             lineHeight: 1.0,
@@ -429,7 +429,7 @@ export default function MovementPage() {
           {/* Title */}
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             color: DARK,
             lineHeight: 1.0,
@@ -638,7 +638,7 @@ export default function MovementPage() {
           {/* Title */}
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             color: DARK,
             lineHeight: 1.0,
@@ -824,7 +824,7 @@ export default function MovementPage() {
           {/* Title */}
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             color: DARK,
             lineHeight: 1.0,
@@ -1026,7 +1026,7 @@ export default function MovementPage() {
           {/* Title */}
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             color: DARK,
             lineHeight: 1.0,
@@ -1190,7 +1190,7 @@ export default function MovementPage() {
           {/* Title */}
           <h1 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             color: DARK,
             lineHeight: 1.0,
@@ -1422,7 +1422,7 @@ export default function MovementPage() {
 
         <h1 style={{
           fontFamily: "'Playfair Display', Georgia, serif",
-          fontWeight: 400,
+          fontWeight: 700,
           fontSize: "3.75rem",
           color: DARK,
           lineHeight: 1.0,

@@ -28,7 +28,7 @@ export default function ArtistsPage() {
         >
           ← Home
         </button>
-        <h1 className="font-display text-6xl tracking-wide" style={{ color: DARK, marginBottom: "1.25rem", lineHeight: 1.0 }}>
+        <h1 className="font-display text-6xl tracking-wide" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, color: DARK, marginBottom: "1.25rem", lineHeight: 1.0 }}>
           Artists
         </h1>
         <p style={{
@@ -111,7 +111,7 @@ export default function ArtistsPage() {
 
               {/* Info */}
               <div style={{ padding: "14px 16px 18px", background: "#F5F0E8" }}>
-                <p className="font-mono uppercase tracking-widest mb-1.5" style={{ fontSize: "8px", color: artist.eraColor }}>
+                <p className="font-mono uppercase tracking-widest mb-1.5" style={{ fontSize: "8px", color: GOLD }}>
                   {artist.movement}
                 </p>
                 <h3 style={{

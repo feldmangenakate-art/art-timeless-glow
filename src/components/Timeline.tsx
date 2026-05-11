@@ -184,7 +184,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                 }}
               >
                 <span
-                  className="uppercase font-mono font-semibold whitespace-nowrap select-none"
+                  className="uppercase font-mono font-bold whitespace-nowrap select-none"
                   style={{
                     color: isEraHovered ? era.color : C_ERA,
                     fontSize: isNarrow ? "0px" : "7px",
@@ -225,8 +225,8 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
             className="absolute left-0 right-0"
             style={{
               top: `${LINE_TOP}px`,
-              height: "1px",
-              background: "linear-gradient(to right, transparent, rgba(42,30,16,0.18) 5%, rgba(42,30,16,0.18) 95%, transparent)",
+              height: "2px",
+              background: "linear-gradient(to right, transparent, rgba(42,30,16,0.22) 5%, rgba(42,30,16,0.22) 95%, transparent)",
             }}
           />
 
@@ -273,7 +273,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                   className="font-mono uppercase tracking-widest whitespace-nowrap"
                   style={{
                     fontSize: "8px",
-                    color: active ? civ.color : C_LABEL,
+                    color: active ? "#C9A84C" : C_LABEL,
                     fontWeight: active ? 600 : 400,
                     transition: "color 0.2s",
                     display: "block",
@@ -309,8 +309,8 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
                 <div
                   className="rounded-full transition-all duration-200"
                   style={{
-                    width: isHovered || isSelected ? "14px" : "9px",
-                    height: isHovered || isSelected ? "14px" : "9px",
+                    width: isHovered || isSelected ? "17px" : "11px",
+                    height: isHovered || isSelected ? "17px" : "11px",
                     backgroundColor: civ.color,
                     boxShadow: isHovered || isSelected
                       ? `0 0 0 3px ${civ.color}30, 0 0 12px ${civ.color}60`

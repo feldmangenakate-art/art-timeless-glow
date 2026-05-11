@@ -19,7 +19,7 @@ export default function TimelinePage() {
         <h1
           style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 400,
+            fontWeight: 700,
             fontSize: "3.75rem",
             lineHeight: 1.0,
             color: "#2A1E10",
@@ -31,11 +31,11 @@ export default function TimelinePage() {
         </h1>
         <p
           style={{
-            fontFamily: "'Raleway', system-ui, sans-serif",
-            fontWeight: 300,
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 400,
+            fontStyle: "italic",
             color: "rgba(42,30,16,0.45)",
-            fontSize: "0.9rem",
-            letterSpacing: "0.02em",
+            fontSize: "1rem",
           }}
         >
           From the first cave paintings to the present day. Click any civilization to explore its story.

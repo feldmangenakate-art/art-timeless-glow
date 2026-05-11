@@ -27,6 +27,8 @@ export default function Navigation() {
   const [overlayOpen, setOverlayOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const isHome = location.pathname === "/";
+
   const q = query.toLowerCase().trim();
 
   const matchedWorks = q.length < 1 ? [] : MASTERWORKS.filter(
@@ -59,10 +61,11 @@ export default function Navigation() {
       <nav
         className="fixed top-0 w-full z-50 h-14 px-8 flex items-center justify-between"
         style={{
-          background: "rgba(12, 10, 7, 0.92)",
-          borderBottom: "1px solid rgba(201, 168, 76, 0.12)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
+          background: isHome ? "rgba(12, 10, 7, 0.4)" : "rgba(12, 10, 7, 0.92)",
+          borderBottom: isHome ? "1px solid rgba(201, 168, 76, 0.08)" : "1px solid rgba(201, 168, 76, 0.12)",
+          backdropFilter: isHome ? "blur(8px)" : "blur(12px)",
+          WebkitBackdropFilter: isHome ? "blur(8px)" : "blur(12px)",
+          transition: "background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease",
         }}
       >
         {/* Logo */}
@@ -70,11 +73,12 @@ export default function Navigation() {
           to="/"
           style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 700,
+            fontWeight: 600,
             fontSize: "1.1rem",
-            color: GOLD,
+            color: isHome ? WARM_WHITE : GOLD,
             letterSpacing: "0.02em",
             textDecoration: "none",
+            transition: "color 0.3s ease",
           }}
         >
           Art Through the Ages
@@ -95,11 +99,11 @@ export default function Navigation() {
                   textTransform: "uppercase" as const,
                   letterSpacing: "0.18em",
                   textDecoration: "none",
-                  color: isActive ? GOLD : `${WARM_WHITE}60`,
-                  transition: "color 0.2s",
+                  color: isActive ? GOLD : (isHome ? `${WARM_WHITE}CC` : `${WARM_WHITE}60`),
+                  transition: "color 0.3s ease",
                 }}
                 onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = WARM_WHITE; }}
-                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = `${WARM_WHITE}60`; }}
+                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = isHome ? `${WARM_WHITE}CC` : `${WARM_WHITE}60`; }}
               >
                 {link.label}
               </Link>
@@ -111,9 +115,12 @@ export default function Navigation() {
         <div
           className="flex items-center gap-2 px-3 py-1 transition-colors duration-200"
           style={{
-            border: `1px solid ${searchFocused ? "rgba(201,168,76,0.4)" : "rgba(201,168,76,0.15)"}`,
+            border: isHome
+              ? `1px solid ${searchFocused ? "rgba(240,234,214,0.5)" : "rgba(240,234,214,0.25)"}`
+              : `1px solid ${searchFocused ? "rgba(201,168,76,0.4)" : "rgba(201,168,76,0.15)"}`,
             background: searchFocused ? "rgba(201,168,76,0.06)" : "transparent",
             borderRadius: "2px",
+            transition: "border-color 0.3s ease",
           }}
         >
           <Search className="w-3.5 h-3.5" strokeWidth={1.5} style={{ color: "rgba(201,168,76,0.5)" }} />
@@ -122,11 +129,12 @@ export default function Navigation() {
             type="text"
             placeholder="Search..."
             value={query}
-            className="bg-transparent outline-none w-20 focus:w-32 transition-all duration-300"
+            className="outline-none w-20 focus:w-32 transition-all duration-300 placeholder:text-[rgba(240,234,214,0.35)]"
             style={{
               fontSize: "11px",
               fontFamily: "'Raleway', system-ui, sans-serif",
               color: WARM_WHITE,
+              backgroundColor: "transparent",
             }}
             onFocus={() => { setSearchFocused(true); setOverlayOpen(true); }}
             onBlur={() => setSearchFocused(false)}

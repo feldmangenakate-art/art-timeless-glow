@@ -63,7 +63,7 @@ export const CIVILIZATIONS: Civilization[] = [
     { name: 'Art Nouveau', dates: '1890–1910', color: '#9B8040' },
     { name: 'Neo-Impressionism', dates: '1886–1910', color: '#60A090' },
   ] },
-  { id: 'modern', name: 'Modern & Contemporary', dates: '1900–present', start: 1900, end: 2025, color: '#C47080', region: 'Global', description: 'The 20th century shattered every rule. Cubism broke the single viewpoint. Surrealism went into the unconscious. Abstract Expressionism made the act of painting the subject. Conceptual art questioned whether the object was necessary at all.', works: ['Guernica, Picasso, 1937', 'The Persistence of Memory, Dalí, 1931', "Campbell's Soup Cans, Warhol, 1962"], duration: '~125 years — still unfolding', quality: 'Art as idea, as question, as provocation', legacy: 'Still being written. We are living inside it', movements: [
+  { id: 'modern', name: 'Modern & Contemporary', image: '/timeline/guernica.webp', dates: '1900–present', start: 1900, end: 2025, color: '#C47080', region: 'Global', description: 'The 20th century shattered every rule. Cubism broke the single viewpoint. Surrealism went into the unconscious. Abstract Expressionism made the act of painting the subject. Conceptual art questioned whether the object was necessary at all.', works: ['Guernica, Picasso, 1937', 'The Persistence of Memory, Dalí, 1931', "Campbell's Soup Cans, Warhol, 1962"], duration: '~125 years — still unfolding', quality: 'Art as idea, as question, as provocation', legacy: 'Still being written. We are living inside it', movements: [
     { name: 'Fauvism', dates: '1905–1910', color: '#C47080' },
     { name: 'Cubism', dates: '1907–1920', color: '#C06070' },
     { name: 'Expressionism', dates: '1905–1930', color: '#A06080' },
@@ -95,7 +95,12 @@ export const TODAY_IN_ART: Record<string, string> = {
   "04-15": "1452: Leonardo da Vinci is born in Vinci, Italy.",
   "04-23": "1616: William Shakespeare dies — his imagery shaped the Western visual imagination for centuries.",
   "05-02": "1519: Leonardo da Vinci dies at Amboise, France, in the arms of King Francis I.",
-  "05-05": "1821: Napoleon dies on St. Helena. His Egyptian campaign had ignited Egyptomania across European art.",
+  "05-05": "Honoré Daumier dies in Valmondois, 1879 — the greatest caricaturist in the history of art, whose savage images of lawyers and politicians invented art as social criticism.",
+  "05-06": "Sigmund Freud born in Moravia, 1856 — whose theories of the unconscious directly inspired Surrealism: without Freud there is no Dalí, no Magritte, no Ernst.",
+  "05-07": "Brahms born in Hamburg, 1833 — his lifelong friendship with Clara Schumann inspired some of the most emotionally charged art of the Romantic era.",
+  "05-08": "Paul Gauguin born in Paris, 1848 — the painter who fled European civilization for the South Seas, searching for a primitive spiritual authenticity in Tahiti.",
+  "05-09": "The Victorian era's most prolific Royal Academy exhibition season, 1879 — when the Academy's annual show was the social and artistic event of the London year.",
+  "05-10": "Asher B. Durand born in New Jersey, 1796 — the painter who defined the Hudson River School's philosophy: the American wilderness as sacred text.",
   "05-15": "1862: The first Impressionist exhibition opens in Paris — the Salon des Refusés shocks the art world.",
   "05-21": "1471: Albrecht Dürer is born in Nuremberg — master printmaker who bridged Northern and Italian Renaissance.",
   "06-05": "1898: Federico García Lorca is born — poet and dramatist whose surreal imagery influenced visual artists.",
@@ -131,10 +136,5 @@ export function getTodayInArt(): string {
   
   if (TODAY_IN_ART[key]) return TODAY_IN_ART[key];
   
-  // Fallback: find nearest date
-  const keys = Object.keys(TODAY_IN_ART).sort();
-  const nearest = keys.reduce((prev, curr) => {
-    return Math.abs(curr.localeCompare(key)) < Math.abs(prev.localeCompare(key)) ? curr : prev;
-  });
-  return TODAY_IN_ART[nearest];
+  return "Every day in history belongs to an artist, a masterwork, or a revolution in seeing.";
 }

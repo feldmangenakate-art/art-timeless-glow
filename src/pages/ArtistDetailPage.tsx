@@ -140,7 +140,7 @@ export default function ArtistDetailPage() {
             {/* Name */}
             <h1 style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              fontWeight: 400,
+              fontWeight: 700,
               fontSize: "3.75rem",
               color: WARM_WHITE,
               lineHeight: 1.0,
