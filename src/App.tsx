@@ -12,6 +12,7 @@ import ArtistsPage from "./pages/ArtistsPage";
 import ArtistDetailPage from "./pages/ArtistDetailPage";
 import MovementPage from "./pages/MovementPage";
 import CivilizationPage from "./pages/CivilizationPage";
+import GeographyPage from "./pages/GeographyPage";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
@@ -27,7 +28,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/timeline" element={<TimelinePage />} />
-          <Route path="/geography" element={<ComingSoon />} />
+          <Route path="/geography" element={<GeographyPage />} />
           <Route path="/masterworks" element={<MasterworksPage />} />
           <Route path="/masterworks/:id" element={<MasterworkDetailPage />} />
           <Route path="/artists" element={<ArtistsPage />} />

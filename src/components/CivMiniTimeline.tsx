@@ -70,7 +70,7 @@ const CIV_STRIPS: Record<string, CivStrip> = {
     bandColor: "rgba(112,168,184,0.22)",
     movements: [
       { id: "realism",                name: "Realism",           pct:  8, color: "#807060", above: true  },
-      { id: "impressionism-movement", name: "Impressionism",     pct: 24, color: "#70A8B8", above: false },
+      { id: "impressionism",          name: "Impressionism",     pct: 24, color: "#70A8B8", above: false },
       { id: "post-impressionism",     name: "Post-Impressionism",pct: 40, color: "#7090B8", above: true  },
       { id: "symbolism",              name: "Symbolism",         pct: 56, color: "#9070A8", above: false },
       { id: "art-nouveau",            name: "Art Nouveau",       pct: 72, color: "#9B8040", above: true  },
@@ -107,9 +107,13 @@ const CIV_STRIPS: Record<string, CivStrip> = {
     label: "Modern & Contemporary",
     bandColor: "rgba(196,112,128,0.22)",
     movements: [
-      { id: "fauvism-cubism",           name: "Fauvism & Cubism",              pct: 15, color: "#C47080", above: true  },
-      { id: "expressionism-surrealism", name: "Expressionism & Surrealism",    pct: 50, color: "#6080A0", above: false },
-      { id: "abstract-pop",             name: "Abstract & Pop",                pct: 82, color: "#C47080", above: true  },
+      { id: "fauvism",                name: "Fauvism",                 pct: 10, color: "#C47080", above: true  },
+      { id: "cubism",                 name: "Cubism",                  pct: 22, color: "#C06070", above: false },
+      { id: "expressionism",          name: "Expressionism",           pct: 34, color: "#A06080", above: true  },
+      { id: "dada",                   name: "Dada",                    pct: 46, color: "#907090", above: false },
+      { id: "surrealism",             name: "Surrealism",              pct: 58, color: "#6080A0", above: true  },
+      { id: "abstract-expressionism", name: "Abstract Expressionism",  pct: 70, color: "#B05070", above: false },
+      { id: "pop-art",                name: "Pop Art",                 pct: 82, color: "#D07080", above: true  },
     ],
   },
 };

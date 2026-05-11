@@ -78,11 +78,11 @@ The Burial at Ornans (1849–50) was the provocation that defined the movement �
         { id: "bar-at-folies", title: "A Bar at the Folies-Bergère (Manet)", why: "Manet bridges Realism and Impressionism — the barmaid's blank professional face is the most honest depiction of alienated labor in 19th-century painting" },
       ],
       prevMovement: null,
-      nextMovement: { id: "impressionism-movement", name: "Impressionism" },
+      nextMovement: { id: "impressionism", name: "Impressionism" },
     },
 
     {
-      id: "impressionism-movement",
+      id: "impressionism",
       name: "Impressionism",
       dates: "c. 1860–1886",
       parentCivilization: "Impressionism",
@@ -140,7 +140,7 @@ What these four share, despite their enormous differences, is a dissatisfaction 
         { id: "grande-jatte", title: "A Sunday on La Grande Jatte", why: "Seurat's masterpiece — two years of work, every centimeter covered in dots of pure unmixed color, a Sunday afternoon in the Paris suburbs frozen into something as permanent as an ancient frieze" },
         { id: "card-players", title: "The Card Players", why: "Cézanne's most celebrated painting — two men at a table, the composition a systematic investigation of form and space that Picasso studied obsessively before inventing Cubism" },
       ],
-      prevMovement: { id: "impressionism-movement", name: "Impressionism" },
+      prevMovement: { id: "impressionism", name: "Impressionism" },
       nextMovement: { id: "symbolism", name: "Symbolism" },
     },
 
