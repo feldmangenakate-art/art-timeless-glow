@@ -333,14 +333,24 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
               )}
             </div>
 
-            {/* Right col: image — natural aspect ratio, no cropping */}
+            {/* Right col: image — natural aspect ratio; Egypt gets a tall portrait crop */}
             <div className="hidden md:block">
               {civ.image ? (
+                civ.id === 'egypt' ? (
+                  <div style={{ width: "100%", height: "520px", borderRadius: "2px", overflow: "hidden" }}>
+                    <img
+                      src={civ.image}
+                      alt={civ.name}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 18%", display: "block", opacity: 0.9 }}
+                    />
+                  </div>
+                ) : (
                 <img
                   src={civ.image}
                   alt={civ.name}
                   style={{ width: "100%", height: "auto", display: "block", borderRadius: "2px", opacity: 0.9 }}
                 />
+                )
               ) : (
                 <div
                   className="w-full rounded flex items-center justify-center flex-col gap-2"

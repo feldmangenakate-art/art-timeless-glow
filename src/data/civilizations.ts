@@ -333,7 +333,7 @@ export const CIVILIZATIONS: Civilization[] = [
   {
     id: 'modern',
     name: 'Modern & Contemporary',
-    image: '/timeline/klimt.webp',
+    image: '/timeline/Adele_Klimt_.webp',
     dates: '1900–present',
     start: 1900,
     end: 2025,
