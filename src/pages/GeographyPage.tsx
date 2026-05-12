@@ -125,7 +125,7 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, onClic
   const pillOpacity = active ? 1 : 0.6;
   const pw = pillWidth(movement.name);
 
-  const pillFill = (active || isSelected) ? `${movement.color}26` : "#FAF8F4";
+  const GOLD = "#C9A84C";
 
   return (
     <g>
@@ -142,7 +142,7 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, onClic
       />
       <motion.g
         onClick={(e: any) => { e.stopPropagation(); onClick(); }}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.08))" }}
         initial={{ opacity: 0, scale: 0.7 }}
         animate={{ opacity: pillOpacity, scale: 1 }}
         transition={{ delay: index * 0.1 + 0.25, duration: 0.2, ease: "easeOut" }}
@@ -153,21 +153,20 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, onClic
           width={pw}
           height={PILL_H}
           rx={3}
-          fill={pillFill}
-          stroke={movement.color}
-          strokeWidth={isSelected ? 1.5 : 0.8}
-          strokeOpacity={active ? 1 : 0.45}
+          fill="#FAF8F4"
+          stroke={isSelected ? GOLD : `${GOLD}99`}
+          strokeWidth={isSelected ? 1.5 : 1}
         />
         <text
           x={px}
           y={py - 3}
           textAnchor="middle"
-          fill="#2A2018"
+          fill="#2A1E10"
           fontSize={6.5}
           fontFamily="'Courier New', monospace"
           letterSpacing="0.06em"
           style={{ textTransform: "uppercase", userSelect: "none", pointerEvents: "none" }}
-          fillOpacity={active ? 1 : 0.55}
+          fillOpacity={active ? 0.9 : 0.5}
         >
           {movement.name}
         </text>
@@ -175,10 +174,10 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, onClic
           x={px}
           y={py + 8}
           textAnchor="middle"
-          fill="#2A2018"
+          fill="#2A1E10"
           fontSize={5.5}
           fontFamily="'Courier New', monospace"
-          fillOpacity={active ? 0.65 : 0.35}
+          fillOpacity={active ? 0.55 : 0.3}
           style={{ userSelect: "none", pointerEvents: "none" }}
         >
           {movement.dates}
