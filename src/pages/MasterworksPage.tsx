@@ -13,16 +13,7 @@ export default function MasterworksPage() {
     <main style={{ background: "#EDE8DF", minHeight: "100vh" }} className="pt-16">
 
       {/* Header */}
-      <section className="px-8 pt-10 pb-4 max-w-6xl mx-auto text-center">
-        <button
-          onClick={() => navigate("/")}
-          className="font-mono uppercase tracking-widest mb-6 block transition-colors duration-200"
-          style={{ fontSize: "9px", color: MUTED, letterSpacing: "0.15em" }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = GOLD)}
-          onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
-        >
-          ← Home
-        </button>
+      <section className="px-8 pt-8 pb-4 max-w-6xl mx-auto text-center">
         <h1 className="font-display text-6xl tracking-wide" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, color: DARK, marginBottom: "1.25rem", lineHeight: 1.0 }}>
           Masterworks
         </h1>
