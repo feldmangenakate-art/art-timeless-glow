@@ -116,7 +116,7 @@ medieval: 1100,
     impressionism: { side: "above" },
     modern:        { side: "below" },
 byzantine:     { side: "below" },
-    medieval:      { side: "below", offsetPx: -20 },
+    medieval:      { side: "below" },
   };
   for (const placement of labelPlacements) {
     const id = CIVILIZATIONS[placement.civIndex].id;
