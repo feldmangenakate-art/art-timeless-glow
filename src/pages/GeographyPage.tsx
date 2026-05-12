@@ -116,13 +116,18 @@ interface PillProps {
   year: number;
   index: number;
   isSelected: boolean;
+  hasSelection: boolean;
   onClick: () => void;
 }
 
-function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, onClick }: PillProps) {
+function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, hasSelection, onClick }: PillProps) {
   const active = isMovementActive(movement.activeRange, year);
-  const rayOpacity = active ? 0.85 : 0.28;
-  const pillOpacity = active ? 1 : 0.6;
+  const rayOpacity = hasSelection
+    ? isSelected ? 0.85 : 0.1
+    : active ? 0.85 : 0.28;
+  const pillOpacity = hasSelection
+    ? isSelected ? 1 : 0.2
+    : active ? 1 : 0.6;
   const pw = pillWidth(movement.name);
 
   const GOLD = "#C9A84C";
@@ -192,10 +197,11 @@ interface RayLayerProps {
   selectedCountryId: string | null;
   sidePanelMovement: GeoMovement | null;
   year: number;
+  hasSelection: boolean;
   onPillClick: (movement: GeoMovement, countryName: string) => void;
 }
 
-function RayLayer({ selectedCountryId, sidePanelMovement, year, onPillClick }: RayLayerProps) {
+function RayLayer({ selectedCountryId, sidePanelMovement, year, hasSelection, onPillClick }: RayLayerProps) {
   const { projection } = useMapContext();
   const selectedCountry = GEO_COUNTRIES.find((c) => c.id === selectedCountryId) ?? null;
 
@@ -225,6 +231,7 @@ function RayLayer({ selectedCountryId, sidePanelMovement, year, onPillClick }: R
           year={year}
           index={i}
           isSelected={sidePanelMovement?.id === movement.id}
+          hasSelection={hasSelection}
           onClick={() => onPillClick(movement, selectedCountry.name)}
         />
       ))}
@@ -254,8 +261,12 @@ export default function GeographyPage() {
   }
 
   function handlePillClick(movement: GeoMovement, countryName: string) {
-    setSidePanelMovement(movement);
-    setSidePanelCountryName(countryName);
+    if (sidePanelMovement?.id === movement.id) {
+      setSidePanelMovement(null);
+    } else {
+      setSidePanelMovement(movement);
+      setSidePanelCountryName(countryName);
+    }
   }
 
   return (
@@ -375,6 +386,7 @@ export default function GeographyPage() {
             selectedCountryId={selectedCountryId}
             sidePanelMovement={sidePanelMovement}
             year={year}
+            hasSelection={sidePanelMovement !== null}
             onPillClick={handlePillClick}
           />
 
@@ -389,7 +401,13 @@ export default function GeographyPage() {
             return (
               <Marker key={country.id} coordinates={coords}>
                 {isSelected && (
-                  <circle r={9} fill="none" stroke={GOLD} strokeWidth={1} strokeOpacity={0.5} />
+                  <circle
+                    r={9}
+                    fill="none"
+                    stroke={sidePanelMovement ? sidePanelMovement.color : GOLD}
+                    strokeWidth={sidePanelMovement ? 1.5 : 1}
+                    strokeOpacity={sidePanelMovement ? 0.9 : 0.5}
+                  />
                 )}
                 <circle
                   r={isHovered && !isSelected ? 5.5 : 4.5}
