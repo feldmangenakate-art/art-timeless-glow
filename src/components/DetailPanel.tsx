@@ -336,12 +336,12 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
             {/* Right col: image — natural aspect ratio; Egypt gets a tall portrait crop */}
             <div className="hidden md:block">
               {civ.image ? (
-                civ.id === 'egypt' ? (
+                (civ.id === 'egypt' || civ.id === 'modern') ? (
                   <div style={{ width: "100%", height: "520px", borderRadius: "2px", overflow: "hidden" }}>
                     <img
                       src={civ.image}
                       alt={civ.name}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 18%", display: "block", opacity: 0.9 }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: civ.id === 'egypt' ? "50% 18%" : "50% 20%", display: "block", opacity: 0.9 }}
                     />
                   </div>
                 ) : (
