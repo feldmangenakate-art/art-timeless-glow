@@ -65,10 +65,10 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="max-w-6xl mx-auto px-8 py-7"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8" style={{ gridTemplateColumns: "1fr 340px" }}>
 
             {/* Left col: name + description + works */}
-            <div className="md:col-span-2 space-y-4">
+            <div className="space-y-4">
 
               {/* Back to civilization — shown when a movement is selected */}
               {selectedMovement && (
@@ -186,39 +186,127 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                     fontFamily: "'Raleway', system-ui, sans-serif",
                     fontWeight: 300,
                     fontSize: "0.875rem",
-                    lineHeight: 1.7,
+                    lineHeight: 1.75,
                     color: "rgba(42,30,16,0.8)",
                     margin: 0,
                   }}
                 >
-                  {civ.description}
+                  {civ.longDescription || civ.description}
                 </p>
               )}
 
-              {/* Key works — only for civilization view */}
+              {/* Key works — image cards */}
               {!selectedMovement && (
                 <div>
-                  <p className="font-mono uppercase tracking-widest mb-2" style={{ fontSize: "9px", color: MUTED }}>
+                  <p className="font-mono uppercase tracking-widest mb-3" style={{ fontSize: "9px", color: MUTED }}>
                     Key Works
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {civ.works.map((work, i) => (
-                      <span
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    {civ.keyWorks.map((work, i) => (
+                      <div
                         key={i}
-                        className="px-3 py-1 font-mono"
+                        onClick={() => work.masterId && navigate(`/masterworks/${work.masterId}`)}
                         style={{
-                          fontSize: "9px",
-                          border: `1px solid rgba(42,30,16,0.15)`,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          padding: "7px 10px",
+                          background: "#FAF8F4",
+                          border: "1px solid rgba(42,30,16,0.1)",
                           borderRadius: "2px",
-                          color: "rgba(42,30,16,0.65)",
-                          background: "rgba(42,30,16,0.03)",
+                          cursor: work.masterId ? "pointer" : "default",
+                          transition: "border-color 0.15s, box-shadow 0.15s",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (work.masterId) {
+                            (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(201,168,76,0.45)";
+                            (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 8px rgba(42,30,16,0.07)";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(42,30,16,0.1)";
+                          (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
                         }}
                       >
-                        {work}
+                        {/* Text */}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{
+                            fontFamily: "'Raleway', system-ui, sans-serif",
+                            fontWeight: 400,
+                            fontSize: "0.75rem",
+                            color: work.masterId ? DARK : "rgba(42,30,16,0.7)",
+                            lineHeight: 1.3,
+                            marginBottom: "2px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}>
+                            {work.title}
+                          </p>
+                          <p style={{
+                            fontFamily: "monospace",
+                            fontSize: "9px",
+                            color: MUTED,
+                            lineHeight: 1,
+                          }}>
+                            {work.date}
+                          </p>
+                        </div>
+                        {/* Arrow for linked works */}
+                        {work.masterId && (
+                          <span style={{ fontFamily: "monospace", fontSize: "10px", color: "rgba(201,168,76,0.5)", flexShrink: 0 }}>
+                            →
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Art Movement Tags */}
+              {!selectedMovement && civ.artMovementTags && civ.artMovementTags.length > 0 && (
+                <div>
+                  <p className="font-mono uppercase tracking-widest mb-3" style={{ fontSize: "9px", color: MUTED }}>
+                    Art Movements
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                    {civ.artMovementTags.map((tag) => (
+                      <span
+                        key={tag}
+                        style={{
+                          fontFamily: "'Raleway', system-ui, sans-serif",
+                          fontWeight: 300,
+                          fontSize: "10px",
+                          padding: "3px 10px",
+                          border: "1px solid rgba(201,168,76,0.35)",
+                          borderRadius: "2px",
+                          color: "rgba(201,168,76,0.75)",
+                          background: "rgba(201,168,76,0.04)",
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {tag}
                       </span>
                     ))}
                   </div>
                 </div>
+              )}
+
+              {/* Closing insight */}
+              {!selectedMovement && civ.insight && (
+                <p style={{
+                  fontFamily: "'Libre Baskerville', Georgia, serif",
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  fontSize: "0.8rem",
+                  color: "rgba(42,30,16,0.45)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                  paddingTop: "4px",
+                }}>
+                  {civ.insight}
+                </p>
               )}
 
               {/* Facts row — only for civilization view */}
@@ -245,27 +333,29 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
               )}
             </div>
 
-            {/* Right col: image */}
-            <div className="hidden md:flex flex-col gap-4">
-              <div
-                className="w-full rounded overflow-hidden flex items-center justify-center flex-col gap-2"
-                style={{ height: "180px", background: civ.image ? "transparent" : "#E8E4DC" }}
-              >
-                {civ.image ? (
-                  <img src={civ.image} alt={civ.name} className="w-full h-full object-cover" style={{ opacity: 0.9 }} />
-                ) : (
-                  <>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.3 }}>
-                      <rect x="3" y="3" width="18" height="18" rx="2" stroke="rgba(42,30,16,0.5)" strokeWidth="1.5"/>
-                      <circle cx="8.5" cy="8.5" r="1.5" stroke="rgba(42,30,16,0.5)" strokeWidth="1.5"/>
-                      <path d="M21 15l-5-5L5 21" stroke="rgba(42,30,16,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span className="font-mono uppercase tracking-widest" style={{ fontSize: "8px", color: "rgba(42,30,16,0.35)" }}>
-                      Image coming soon
-                    </span>
-                  </>
-                )}
-              </div>
+            {/* Right col: image — natural aspect ratio, no cropping */}
+            <div className="hidden md:block">
+              {civ.image ? (
+                <img
+                  src={civ.image}
+                  alt={civ.name}
+                  style={{ width: "100%", height: "auto", display: "block", borderRadius: "2px", opacity: 0.9 }}
+                />
+              ) : (
+                <div
+                  className="w-full rounded flex items-center justify-center flex-col gap-2"
+                  style={{ minHeight: "200px", background: "#E8E4DC" }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.3 }}>
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="rgba(42,30,16,0.5)" strokeWidth="1.5"/>
+                    <circle cx="8.5" cy="8.5" r="1.5" stroke="rgba(42,30,16,0.5)" strokeWidth="1.5"/>
+                    <path d="M21 15l-5-5L5 21" stroke="rgba(42,30,16,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span className="font-mono uppercase tracking-widest" style={{ fontSize: "8px", color: "rgba(42,30,16,0.35)" }}>
+                    Image coming soon
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
