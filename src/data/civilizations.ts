@@ -36,7 +36,7 @@ export const CIVILIZATIONS: Civilization[] = [
   {
     id: 'prehistoric',
     name: 'Prehistoric Art',
-    image: '/timeline/Venus Prehistoric.webp',
+    image: '/timeline/prehistoric.webp',
     dates: '35,000–10,000 BC',
     start: -35000,
     end: -10000,
