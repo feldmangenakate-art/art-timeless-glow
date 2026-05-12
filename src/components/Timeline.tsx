@@ -103,8 +103,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
   // Visual-only dot position overrides (does not affect panel data)
   const DOT_YEAR_OVERRIDES: Record<string, number> = {
     byzantine: 600,
-    islamic: 750,
-    medieval: 1100,
+medieval: 1100,
   };
 
   const positions = CIVILIZATIONS.map((civ) =>
@@ -116,8 +115,7 @@ export default function Timeline({ onSelect, selectedId }: TimelineProps) {
   const overrideSides: Record<string, { side: "above" | "below"; offsetPx?: number }> = {
     impressionism: { side: "above" },
     modern:        { side: "below" },
-    islamic:       { side: "above" },
-    byzantine:     { side: "below" },
+byzantine:     { side: "below" },
     medieval:      { side: "below", offsetPx: -20 },
   };
   for (const placement of labelPlacements) {
