@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ChevronLeft } from "lucide-react";
@@ -51,26 +51,24 @@ export default function MasterworkDetailPage() {
   return (
     <div style={{ background: "#0F0D0A", minHeight: "100vh" }} className="pt-16">
 
-      {/* Back nav — fixed so always visible while scrolling */}
+      {/* Breadcrumb nav — fixed so always visible while scrolling */}
       <div style={{ position: "fixed", top: "72px", left: "32px", zIndex: 50 }}>
+        {/* Primary: always Back to Masterworks */}
         <button
-          onClick={() => cameFromArtist
-            ? navigate(`/artists/${locationState?.artistId}`)
-            : navigate("/masterworks")
-          }
+          onClick={() => navigate("/masterworks")}
           className="flex items-center gap-2 transition-colors duration-200"
           style={{ color: `${WARM_WHITE}50`, fontFamily: "'Raleway', system-ui, sans-serif", fontWeight: 300, fontSize: "0.8rem" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = GOLD)}
           onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}50`)}
         >
           <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
-          {cameFromArtist ? `Back to ${locationState?.artistName}` : "Back to Masterworks"}
+          Back to Masterworks
         </button>
 
-        {/* Secondary quiet link */}
-        {cameFromArtist ? (
+        {/* Secondary: Back to Artist — only if navigated from an artist page */}
+        {cameFromArtist && (
           <button
-            onClick={() => navigate("/masterworks")}
+            onClick={() => navigate(`/artists/${locationState?.artistId}`)}
             style={{
               display: "block",
               marginTop: "4px",
@@ -88,31 +86,9 @@ export default function MasterworkDetailPage() {
             onMouseEnter={(e) => (e.currentTarget.style.color = `${WARM_WHITE}55`)}
             onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}28`)}
           >
-            Also in: Masterworks ↗
+            ← Back to {locationState?.artistName}
           </button>
-        ) : (associatedArtist && (cameFromMasterworks || !locationState)) ? (
-          <button
-            onClick={() => navigate(`/artists/${associatedArtist.id}`)}
-            style={{
-              display: "block",
-              marginTop: "4px",
-              fontFamily: "'Raleway', system-ui, sans-serif",
-              fontSize: "11px",
-              fontWeight: 300,
-              letterSpacing: "0.08em",
-              color: `${WARM_WHITE}28`,
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = `${WARM_WHITE}55`)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}28`)}
-          >
-            Also in: {associatedArtist.name} ↗
-          </button>
-        ) : null}
+        )}
       </div>
 
       {/* Main content */}
@@ -164,16 +140,21 @@ export default function MasterworkDetailPage() {
           >
             {/* Era + year */}
             <div className="flex items-center gap-3 flex-wrap">
-              <span
+              <Link
+                to={`/timeline#${work.civilizationId}`}
                 className="font-mono text-[9px] uppercase tracking-widest px-2 py-0.5"
                 style={{
                   color: work.eraColor,
                   border: `1px solid ${work.eraColor}50`,
                   borderRadius: "2px",
+                  textDecoration: "none",
+                  transition: "border-color 0.2s, background-color 0.2s",
                 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = work.eraColor; (e.currentTarget as HTMLElement).style.backgroundColor = `${work.eraColor}12`; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = `${work.eraColor}50`; (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
               >
                 {work.era}
-              </span>
+              </Link>
               <span className="font-mono text-[10px]" style={{ color: `${WARM_WHITE}40` }}>
                 {work.year}
               </span>
@@ -193,15 +174,35 @@ export default function MasterworkDetailPage() {
             </h1>
 
             {/* Artist */}
-            <p style={{
-              fontFamily: "'Raleway', system-ui, sans-serif",
-              fontWeight: 300,
-              fontSize: "1rem",
-              color: `${WARM_WHITE}70`,
-              margin: 0,
-            }}>
-              {work.artist}
-            </p>
+            {work.artistId ? (
+              <Link
+                to={`/artists/${work.artistId}`}
+                style={{
+                  fontFamily: "'Raleway', system-ui, sans-serif",
+                  fontWeight: 300,
+                  fontSize: "1rem",
+                  color: `${GOLD}99`,
+                  textDecoration: "none",
+                  display: "block",
+                  margin: 0,
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = GOLD; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = `${GOLD}99`; }}
+              >
+                {work.artist}
+              </Link>
+            ) : (
+              <p style={{
+                fontFamily: "'Raleway', system-ui, sans-serif",
+                fontWeight: 300,
+                fontSize: "1rem",
+                color: `${WARM_WHITE}70`,
+                margin: 0,
+              }}>
+                {work.artist}
+              </p>
+            )}
 
             {/* 4 Pillars */}
             <div className="space-y-6">
