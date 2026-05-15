@@ -141,18 +141,17 @@ export default function Index() {
           <div style={{ width: 60, height: 1, background: GOLD, opacity: 0.4, margin: "0 auto 1.5rem" }} />
 
           {todayEvent && (
-            <>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem", padding: "0.3rem 0.9rem", borderRadius: 9999, border: "1px solid rgba(201,168,76,0.4)", background: "rgba(12,10,7,0.45)", backdropFilter: "blur(2px)" }}>
-                <span className="animate-pulse-dot" style={{ display: "inline-block", width: 5, height: 5, borderRadius: "50%", backgroundColor: GOLD, flexShrink: 0 }} />
-                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 8, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase" }}>
-                  Today in Art History
-                </span>
-              </div>
-
-              <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: "italic", fontSize: "0.85rem", color: "rgba(240,234,214,0.65)", lineHeight: 1.5, maxWidth: "38rem", margin: "0 auto" }}>
-                {todayEvent}
-              </p>
-            </>
+            <button
+              onClick={() => document.getElementById("today-strip")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+              style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.3rem 0.9rem", borderRadius: 9999, border: "1px solid rgba(201,168,76,0.4)", background: "rgba(12,10,7,0.45)", backdropFilter: "blur(2px)", cursor: "pointer", transition: "filter 0.2s ease, border-color 0.2s ease" }}
+              onMouseEnter={(e) => { e.currentTarget.style.filter = "brightness(1.25)"; e.currentTarget.style.borderColor = "rgba(201,168,76,0.75)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.filter = "brightness(1)"; e.currentTarget.style.borderColor = "rgba(201,168,76,0.4)"; }}
+            >
+              <span className="animate-pulse-dot" style={{ display: "inline-block", width: 5, height: 5, borderRadius: "50%", backgroundColor: GOLD, flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Courier New', monospace", fontSize: 8, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                Today in Art History
+              </span>
+            </button>
           )}
 
         </div>
@@ -162,7 +161,7 @@ export default function Index() {
       <div style={{ backgroundColor: "#F5F0E8", padding: "28px 40px 20px", display: "flex", flexDirection: "column", alignItems: "center", boxSizing: "border-box" }}>
 
         {todayEvent && (
-          <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontSize: "0.8rem", color: "rgba(130,100,40,0.75)", letterSpacing: "0.015em", marginBottom: "16px", textAlign: "center" }}>
+          <p id="today-strip" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontSize: "0.8rem", color: "rgba(130,100,40,0.75)", letterSpacing: "0.015em", marginBottom: "16px", textAlign: "center" }}>
             Today &#183; {todayEvent}
           </p>
         )}
