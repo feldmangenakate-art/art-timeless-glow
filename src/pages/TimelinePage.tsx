@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "@/components/Timeline";
 import DetailPanel from "@/components/DetailPanel";
@@ -6,11 +6,27 @@ import { CIVILIZATIONS, type Civilization } from "@/data/civilizations";
 
 const PREHISTORIC = CIVILIZATIONS.find((c) => c.id === "prehistoric")!;
 
+// Normalize incoming civilizationId aliases to the actual CIVILIZATIONS data IDs
+const CIV_ID_MAP: Record<string, string> = {
+  "ancient-egypt":       "egypt",
+  "ancient-greece":      "greece",
+  "roman-empire":        "rome",
+  "medieval-europe":     "medieval",
+  "islamic-golden-age":  "medieval",
+  "modern-contemporary": "modern",
+};
+
+function resolvecivId(raw: string | undefined): Civilization {
+  if (!raw) return PREHISTORIC;
+  const normalized = CIV_ID_MAP[raw] ?? raw;
+  return CIVILIZATIONS.find((c) => c.id === normalized) ?? PREHISTORIC;
+}
+
 export default function TimelinePage() {
   const location = useLocation();
   const [selected, setSelected] = useState<Civilization>(() => {
-    const state = location.state as { highlightDot?: string } | null;
-    return CIVILIZATIONS.find((c) => c.id === state?.highlightDot) ?? PREHISTORIC;
+    const state = location.state as { civilizationId?: string; highlightDot?: string } | null;
+    return resolvecivId(state?.civilizationId ?? state?.highlightDot);
   });
 
   return (

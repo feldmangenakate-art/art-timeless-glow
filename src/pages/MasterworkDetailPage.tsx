@@ -141,7 +141,8 @@ export default function MasterworkDetailPage() {
             {/* Era + year */}
             <div className="flex items-center gap-3 flex-wrap">
               <Link
-                to={`/timeline#${work.civilizationId}`}
+                to="/timeline"
+                state={{ civilizationId: work.civilizationId }}
                 className="font-mono text-[9px] uppercase tracking-widest px-2 py-0.5"
                 style={{
                   color: work.eraColor,
