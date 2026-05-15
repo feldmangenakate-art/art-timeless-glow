@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { CIVILIZATIONS, getTodayInArt } from "@/data/civilizations";
+import { motion, AnimatePresence } from "framer-motion";
+import { CIVILIZATIONS, getTodayInArt, getTodayDetail } from "@/data/civilizations";
 import { MASTERWORKS } from "@/data/masterworks";
 import { RENAISSANCE_ARTISTS } from "@/data/artists-renaissance";
 import { BAROQUE_ARTISTS } from "@/data/artists-baroque";
@@ -105,6 +106,10 @@ function FeaturedCard({ image, label, title, subtitle, href }: FeaturedItem) {
 
 export default function Index() {
   const todayEvent = getTodayInArt();
+  const todayDetail = getTodayDetail();
+  const [expanded, setExpanded] = useState(false);
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString("en-US", { month: "long", day: "numeric" }).toUpperCase();
 
   const featured = useMemo((): FeaturedItem[] => {
     const ALL_ARTISTS = [...RENAISSANCE_ARTISTS, ...BAROQUE_ARTISTS, ...CENTURY_18_19_ARTISTS, ...MODERN_ARTISTS];
@@ -121,14 +126,14 @@ export default function Index() {
   return (
     <main style={{ minHeight: "100vh" }}>
 
-      {/* HERO — 65vh */}
-      <section style={{ position: "relative", height: "65vh", minHeight: 380, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      {/* HERO */}
+      <section style={{ position: "relative", minHeight: "65vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "5rem 0 4rem" }}>
 
         <div style={{ position: "absolute", inset: 0, backgroundImage: "url('/timeline/birth-of-venus.webp')", backgroundSize: "cover", backgroundPosition: "62% 15%", zIndex: 0 }} />
 
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(12,10,7,0.4) 0%, rgba(12,10,7,0.62) 55%, rgba(245,240,232,1) 100%)", zIndex: 1 }} />
 
-        <div style={{ position: "relative", zIndex: 2, textAlign: "center", maxWidth: "56rem", padding: "0 2rem" }}>
+        <div style={{ position: "relative", zIndex: 2, textAlign: "center", maxWidth: "56rem", padding: "0 2rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
           <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: "72px", lineHeight: 1.05, color: "#F0EAD6", letterSpacing: "-0.01em", marginBottom: "0.9rem", textShadow: "0 2px 24px rgba(0,0,0,0.6)" }}>
             Art Through the Ages
@@ -141,17 +146,155 @@ export default function Index() {
           <div style={{ width: 60, height: 1, background: GOLD, opacity: 0.4, margin: "0 auto 1.5rem" }} />
 
           {todayEvent && (
-            <button
-              onClick={() => document.getElementById("today-strip")?.scrollIntoView({ behavior: "smooth", block: "center" })}
-              style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.3rem 0.9rem", borderRadius: 9999, border: "1px solid rgba(201,168,76,0.4)", background: "rgba(12,10,7,0.45)", backdropFilter: "blur(2px)", cursor: "pointer", transition: "filter 0.2s ease, border-color 0.2s ease" }}
-              onMouseEnter={(e) => { e.currentTarget.style.filter = "brightness(1.25)"; e.currentTarget.style.borderColor = "rgba(201,168,76,0.75)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.filter = "brightness(1)"; e.currentTarget.style.borderColor = "rgba(201,168,76,0.4)"; }}
-            >
-              <span className="animate-pulse-dot" style={{ display: "inline-block", width: 5, height: 5, borderRadius: "50%", backgroundColor: GOLD, flexShrink: 0 }} />
-              <span style={{ fontFamily: "'Courier New', monospace", fontSize: 8, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase" }}>
-                Today in Art History
-              </span>
-            </button>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+
+              {/* Pill toggle */}
+              <button
+                onClick={() => setExpanded((e) => !e)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  padding: "0.3rem 0.9rem",
+                  borderRadius: 9999,
+                  border: `1px solid rgba(201,168,76,${expanded ? "0.65" : "0.4"})`,
+                  background: "rgba(12,10,7,0.45)",
+                  backdropFilter: "blur(2px)",
+                  cursor: "pointer",
+                  transition: "filter 0.2s ease, border-color 0.2s ease",
+                  marginBottom: "0.85rem",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.filter = "brightness(1.25)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = "brightness(1)"; }}
+              >
+                {expanded ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 8, height: 8, color: GOLD, fontSize: 11, lineHeight: 1, flexShrink: 0, marginBottom: 1 }}>×</span>
+                ) : (
+                  <span className="animate-pulse-dot" style={{ display: "inline-block", width: 5, height: 5, borderRadius: "50%", backgroundColor: GOLD, flexShrink: 0 }} />
+                )}
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 8, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                  {expanded ? "Close" : "Today in Art History"}
+                </span>
+              </button>
+
+              {/* Short fact — slides up and fades out when expanded */}
+              <AnimatePresence mode="wait">
+                {!expanded && (
+                  <motion.p
+                    key="short-fact"
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25 }}
+                    style={{
+                      fontFamily: "'Libre Baskerville', Georgia, serif",
+                      fontStyle: "italic",
+                      fontSize: "0.8rem",
+                      color: "rgba(240,234,214,0.65)",
+                      lineHeight: 1.6,
+                      maxWidth: "34rem",
+                      textAlign: "center",
+                      margin: 0,
+                    }}
+                  >
+                    {todayEvent}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+
+              {/* Expanded panel — slides down */}
+              <AnimatePresence>
+                {expanded && (
+                  <motion.div
+                    key="expanded-panel"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    style={{ overflow: "hidden", width: "100%" }}
+                  >
+                    <div style={{
+                      background: "rgba(12,10,7,0.72)",
+                      backdropFilter: "blur(10px)",
+                      border: "1px solid rgba(201,168,76,0.2)",
+                      borderRadius: 4,
+                      padding: "1.75rem 2.5rem",
+                      maxWidth: "44rem",
+                      margin: "0 auto",
+                      textAlign: "center",
+                    }}>
+
+                      {/* Historical date */}
+                      <p style={{
+                        fontFamily: "'Courier New', monospace",
+                        fontSize: "9px",
+                        letterSpacing: "0.22em",
+                        textTransform: "uppercase",
+                        color: GOLD,
+                        margin: "0 0 0.75rem",
+                      }}>
+                        {todayDetail?.date ?? formattedDate}
+                      </p>
+
+                      {/* Title */}
+                      <h2 style={{
+                        fontFamily: "'Playfair Display', Georgia, serif",
+                        fontStyle: "italic",
+                        fontWeight: 700,
+                        fontSize: "clamp(1.15rem, 3vw, 1.6rem)",
+                        color: "#F0EAD6",
+                        lineHeight: 1.2,
+                        margin: "0 0 0.75rem",
+                        textShadow: "0 1px 8px rgba(0,0,0,0.5)",
+                      }}>
+                        {todayDetail?.title ?? "Today in Art History"}
+                      </h2>
+
+                      {/* Gold rule */}
+                      <div style={{ width: 36, height: 1, background: GOLD, opacity: 0.35, margin: "0 auto 1.25rem" }} />
+
+                      {/* Body paragraphs */}
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", textAlign: "left" }}>
+                        {(todayDetail?.body ?? [todayEvent]).map((para, i) => (
+                          <p key={i} style={{
+                            fontFamily: "'Raleway', system-ui, sans-serif",
+                            fontWeight: 300,
+                            fontSize: "0.8rem",
+                            lineHeight: 1.8,
+                            color: "rgba(240,234,214,0.82)",
+                            margin: 0,
+                          }}>
+                            {para}
+                          </p>
+                        ))}
+                      </div>
+
+                      {/* Related link */}
+                      {todayDetail?.relatedWorkId && (
+                        <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: "1px solid rgba(201,168,76,0.15)", textAlign: "center" }}>
+                          <Link
+                            to={`/masterworks/${todayDetail.relatedWorkId}`}
+                            style={{
+                              fontFamily: "'Raleway', system-ui, sans-serif",
+                              fontSize: "0.7rem",
+                              letterSpacing: "0.1em",
+                              color: GOLD,
+                              textDecoration: "none",
+                              borderBottom: "1px solid rgba(201,168,76,0.4)",
+                              paddingBottom: "1px",
+                            }}
+                          >
+                            Explore the work &#8594;
+                          </Link>
+                        </div>
+                      )}
+
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+            </div>
           )}
 
         </div>
@@ -159,12 +302,6 @@ export default function Index() {
 
       {/* ABOVE-FOLD CARDS — 35vh */}
       <div style={{ backgroundColor: "#F5F0E8", padding: "28px 40px 20px", display: "flex", flexDirection: "column", alignItems: "center", boxSizing: "border-box" }}>
-
-        {todayEvent && (
-          <p id="today-strip" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontSize: "0.8rem", color: "rgba(130,100,40,0.75)", letterSpacing: "0.015em", marginBottom: "16px", textAlign: "center" }}>
-            Today &#183; {todayEvent}
-          </p>
-        )}
 
         <div style={{ width: "100%", maxWidth: "72rem", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
           {NAV_CARDS.map((card) => (

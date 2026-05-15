@@ -341,13 +341,20 @@ export const CIVILIZATIONS: Civilization[] = [
   },
 ];
 
-import { TODAY_IN_ART } from "./today-in-art";
+import { TODAY_IN_ART, TODAY_IN_ART_DETAIL, type TodayDetail } from "./today-in-art";
+
+function todayKey(): string {
+  const now = new Date();
+  return `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+}
 
 export function getTodayInArt(): string {
-  const now = new Date();
-  const key = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  
-  if (TODAY_IN_ART[key]) return TODAY_IN_ART[key];
-  
-  return "Every day in history belongs to an artist, a masterwork, or a revolution in seeing.";
+  const key = todayKey();
+  return TODAY_IN_ART[key] ?? "Every day in history belongs to an artist, a masterwork, or a revolution in seeing.";
 }
+
+export function getTodayDetail(): TodayDetail | null {
+  return TODAY_IN_ART_DETAIL[todayKey()] ?? null;
+}
+
+export type { TodayDetail };

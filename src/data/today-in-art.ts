@@ -2,6 +2,433 @@
 // 365-day "Today in Art History" dataset
 // Keys: "MM-DD" — one entry per calendar day
 
+// ─── Rich detail entries (used in the expanded panel) ────────────────────────
+
+export interface TodayDetail {
+  date: string;           // e.g. "MAY 15, 1863"
+  title: string;          // large heading for expanded panel
+  body: string[];         // paragraphs
+  relatedWorkId?: string; // optional masterwork ID for "Explore the work →" link
+}
+
+export const TODAY_IN_ART_DETAIL: Record<string, TodayDetail> = {
+  "01-02": {
+    date: "JANUARY 2, 1839",
+    title: "The Day Painting Lost Its Monopoly",
+    body: [
+      "On this day Louis Daguerre demonstrated his photographic process to the French Academy of Sciences. Within months the daguerreotype was publicly available, and within a decade commercial portrait studios had opened across Europe and America.",
+      "Painters panicked — and then adapted. The question 'why paint what a camera can record?' forced art toward everything a camera could not do: emotion, subjectivity, the felt quality of light. Impressionism is, in part, photography's greatest unintended consequence.",
+      "Degas used photographs as compositional references. Cézanne sought what he called 'the sensation behind the sensation.' The camera did not kill painting. It freed it."
+    ],
+  },
+  "01-19": {
+    date: "JANUARY 19, 1839",
+    title: "The Man Who Broke the Box",
+    body: [
+      "Paul Cézanne was born in Aix-en-Provence on this day in 1839 — the son of a banker who wanted him to study law, a man who failed the entrance exam to the École des Beaux-Arts twice, and the artist who dismantled six centuries of pictorial convention.",
+      "Where the Renaissance established a fixed viewpoint — one eye, one moment, one perspective — Cézanne painted what two eyes actually see: a table that curves slightly, an apple seen from above and the side simultaneously, a mountain that seems to exist in multiple atmospheric states at once.",
+      "Picasso called him 'the father of us all.' Matisse owned his bathers. Without Cézanne there is no Cubism, no abstraction, no modern art as we understand it. He died in 1906 having been caught in a rainstorm while painting outdoors — still working, as always."
+    ],
+    relatedWorkId: "card-players",
+  },
+  "01-23": {
+    date: "JANUARY 23, 1832",
+    title: "The Painter Who Killed Academic Art",
+    body: [
+      "Édouard Manet was born in Paris on this day in 1832 — and no painter did more to destroy what painting had been and make it what it would become. His 'Olympia' (1863) placed a recognizable modern Parisian nude on the compositional throne of Titian's Venus. The official Salon hung it, then recoiled from the public scandal.",
+      "Manet's crime was not nudity but modernity. His figures don't pose in myth or allegory — they stand in Paris, in contemporary clothes or out of them, looking directly back at you with the unsentimental gaze of people who know they're being watched.",
+      "He was refused by the Salon, mocked by critics, and privately adored by the painters who learned most from him. He never exhibited with the Impressionists, though he was their spiritual center. He died in 1883, eleven days after his leg was amputated."
+    ],
+    relatedWorkId: "bar-at-folies",
+  },
+  "02-18": {
+    date: "FEBRUARY 18, 1564",
+    title: "Four Days Before the End",
+    body: [
+      "Michelangelo died in Rome on this day in 1564 at the age of 88, four days after he had been found at work on his final Pietà — the Rondanini, which he had been carving and re-carving for over a decade. He was still chipping stone at 88. They had to take the hammer from his hand.",
+      "He outlived four popes who had employed him. He outlived Leonardo by 45 years. He watched the Reformation transform the world his art had decorated. He designed the dome of St. Peter's and did not live to see it built.",
+      "The stone he left unfinished in his studio — a figure emerging from marble, half-alive, caught between form and formlessness — became the defining image of Michelangelo: a man who believed that the sculpture already existed inside the marble, and that his job was only to release it."
+    ],
+    relatedWorkId: "sistine-ceiling",
+  },
+  "03-06": {
+    date: "MARCH 6, 1475",
+    title: "Born in Caprese, Italy",
+    body: [
+      "Michelangelo di Lodovico Buonarroti Simoni was born on this day in 1475, in the small town of Caprese in Tuscany. His mother died when he was six. He was sent to live with a stonecutter's family, and later claimed that his love of marble came from his wet nurse's milk — she was the wife of a stonecutter.",
+      "By thirteen he was apprenticed to Ghirlandaio, one of the finest painters in Florence. By sixteen he was living in the Medici household, studying the ancient sculptures in Lorenzo de' Medici's garden. By twenty-four he had carved the Pietà. By thirty he had painted the Sistine ceiling's main panels. He called himself a sculptor, not a painter, and resented the commission for the rest of his life.",
+      "He was difficult, suspicious, solitary, and possibly the most talented human being who has ever lived."
+    ],
+    relatedWorkId: "creation-of-adam",
+  },
+  "03-28": {
+    date: "MARCH 28, 1483",
+    title: "The Master of Grace",
+    body: [
+      "Raphael Sanzio was born in Urbino on this day in 1483 — the son of a court painter who died when Raphael was eleven, leaving him the paintbrushes and the lesson that elegance, if pursued with sufficient intelligence, becomes its own kind of truth.",
+      "He arrived in Florence at twenty-one, absorbed Leonardo's sfumato and Michelangelo's anatomical power, synthesized them into something neither man could have produced, and moved to Rome at twenty-five to begin the Vatican Stanze — the most ambitious fresco cycle since the Sistine Chapel, executed simultaneously with it, by a man twenty-three years younger than its creator.",
+      "He died on his 37th birthday. All of Rome went into mourning. His unfinished 'Transfiguration' hung at the head of his bier. He is buried in the Pantheon, where he asked to be placed — near the gods."
+    ],
+    relatedWorkId: "school-of-athens",
+  },
+  "03-30": {
+    date: "MARCH 30, 1853",
+    title: "Born in Groot-Zundert",
+    body: [
+      "Vincent van Gogh was born on this day in 1853 in the southern Netherlands — the son of a Protestant minister, the eldest surviving child (a brother named Vincent Willem had been stillborn exactly one year before). He grew up anxious, intense, difficult to employ, and one of the finest letter-writers in any language.",
+      "He did not begin painting seriously until he was twenty-seven. He spent time as an art dealer, a schoolteacher, a preacher among coal miners. When he finally turned to painting he had roughly ten years left to live and produced over two thousand works in them.",
+      "In his lifetime he sold one painting. The letters he wrote to his brother Theo — over 600 of them, covering everything from Japanese prints to the texture of Provençal sunlight — are now considered one of the greatest documents in the history of art."
+    ],
+    relatedWorkId: "starry-night",
+  },
+  "04-06": {
+    date: "APRIL 6, 1520",
+    title: "All of Rome Mourned",
+    body: [
+      "Raphael died in Rome on this day in 1520 — Good Friday, his 37th birthday. The cause was almost certainly a fever, possibly contracted while supervising the excavation of ancient Roman ruins. He had been working that morning.",
+      "Pope Leo X wept. The body lay in state in the Vatican apartments, surrounded by his unfinished 'Transfiguration,' which had been propped at the head of the bier. Contemporary accounts describe crowds filling the streets. Giorgio Vasari, writing decades later, said the sky itself seemed to darken.",
+      "He was buried in the Pantheon, next to his fiancée's father, beneath an inscription that reads: 'Here lies Raphael, by whom Nature herself feared to be outdone while he lived, and when he died, feared that she too would die.'"
+    ],
+    relatedWorkId: "school-of-athens",
+  },
+  "04-08": {
+    date: "APRIL 8, 1973",
+    title: "The Last Cubist",
+    body: [
+      "Pablo Picasso died in Mougins, France, on this day in 1973 at age 91 — still married to Jacqueline Roque, still painting almost daily, still controversial, still prodigiously productive. He had outlived nearly everyone who had known him in Paris before the First World War.",
+      "The inventory of his estate took years: 1,885 paintings, 1,228 sculptures, 2,880 ceramics, 18,000 engravings and lithographs, 12,000 drawings. He had never stopped. He had moved through Cubism, Surrealism, Classicism, and back to figuration with a restless energy that made every decade feel like a different artist.",
+      "He was buried at Vauvenargues, beneath a bronze sculpture he had made himself. Jacqueline Roque was not permitted at the funeral by his children from previous relationships. Even in death, the biographical drama continued."
+    ],
+    relatedWorkId: "guernica",
+  },
+  "04-15": {
+    date: "APRIL 15, 1452",
+    title: "The Man Who Wanted to Know Everything",
+    body: [
+      "Leonardo da Vinci was born on this day in 1452 in the village of Vinci in Tuscany — the illegitimate son of a notary and a peasant woman, raised by his father's family, apprenticed at fourteen to Andrea del Verrocchio in Florence.",
+      "By the time he left Verrocchio's workshop he was already the finest painter alive. But painting was only one of the things he wanted to do. His notebooks — over 7,000 pages survive, probably a quarter of what he produced — contain designs for flying machines, solar power concentrators, armored vehicles, anatomical studies, hydraulic systems, optical instruments, and investigations into the nature of light, water, and air.",
+      "He left the Mona Lisa unfinished for four years, carrying it with him from commission to commission, adding and refining. When he died in France in 1519, King Francis I was reportedly holding his hand. The Mona Lisa was in the room."
+    ],
+    relatedWorkId: "mona-lisa",
+  },
+  "04-19": {
+    date: "APRIL 19, 1828",
+    title: "The Most Modern Old Master",
+    body: [
+      "Francisco Goya died in Bordeaux on this day in 1828, aged 82, in self-imposed exile from a Spain he no longer recognized. He had survived the Napoleonic invasion, the Inquisition, a mysterious illness that left him completely deaf at 46, and the political chaos of the Restoration.",
+      "The deafness was the turning point. Goya had been the brilliant, celebrated court painter of Charles IV — witty, grand, technically dazzling. After the illness, something darker entered the work. The Saturn devouring his son. The witches' sabbath. The firing squad at dawn.",
+      "He painted those Black Paintings directly onto the walls of his house, for himself alone, with no intention of ever showing them. They were not discovered until after his death, transferred to canvas and shown to the public for the first time in 1878. They look like they were made yesterday."
+    ],
+    relatedWorkId: "third-of-may",
+  },
+  "04-26": {
+    date: "APRIL 26, 1798",
+    title: "The Lion of Romanticism",
+    body: [
+      "Eugène Delacroix was born near Paris on this day in 1798 — possibly the illegitimate son of the diplomat Talleyrand, certainly the heir to everything that made French Romantic painting electrifying. He was twenty-four when he showed 'The Barque of Dante' at the Salon and found himself, overnight, the leader of a movement he hadn't intended to start.",
+      "He traveled to Morocco in 1832 and returned with notebooks full of drawings, sketches, and color observations that fed his work for the rest of his career. He was obsessed with color — unblended, vibrating, laid beside its complement to intensify both. Baudelaire called him 'the last great painter.' Van Gogh copied his pietà from a black-and-white print.",
+      "He quarreled famously with Ingres, the titan of academic line. The argument between color and drawing — between Delacroix and Ingres — is still, in some form, alive."
+    ],
+    relatedWorkId: "liberty-leading",
+  },
+  "05-02": {
+    date: "MAY 2, 1519",
+    title: "In the Arms of the King",
+    body: [
+      "Leonardo da Vinci died at the Château du Clos Lucé in Amboise, France, on this day in 1519 — invited there by King Francis I, who gave him a house, a stipend, and the title 'Premier Painter, Engineer, and Architect to the King.' He was 67. He had brought three paintings with him from Italy: the Mona Lisa, the Virgin and Child with Saint Anne, and the Saint John the Baptist.",
+      "The Mona Lisa never returned to Italy. Leonardo had been working on it, on and off, for sixteen years. After his death it passed into the French royal collection, hung for a time in Versailles, and eventually came to rest in the Louvre — where it still is.",
+      "Francis I reportedly wept at his bedside. The story that he held Leonardo's dying head in his arms was first told by Vasari and is probably not literally true. But Leonardo had spent the last years of his life in France, comfortable and respected, filling notebooks, unable to paint much anymore because his right hand had been partially paralyzed by a stroke. He drew with his left."
+    ],
+    relatedWorkId: "mona-lisa",
+  },
+  "05-11": {
+    date: "MAY 11, 1904",
+    title: "The Last Surrealist",
+    body: [
+      "Salvador Dalí was born in Figueres, Catalonia, on this day in 1904 — the flamboyant, meticulous, commercially savvy, possibly calculating, certainly singular painter who made the unconscious visible with the technical precision of a Flemish master.",
+      "'The Persistence of Memory' (1931) was painted in two hours on a small piece of wood while Gala was out at the cinema. The melting watches came to him, he said, while contemplating a piece of runny Camembert cheese. He painted them before she returned. When she saw it she said he would be unable to forget it once he had seen it.",
+      "He lived until 1989, long enough to see himself become an industry, a brand, a theme park of himself. He moved back to the castle in Púbol he had given Gala, who is buried there. He died in a tower in Figueres, in the theater-museum he had built on the ruins of the municipal theater where his first exhibition had been held."
+    ],
+    relatedWorkId: "persistence-of-memory",
+  },
+  "05-15": {
+    date: "MAY 15, 1863",
+    title: "The Scandal That Broke Academic Art",
+    body: [
+      "On this day in 1863, Napoleon III opened the Salon des Refusés — an exhibition of work rejected by the official Paris Salon jury. Among the 1,200 rejected works was Édouard Manet's 'Le Déjeuner sur l'herbe': a naked Parisian woman seated with two fully clothed men in a modern park, staring directly out at the viewer. Nothing mythological. No allegorical excuse. Just a woman, naked, looking at you.",
+      "The crowds came to laugh, and largely did. What made it scandalous was not the nudity — the official Salon exhibited mythological nudes every year — but the modernity. Titian's Venus sleeps and averts her gaze. Manet's woman sits up, looks directly at you, and clearly knows exactly what is happening.",
+      "But a generation of painters — Monet, Pissarro, Cézanne — understood immediately what Manet had done. He had stepped painting out of antiquity and into the street. The Impressionist revolution, which would formally begin eleven years later, was already announced in the Salon des Refusés on this afternoon."
+    ],
+    relatedWorkId: "bar-at-folies",
+  },
+  "05-17": {
+    date: "MAY 17, 1510",
+    title: "Forgotten for Three Centuries",
+    body: [
+      "Sandro Botticelli died in Florence on this day in 1510 — poor, largely forgotten, and with no idea that 'The Birth of Venus' and 'Primavera' would one day be the most recognized paintings of the Italian Renaissance.",
+      "He had been Medici Florence's most celebrated painter. After Lorenzo de' Medici's death and Savonarola's rise, Botticelli apparently turned religious and destroyed some of his own secular works. His late paintings are darker, stranger, less comfortable. He stopped receiving major commissions.",
+      "It was John Ruskin and the Pre-Raphaelites in the 1860s who rediscovered him — seeing in his graceful, slightly melancholy line exactly the quality that academic art had lost. The Birth of Venus entered the Uffizi and began its long ascent to ubiquity. Botticelli had been in his grave for 350 years."
+    ],
+    relatedWorkId: "birth-of-venus",
+  },
+  "05-21": {
+    date: "MAY 21, 1471",
+    title: "The Northern Renaissance, in One Person",
+    body: [
+      "Albrecht Dürer was born in Nuremberg on this day in 1471 — the son of a goldsmith, trained in the precision of metalwork, and the man who single-handedly transplanted Italian Renaissance ideas about proportion, anatomy, and perspective into the Northern European tradition.",
+      "He traveled to Venice twice. He painted himself with the severity and directness of a saint — the 1500 self-portrait, in which he stares directly at the viewer with his hand raised in an echo of Christ's gesture of blessing, is one of the most audacious acts of self-presentation in art history.",
+      "But his prints were his greatest legacy. Woodcuts and engravings that circulated across Europe, carrying Italian ideas to workshops in Germany, Flanders, and England. In an age before museums, Dürer's prints were how the Renaissance traveled."
+    ],
+  },
+  "07-06": {
+    date: "JULY 6, 1907",
+    title: "The Most Famous Female Artist in History",
+    body: [
+      "Frida Kahlo was born in Coyoacán, Mexico, on this day in 1907 — or so she always said; her birth certificate gives 1907 but she sometimes claimed 1910, the year of the Mexican Revolution, to align herself with the founding of the country she loved and painted.",
+      "She was eighteen when a bus accident broke her spine, collarbone, ribs, pelvis, and right leg. She spent her life in pain, in plaster corsets, and in defiance of both. She began painting during her first long convalescence, using a mirror mounted above her bed. 'I paint myself because I am so often alone,' she said, 'and because I am the subject I know best.'",
+      "She married Diego Rivera twice. She had affairs with Trotsky and Josephine Baker. She wore Tehuana dress and pre-Columbian jewelry as a political act. She did not live to see herself become an icon — she died in 1954, and her international reputation was built almost entirely posthumously."
+    ],
+    relatedWorkId: "two-fridas",
+  },
+  "07-14": {
+    date: "JULY 14, 1862",
+    title: "The Painter of Gold and Desire",
+    body: [
+      "Gustav Klimt was born in Baumgarten, near Vienna, on this day in 1862 — the son of a gold engraver, a fact that seems almost too perfect. He grew up handling gold, understanding how it catches and holds light, how it can make the ordinary sacred.",
+      "'The Kiss' (1907–08) is the most reproduced painting in the Vienna Secession and arguably the most romantic image in the Western tradition: two figures, swathed in gold, at the edge of a precipice of flowers, caught in a moment that appears to dissolve the boundary between person and ornament, between desire and landscape.",
+      "Klimt founded the Vienna Secession in 1897 precisely to escape academic constraint. He designed everything — the building, the magazine 'Ver Sacrum,' the exhibition installations. He believed there was no hierarchy between the fine and decorative arts. His studio was legendary for its cats, its peacocks, and his working in a loose robe with nothing underneath."
+    ],
+    relatedWorkId: "the-kiss-klimt",
+  },
+  "07-15": {
+    date: "JULY 15, 1606",
+    title: "The Greatest Dutch Painter",
+    body: [
+      "Rembrandt van Rijn was born in Leiden on this day in 1606 — the son of a miller, one of nine children, who would become the greatest Dutch painter and the man who understood better than anyone before or since what a human face can hold.",
+      "His self-portraits — over 80 of them across five decades — form the most sustained visual autobiography in Western art. You can watch him age in them: the confident young man with the feathered beret; the prosperous master of the 1630s; the bankrupt, widowed, aging painter of the 1650s and 60s, looking out from the canvas with an acceptance so complete it amounts to a kind of grace.",
+      "He died in 1669, bankrupt, having outlived his wife Saskia, his son Titus, and his companion Hendrickje. The inventory of his studio — listed when he was declared insolvent in 1656 — is one of the most poignant documents in art history: 'a number of antique busts, a bundle of old armor, some wax models, a stack of prints, assorted globes.'"
+    ],
+    relatedWorkId: "night-watch",
+  },
+  "07-18": {
+    date: "JULY 18, 1610",
+    title: "A Violent Life, a Violent End",
+    body: [
+      "Michelangelo Merisi da Caravaggio died on a beach near Porto Ercole on this day in 1610, aged 38 — feverish, exhausted, possibly poisoned, certainly alone. He had spent his final years fleeing a murder charge across Malta, Sicily, and Naples, painting with the furious intensity of someone who knew he might not finish the next commission.",
+      "His life had the drama of his paintings. He killed a man in a brawl in Rome in 1606 — the circumstances are disputed but the death sentence was real — and spent four years on the run, accepting commissions from any church or noble who would shelter him. The paintings from those years are extraordinary: darker, stranger, more desperate than anything before.",
+      "He had applied to the Pope for a pardon and was apparently on his way back to Rome when he died. The pardon arrived days after his death. He had no pupils, refused to teach, left no theoretical writing. But the whole of Baroque painting flows directly from the things he discovered about how light falls on a face in darkness."
+    ],
+    relatedWorkId: "calling-saint-matthew",
+  },
+  "07-29": {
+    date: "JULY 29, 1890",
+    title: "The Sadness Will Last Forever",
+    body: [
+      "Vincent van Gogh died in Auvers-sur-Oise on this day in 1890, two days after shooting himself in a wheat field. He was 37. His last words to his brother Theo, who had rushed from Paris and sat with him through the night, were reportedly: 'The sadness will last forever.'",
+      "He had painted over 2,000 works in ten years. He had sold one painting in his lifetime — 'The Red Vineyard,' in Brussels, for 400 francs. The 137 letters he wrote to Theo in the last eighteen months of his life are among the most extraordinary documents in the history of art: detailed, precise, full of observations about color and light that would take the art world decades to understand.",
+      "Theo survived him by six months, dying in January 1891. They are buried side by side in the cemetery at Auvers, under ivy that Theo's wife Jo planted. She spent the rest of her life ensuring that the world would eventually understand what her brother-in-law had done."
+    ],
+    relatedWorkId: "starry-night",
+  },
+  "08-06": {
+    date: "AUGUST 6, 1660",
+    title: "The Greatest Spanish Painter",
+    body: [
+      "Diego Velázquez died in Madrid on this day in 1660, aged 61, five days after falling ill at the elaborate ceremonies for the marriage of the Infanta María Teresa to Louis XIV of France — the event he had spent months helping to organize as the king's chief court official.",
+      "'Las Meninas,' painted four years earlier, was already in the royal collection. Nobody knew yet that it would become the most analyzed painting in Western art — that Foucault would open his masterwork of philosophy with it, that Picasso would spend a year making 58 variations on it, that it would eventually be recognized as the painting that most completely interrogates the nature of representation itself.",
+      "He had been court painter to Philip IV for 37 years. He painted the king, the queen, the infantas, the dwarfs, the jesters, the pope, and — in 'The Rokeby Venus' — one of the only female nudes in Spanish Baroque painting. He was knighted three years before he died, the honor he had wanted most."
+    ],
+    relatedWorkId: "las-meninas",
+  },
+  "08-11": {
+    date: "AUGUST 11, 1956",
+    title: "The Founder of Action Painting",
+    body: [
+      "Jackson Pollock died in a car accident near his home in Springs, Long Island, on this day in 1956. He was 44, drunk, and driving. Two passengers died with him. He had not produced a significant new work in almost two years.",
+      "The drip paintings of 1947–1950 — made by laying the canvas on the floor and moving around it, pouring and flicking paint from cans and hardened brushes — had made him the most famous living American painter. Life magazine had run a two-page spread in 1949 under the headline 'Is he the greatest living painter in the United States?' He was not yet 40.",
+      "He had started drinking again heavily in 1950, after a period of sobriety that had produced his greatest work. The last years were difficult — long silences, failed canvases, the sense of an artist who had found his method and then found it insufficient. He was buried in the Green River Cemetery in East Hampton, under a large glacial boulder."
+    ],
+    relatedWorkId: "guernica",
+  },
+  "08-21": {
+    date: "AUGUST 21, 1911",
+    title: "The Theft That Made Her Famous",
+    body: [
+      "The Mona Lisa was stolen from the Louvre on this day in 1911 by Vincenzo Peruggia, an Italian handyman who had previously worked in the museum. He removed the painting from the wall on a Monday morning when the Louvre was closed to the public, hid in a broom closet overnight, and walked out the next morning with the painting concealed under his coat.",
+      "She was missing for two years and three months. The global newspaper coverage was unprecedented — this was the first media event in art history. More people visited the Louvre to see the empty space on the wall than had visited to see the painting. Peruggia was caught in Florence when he tried to sell her to an antiques dealer, and she was returned to Paris in January 1914.",
+      "Before the theft, the Mona Lisa was one great painting among many in the Louvre. After it, she was the most famous painting in the world. Peruggia, who believed he was repatriating an Italian treasure stolen by Napoleon, served eight months in prison."
+    ],
+    relatedWorkId: "mona-lisa",
+  },
+  "08-27": {
+    date: "AUGUST 27, 1576",
+    title: "The Warmth of Living Flesh",
+    body: [
+      "Titian died in Venice of plague on this day in 1576, at approximately 88 years of age — though some sources give 99, and the uncertainty is itself part of the legend. He had outlived almost every artist of his generation. He had painted six popes, two Holy Roman Emperors, and the most powerful rulers of his age.",
+      "His late style — loose, shimmering, almost dissolved into pure light and tone — was not understood by his contemporaries. Critics who visited his studio in the 1570s found the unfinished works baffling, even embarrassing. Three centuries later, those same late paintings were recognized as the first Impressionism, as the discovery that paint itself could carry meaning independent of the subject it depicted.",
+      "He died in his studio surrounded by his brushes. Because of the plague, he was buried without ceremony — one of the few Venetians of his stature denied a public funeral. The church of the Frari, where his 'Assumption of the Virgin' still hangs above the high altar, is his real monument."
+    ],
+    relatedWorkId: "venus-of-urbino",
+  },
+  "09-09": {
+    date: "SEPTEMBER 9, 1901",
+    title: "The Chronicler of Montmartre",
+    body: [
+      "Henri de Toulouse-Lautrec died at his mother's estate at Malromé on this day in 1901, aged 36 — a small man with a large genius and a body that had been breaking down since a childhood fall left his legs permanently stunted and painful.",
+      "He had spent his most productive years in Montmartre, in the dance halls and cabarets and brothels, sketching the performers who became his subjects: Jane Avril, Yvette Guilbert, La Goulue, the Can-Can dancers of the Moulin Rouge. He drew them not as spectacle but as workers — the boredom between performances, the exhaustion behind the makeup.",
+      "His posters — bold, flat, graphically revolutionary — turned commercial art into fine art almost overnight. They covered the walls of Paris in the 1890s. The originals are now in museums. He left 737 paintings, 275 watercolors, 363 prints, and 5,000 drawings, produced in a career of barely fifteen years."
+    ],
+    relatedWorkId: "moulin-galette",
+  },
+  "09-24": {
+    date: "SEPTEMBER 24, 1501",
+    title: "Three Years to Free a Figure from Stone",
+    body: [
+      "On this day in 1501, Michelangelo signed his contract with the Opera del Duomo in Florence to carve a statue of David from a block of Carrara marble that had been quarried forty years earlier, half-roughed-out by a previous sculptor, and abandoned. The stone had been sitting in the cathedral workshop, deemed too long and narrow to carve successfully, for a generation.",
+      "Michelangelo worked on it for three years, mostly alone, covering the workshop so no one could see it in progress. When he finished, a committee that included Leonardo da Vinci debated where to place it. They chose the Piazza della Signoria — the political heart of Florence — where it was installed in May 1504 after four days of slow transportation through the narrow streets.",
+      "It is 17 feet tall and weighs six tons. Michelangelo carved it from a single block, adding nothing. The stone that was 'too narrow' became the figure that still defines what sculpture can be."
+    ],
+    relatedWorkId: "david",
+  },
+  "09-28": {
+    date: "SEPTEMBER 28, 1573",
+    title: "The Painter Who Brought Darkness to Light",
+    body: [
+      "Caravaggio was born in Milan on this day in 1573 — or possibly in Caravaggio, the small town whose name he took as his own. His early years are obscure. He arrived in Rome around 1592 and spent a difficult period painting small devotional works, flowers, fruit, and the occasional young man with an ambiguous gaze.",
+      "The commission for the Contarelli Chapel in 1599 changed everything. The 'Calling of Saint Matthew' and 'The Martyrdom of Saint Matthew' introduced the world to chiaroscuro as pure drama: total darkness from which figures emerge into a single raking light, as if illuminated by a torch held just outside the frame.",
+      "He was violent, difficult, and probably brilliant in a way he himself barely understood. He killed a man in 1606 and spent the rest of his short life on the run, painting with the intensity of someone who suspects he won't finish the next commission. He was right. He died at 38, still running."
+    ],
+    relatedWorkId: "calling-saint-matthew",
+  },
+  "10-04": {
+    date: "OCTOBER 4, 1669",
+    title: "Bankrupt and Forgotten",
+    body: [
+      "Rembrandt van Rijn died in Amsterdam on this day in 1669 — bankrupt, having outlived his wife, his son, and his companion; the greatest Dutch painter of the 17th century, in a city that had largely forgotten him.",
+      "The bankruptcy had come in 1656. His collection was auctioned off — the antique sculptures, the armor, the prints, the drawing books. He was forced to move to a smaller house. He kept painting. The work from the 1660s is among the most extraordinary in Western art: the self-portraits, the 'Return of the Prodigal Son,' the 'Jewish Bride' — all painted by a man with no money and diminishing patronage.",
+      "The inventory of his estate at death listed a few pieces of old clothing, some painting equipment, and two small cabinets. The 'Night Watch,' which hangs in the Rijksmuseum and is visited by millions each year, was already in the possession of the city. He left it knowing it was there. He did not know it would eventually be considered the greatest painting in the Netherlands."
+    ],
+    relatedWorkId: "night-watch",
+  },
+  "10-22": {
+    date: "OCTOBER 22, 1906",
+    title: "Still Working",
+    body: [
+      "Paul Cézanne died in Aix-en-Provence on this day in 1906 — caught in a rainstorm while painting his beloved Mont Sainte-Victoire, he collapsed and was brought home, where he died five days later. He had been painting outdoors that morning despite being 67 and unwell. He did not consider stopping.",
+      "He had been working in near-isolation in Aix for decades, regarded by Parisian critics as a failure — the man who had tried and missed. He sold almost nothing. He showed rarely. He lived on an allowance from his father and later his inheritance.",
+      "After his death, two retrospective exhibitions — in 1907 and 1910 — revealed the work to a generation of young painters who saw in it something nobody had seen before: a new way of organizing space, a new kind of pictorial truth, a method of looking that would become the foundation of Cubism, abstraction, and everything that defines modern art. Picasso called him 'the father of us all.' He had been dead four years."
+    ],
+    relatedWorkId: "card-players",
+  },
+  "10-25": {
+    date: "OCTOBER 25, 1881",
+    title: "The Most Prolific Artist in History",
+    body: [
+      "Pablo Picasso was born in Málaga, Spain, on this day in 1881 — the son of an art teacher who recognized his son's ability early and reportedly gave him his own brushes when the boy was thirteen, declaring that his own art career was over.",
+      "The statistics are almost incomprehensible: 1,885 paintings, 1,228 sculptures, 2,880 ceramics, 18,000 engravings and lithographs, 12,000 drawings. He worked every day of his adult life. He moved through more styles in a single lifetime than most movements produce in a century: Blue Period, Rose Period, African-influenced work, Analytical Cubism, Synthetic Cubism, Neoclassicism, Surrealism, and back to figuration.",
+      "He said: 'Every child is an artist. The problem is how to remain an artist once we grow up.' He solved this problem by never growing up in the relevant sense — by maintaining, to the end of his 91 years, the conviction that the next painting might contain something that had never been seen before."
+    ],
+    relatedWorkId: "guernica",
+  },
+  "10-31": {
+    date: "OCTOBER 31, 1632",
+    title: "Painter of Silence and Light",
+    body: [
+      "Johannes Vermeer was born in Delft on this day in 1632 — baptized in the Nieuwe Kerk, the son of an innkeeper and art dealer who died when Vermeer was twenty-one, leaving him the inn, the art business, and eleven children to raise.",
+      "He painted slowly. In a career of roughly twenty years he produced perhaps 34 surviving paintings — an average of less than two per year. He worked in the same small house, using the same north-facing room, painting the same women, the same furniture, the same light falling through the same window at the same angle across the same Turkish carpet.",
+      "He died in 1675, bankrupt, leaving his wife and eleven children in debt to a baker who had been accepting paintings as payment for bread. His reputation did not recover until 1866, when the critic Thoré-Bürger published a series of articles attributing to him works that had been attributed to other painters. Before that, almost no one knew his name."
+    ],
+    relatedWorkId: "girl-pearl-earring",
+  },
+  "11-12": {
+    date: "NOVEMBER 12, 1840",
+    title: "The Sculptor Who Made Marble Breathe",
+    body: [
+      "Auguste Rodin was born in Paris on this day in 1840 — the son of a police clerk, a poor student, rejected three times by the École des Beaux-Arts (they would later offer him honorary membership, which he declined). He spent his twenties doing decorative stonework for other sculptors.",
+      "At 37 he exhibited 'The Age of Bronze' — so lifelike that critics accused him of casting it from a living model rather than carving it. He hadn't. He had simply learned to observe the human body more precisely than any sculptor since Michelangelo.",
+      "The commission for 'The Gates of Hell' arrived in 1880 and occupied him for the rest of his life — he was still modifying it when he died in 1917 at 77. 'The Thinker' was originally made for the top of the Gates as a self-portrait of the artist. He eventually made it monumental. It stands now in museums and public squares across the world, usually mistaken for a representation of thought in general, when it was first a portrait of Dante at the entrance to the Inferno."
+    ],
+  },
+  "11-14": {
+    date: "NOVEMBER 14, 1840",
+    title: "The Painter of Light Itself",
+    body: [
+      "Claude Monet was born in Paris on this day in 1840 — and grew up in Normandy, where the light off the Channel and the soft moisture in the air taught him everything he needed to know about the elusiveness of color.",
+      "He founded Impressionism almost by accident. 'Impression, Sunrise' (1872) was shown at the group's first exhibition in 1874 and mocked by a critic who borrowed the title sarcastically. Monet kept the name. The movement kept the name. The critic is forgotten.",
+      "He was nearly blind from cataracts in his final decade, his perception of color shifted toward yellow by the condition, and still he worked. The water lily canvases he painted for the Orangerie — 8 panels, 91 meters total — were his gift to France on Armistice Day 1918. He died in 1926. They were installed in 1927. He did not see them on the walls."
+    ],
+    relatedWorkId: "water-lilies",
+  },
+  "11-17": {
+    date: "NOVEMBER 17, 1917",
+    title: "The Last Great Sculptor",
+    body: [
+      "Auguste Rodin died at Meudon on this day in 1917, aged 77 — in the house next door to the studio where 'The Gates of Hell' still stood, technically unfinished, as it had stood for 37 years. He had never stopped working on it.",
+      "The war had devastated him. His friends were dying, his country was suffering, and the government that had commissioned 'The Gates' was now too occupied with other catastrophes to think about public sculpture. He had been sick for a year, his mind slipping, refusing to eat.",
+      "He left everything to the French state: the studio, the works, the collection of ancient sculpture and Japanese prints he had accumulated over a lifetime. The Musée Rodin opened in his house in Paris in 1919. 'The Thinker' sits in the garden. 'The Burghers of Calais' stand in the courtyard. The Gates are inside, still working their way toward completion."
+    ],
+  },
+  "12-04": {
+    date: "DECEMBER 4, 1866",
+    title: "The First Abstraction",
+    body: [
+      "Wassily Kandinsky was born in Moscow on this day in 1866 — trained as a lawyer, practicing as an art teacher, and thirty when he saw a Monet haystack painting in Moscow and could not identify what he was looking at in the fading evening light. The fact that the subject was unrecognizable did not prevent the painting from being extraordinarily powerful. That observation changed his life.",
+      "He spent the next decade pursuing the implication. If subject matter was not necessary for emotional power, then color and form alone could carry meaning — as music carries meaning without representing anything in the world. His first fully abstract watercolor, made around 1910, is usually identified as the first non-representational work in Western art history.",
+      "'Concerning the Spiritual in Art' (1911) — the theoretical text he wrote alongside these first abstractions — remains abstraction's founding document, the book that explains why painting might not need to look like anything."
+    ],
+  },
+  "12-05": {
+    date: "DECEMBER 5, 1926",
+    title: "Still Painting",
+    body: [
+      "Claude Monet died at Giverny on this day in 1926, aged 86 — nearly blind, having refused surgery on his cataracts for years because he feared losing what vision he had left, and finally having the surgery, which helped somewhat but left his color perception permanently altered.",
+      "He had been working on the water lily paintings for twenty years. The garden at Giverny — the Japanese bridge, the willow trees, the pond — was itself a work of art, designed and planted and managed over decades as a painting subject. He tended it obsessively.",
+      "The eight panels of the Grande Décoration, installed in the Orangerie in Paris in 1927, are among the largest paintings ever made — immersive, total, more like an environment than a picture. He had conceived them as a gift to France after the First World War. He did not live to see them installed, dying six months before the opening. His friend Georges Clemenceau attended the ceremony and reportedly wept."
+    ],
+    relatedWorkId: "water-lilies",
+  },
+  "12-12": {
+    date: "DECEMBER 12, 1863",
+    title: "The Face of Anxiety",
+    body: [
+      "Edvard Munch was born in Løten, Norway, on this day in 1863 — the son of a doctor, a child who lost his mother to tuberculosis at five and his sister Sophie at fifteen; a man for whom anxiety was not a mood but a climate.",
+      "'The Scream' (1893) exists in four versions — one in oil, one in tempera, two in pastel. The sky he painted it under was the sky over Ekeberg, on an evening walk when, he wrote in his diary, he felt 'an infinite scream passing through nature.' The swirling colors, the distorted bridge, the two figures walking away — these are not Expressionist stylization. They are what he said he saw.",
+      "He gave the painting to Germany. When the Nazis labeled his work degenerate and confiscated it from German museums, he was still alive — he died in 1944, months after his 80th birthday. He left his entire estate, including 1,008 paintings and 15,391 prints, to the city of Oslo. The Munch Museum opened in 1963."
+    ],
+    relatedWorkId: "the-scream",
+  },
+  "12-15": {
+    date: "DECEMBER 15, 1675",
+    title: "Bankrupt, Unknown, Magnificent",
+    body: [
+      "Johannes Vermeer died in Delft on this day in 1675, aged 43 — leaving his wife Catharina with eleven children, enormous debts, and a house full of paintings that the baker who had been accepting them as payment for bread immediately claimed as collateral.",
+      "The Delft art market had collapsed during the French invasion of 1672, which Vermeer always called 'the disaster year.' He had produced almost nothing in the last three years of his life. Catharina later declared that the stress of the invasion had driven him to a 'frenzy' in which he lost his health and died within a day and a half.",
+      "His paintings were dispersed and misattributed for two centuries — collected without being recognized as his, sold cheaply, hung in minor rooms. In 1866, the critic Thoré-Bürger published a study that identified 66 works as his (the number is now generally 34–36 authenticated works). The rediscovery was one of the great detective stories in art history."
+    ],
+    relatedWorkId: "girl-pearl-earring",
+  },
+  "12-23": {
+    date: "DECEMBER 23, 1888",
+    title: "The Night in Arles",
+    body: [
+      "On this night in 1888, Vincent van Gogh cut off the lower portion of his own left ear in his room at the Yellow House in Arles, France — wrapping it in newspaper, walking to a nearby brothel, and presenting it to a woman named Rachel, asking her to 'keep this object carefully.' Gauguin, who had been staying with him and had left that morning after an argument, sent a telegram to Theo.",
+      "The causes remain disputed: the argument with Gauguin, financial pressure, the collapse of his dream of an artists' colony in Provence, the onset of what may have been temporal lobe epilepsy, or some combination of all of these. He was hospitalized, released, and then institutionalized voluntarily at Saint-Paul-de-Mausole in May 1889.",
+      "From the asylum he painted some of his greatest works — including 'The Starry Night,' painted from the view outside his window in June 1889. He described the whirling sky not as visionary but as what he observed through his barred window every night, trying to understand the motion of stars."
+    ],
+    relatedWorkId: "starry-night",
+  },
+  "12-31": {
+    date: "DECEMBER 31, 1869",
+    title: "The Antidote",
+    body: [
+      "Henri Matisse was born in Le Cateau-Cambrésis, in northern France, on the last day of 1869 — the son of a grain merchant, destined for a career in law, who was given a box of paints at twenty-one while recovering from appendicitis and understood immediately that he had found the thing he was supposed to do.",
+      "He was the great counter-weight to Picasso — equally influential, almost exactly contemporary, and temperamentally opposite. Where Picasso fragmented and destabilized, Matisse simplified and harmonized. 'What I dream of,' he wrote, 'is an art of balance, of purity and serenity — something like a good armchair.'",
+      "He died in 1954 with scissors in his hand, in the middle of a cut-out. He had been confined to a wheelchair after surgery in 1941, and had spent the last decade creating the paper cut-outs — simple, joyful shapes in pure color — that many consider his greatest achievement. The Matisse Chapel in Vence, which he designed entirely in his 80s from a wheelchair, is one of the most beautiful rooms in the world."
+    ],
+    relatedWorkId: "the-dance-matisse",
+  },
+};
+
 export const TODAY_IN_ART: Record<string, string> = {
 
   // ─── JANUARY ─────────────────────────────────────────────────────────────────
