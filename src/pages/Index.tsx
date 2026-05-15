@@ -126,6 +126,14 @@ export default function Index() {
   return (
     <main style={{ minHeight: "100vh" }}>
 
+      {/* Click-outside backdrop for Today panel — sits between page (z≤2) and raised card (z=51) */}
+      {expanded && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 50, cursor: "default" }}
+          onClick={() => setExpanded(false)}
+        />
+      )}
+
       {/* HERO */}
       <section style={{ position: "relative", minHeight: "65vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "5rem 0 4rem" }}>
 
@@ -133,7 +141,8 @@ export default function Index() {
 
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(12,10,7,0.4) 0%, rgba(12,10,7,0.62) 55%, rgba(245,240,232,1) 100%)", zIndex: 1 }} />
 
-        <div style={{ position: "relative", zIndex: 2, textAlign: "center", maxWidth: "56rem", padding: "0 2rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        {/* zIndex raised to 51 when expanded so card sits above the z-50 backdrop */}
+        <div style={{ position: "relative", zIndex: expanded ? 51 : 2, textAlign: "center", maxWidth: "56rem", padding: "0 2rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
           <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: "72px", lineHeight: 1.05, color: "#F0EAD6", letterSpacing: "-0.01em", marginBottom: "0.9rem", textShadow: "0 2px 24px rgba(0,0,0,0.6)" }}>
             Art Through the Ages

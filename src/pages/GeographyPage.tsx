@@ -554,7 +554,15 @@ export default function GeographyPage() {
         </div>
       </div>
 
-      {/* Side panel — fixed right overlay */}
+      {/* Click-outside backdrop — closes movement panel when clicking anywhere outside it */}
+      {sidePanelMovement && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 49, cursor: "default" }}
+          onClick={() => setSidePanelMovement(null)}
+        />
+      )}
+
+      {/* Side panel — fixed right overlay (z-50, above backdrop) */}
       <AnimatePresence>
         {sidePanelMovement && (
           <motion.div
