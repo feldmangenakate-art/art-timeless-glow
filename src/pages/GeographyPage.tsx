@@ -43,46 +43,6 @@ const ISO_TO_COUNTRY: Record<string, string> = {
   "840": "usa",
 };
 
-function formatYear(y: number): string {
-  const n = Math.round(y);
-  return n < 0 ? `${Math.abs(n)} BC` : `${n} AD`;
-}
-
-function sliderToYear(v: number): number {
-  if (v <= 15) return -3000 + (v / 15) * 2500;
-  if (v <= 45) return -500 + ((v - 15) / 30) * 1900;
-  return 1400 + ((v - 45) / 55) * 625;
-}
-
-function yearToSlider(year: number): number {
-  if (year <= -500) return ((year + 3000) / 2500) * 15;
-  if (year <= 1400) return 15 + ((year + 500) / 1900) * 30;
-  return 45 + ((year - 1400) / 625) * 55;
-}
-
-// Tick marks: [year, label]
-const TICKS: [number, string][] = [
-  [-3000, "3000 BC"],
-  [-1000, "1000 BC"],
-  [-500,  "500 BC"],
-  [0,     "0"],
-  [500,   "500"],
-  [1000,  "1000"],
-  [1400,  "1400"],
-  [1600,  "1600"],
-  [1800,  "1800"],
-  [1900,  "1900"],
-  [2000,  "2000"],
-];
-
-function isMovementActive(range: [number, number], year: number): boolean {
-  return year >= range[0] && year <= range[1];
-}
-
-function hasActiveMovements(countryId: string, year: number): boolean {
-  const c = GEO_COUNTRIES.find((x) => x.id === countryId);
-  return c?.movements.some((m) => isMovementActive(m.activeRange, year)) ?? false;
-}
 
 function getPillPositions(dotX: number, dotY: number, country: (typeof GEO_COUNTRIES)[0]) {
   const n = country.movements.length;
@@ -113,21 +73,15 @@ interface PillProps {
   px: number;
   py: number;
   movement: GeoMovement;
-  year: number;
   index: number;
   isSelected: boolean;
   hasSelection: boolean;
   onClick: () => void;
 }
 
-function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, hasSelection, onClick }: PillProps) {
-  const active = isMovementActive(movement.activeRange, year);
-  const rayOpacity = hasSelection
-    ? isSelected ? 0.85 : 0.1
-    : active ? 0.85 : 0.28;
-  const pillOpacity = hasSelection
-    ? isSelected ? 1 : 0.2
-    : active ? 1 : 0.6;
+function RayPill({ dotX, dotY, px, py, movement, index, isSelected, hasSelection, onClick }: PillProps) {
+  const rayOpacity = hasSelection ? (isSelected ? 0.85 : 0.1) : 0.85;
+  const pillOpacity = hasSelection ? (isSelected ? 1 : 0.2) : 1;
   const pw = pillWidth(movement.name);
 
   const GOLD = "#C9A84C";
@@ -171,7 +125,7 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, hasSel
           fontFamily="'Courier New', monospace"
           letterSpacing="0.06em"
           style={{ textTransform: "uppercase", userSelect: "none", pointerEvents: "none" }}
-          fillOpacity={active ? 0.9 : 0.5}
+          fillOpacity={0.9}
         >
           {movement.name}
         </text>
@@ -182,7 +136,7 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, hasSel
           fill="#2A1E10"
           fontSize={5.5}
           fontFamily="'Courier New', monospace"
-          fillOpacity={active ? 0.55 : 0.3}
+          fillOpacity={0.55}
           style={{ userSelect: "none", pointerEvents: "none" }}
         >
           {movement.dates}
@@ -196,12 +150,11 @@ function RayPill({ dotX, dotY, px, py, movement, year, index, isSelected, hasSel
 interface RayLayerProps {
   selectedCountryId: string | null;
   sidePanelMovement: GeoMovement | null;
-  year: number;
   hasSelection: boolean;
   onPillClick: (movement: GeoMovement, countryName: string) => void;
 }
 
-function RayLayer({ selectedCountryId, sidePanelMovement, year, hasSelection, onPillClick }: RayLayerProps) {
+function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillClick }: RayLayerProps) {
   const { projection } = useMapContext();
   const selectedCountry = GEO_COUNTRIES.find((c) => c.id === selectedCountryId) ?? null;
 
@@ -228,7 +181,6 @@ function RayLayer({ selectedCountryId, sidePanelMovement, year, hasSelection, on
           px={pills[i].x}
           py={pills[i].y}
           movement={movement}
-          year={year}
           index={i}
           isSelected={sidePanelMovement?.id === movement.id}
           hasSelection={hasSelection}
@@ -241,8 +193,6 @@ function RayLayer({ selectedCountryId, sidePanelMovement, year, hasSelection, on
 
 export default function GeographyPage() {
   const navigate = useNavigate();
-  const [sliderPos, setSliderPos] = useState(yearToSlider(1500));
-  const year = Math.round(sliderToYear(sliderPos));
   const [selectedCountryId, setSelectedCountryId] = useState<string | null>(null);
   const [hoveredCountryId, setHoveredCountryId] = useState<string | null>(null);
   const [sidePanelMovement, setSidePanelMovement] = useState<GeoMovement | null>(null);
@@ -321,7 +271,7 @@ export default function GeographyPage() {
           projectionConfig={{ scale: 220, center: [20, 45] }}
           width={800}
           height={500}
-          style={{ width: "100%", height: "60vh", minHeight: 320, display: "block", backgroundColor: "#EAE4D8" }}
+          style={{ width: "100%", height: "calc(100vh - 13rem)", minHeight: 420, display: "block", backgroundColor: "#EAE4D8" }}
         >
           {/* Background click target — deselects everything */}
           <rect
@@ -339,12 +289,10 @@ export default function GeographyPage() {
                 const countryId = ISO_TO_COUNTRY[String(geo.id)] ?? null;
                 const isSelected = countryId === selectedCountryId;
                 const isHovered = countryId === hoveredCountryId;
-                const active = countryId ? hasActiveMovements(countryId, year) : false;
 
                 let fill = "#E8E0D0";
                 if (isSelected) fill = "rgba(201,168,76,0.25)";
                 else if (isHovered) fill = "#DDD5C0";
-                else if (countryId && !active) fill = "#EDEAE4";
 
                 return (
                   <Geography
@@ -385,7 +333,6 @@ export default function GeographyPage() {
           <RayLayer
             selectedCountryId={selectedCountryId}
             sidePanelMovement={sidePanelMovement}
-            year={year}
             hasSelection={sidePanelMovement !== null}
             onPillClick={handlePillClick}
           />
@@ -396,7 +343,6 @@ export default function GeographyPage() {
             if (!coords) return null;
             const isSelected = country.id === selectedCountryId;
             const isHovered = country.id === hoveredCountryId;
-            const active = hasActiveMovements(country.id, year);
 
             return (
               <Marker key={country.id} coordinates={coords}>
@@ -411,7 +357,7 @@ export default function GeographyPage() {
                 )}
                 <circle
                   r={isHovered && !isSelected ? 5.5 : 4.5}
-                  fill={active ? GOLD : "rgba(201,168,76,0.35)"}
+                  fill={GOLD}
                   stroke={isSelected ? GOLD : "rgba(201,168,76,0.6)"}
                   strokeWidth={isSelected ? 1.5 : 0.8}
                   onClick={(e: any) => { e.stopPropagation(); handleCountryClick(country.id); }}
@@ -439,119 +385,6 @@ export default function GeographyPage() {
           })}
         </ComposableMap>
 
-        {/* Time slider */}
-        <div
-          style={{
-            padding: "0.75rem 2rem 1rem",
-            backgroundColor: "#EDE8DF",
-            borderTop: "1px solid rgba(201,168,76,0.15)",
-          }}
-        >
-          {/* Current year display */}
-          <div style={{ textAlign: "center", marginBottom: "0.25rem" }}>
-            <span
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: "1rem",
-                color: DARK,
-              }}
-            >
-              {formatYear(year)}
-            </span>
-          </div>
-
-          {/* Slider + ticks */}
-          <div
-            style={{
-              position: "relative",
-              maxWidth: "60rem",
-              margin: "0 auto",
-              paddingBottom: "1.25rem",
-            }}
-          >
-            <input
-              type="range"
-              min={0}
-              max={100}
-              step={0.1}
-              value={sliderPos}
-              onChange={(e) => setSliderPos(Number(e.target.value))}
-              style={{
-                width: "100%",
-                height: "2px",
-                appearance: "none",
-                backgroundColor: "rgba(42,30,16,0.15)",
-                outline: "none",
-                cursor: "pointer",
-                accentColor: GOLD,
-                display: "block",
-              }}
-            />
-
-            {/* Tick marks */}
-            <div style={{ position: "relative", height: "1.25rem" }}>
-              {TICKS.map(([tickYear, label]) => {
-                const pct = yearToSlider(tickYear);
-                return (
-                  <div
-                    key={tickYear}
-                    style={{
-                      position: "absolute",
-                      left: `${pct}%`,
-                      transform: "translateX(-50%)",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "1px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "1px",
-                        height: "4px",
-                        backgroundColor: "rgba(42,30,16,0.2)",
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontFamily: "'Courier New', monospace",
-                        fontSize: "0.55rem",
-                        color: MUTED,
-                        letterSpacing: "0.05em",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <p
-            style={{
-              textAlign: "center",
-              fontFamily: "'Courier New', monospace",
-              fontSize: "0.65rem",
-              color: MUTED,
-              letterSpacing: "0.08em",
-              marginTop: "0.4rem",
-              textTransform: "uppercase",
-            }}
-          >
-            {selectedCountry
-              ? `${selectedCountry.name} · ${
-                  selectedCountry.movements.filter((m) => isMovementActive(m.activeRange, year))
-                    .length
-                } active movement${
-                  selectedCountry.movements.filter((m) => isMovementActive(m.activeRange, year))
-                    .length !== 1
-                    ? "s"
-                    : ""
-                } this year`
-              : "Click a country to explore its art movements"}
-          </p>
-        </div>
       </div>
 
       {/* Click-outside backdrop — closes movement panel when clicking anywhere outside it */}
