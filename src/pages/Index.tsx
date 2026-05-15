@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { getTodayInArt } from "@/data/civilizations";
+import { CIVILIZATIONS, getTodayInArt } from "@/data/civilizations";
+import { MASTERWORKS } from "@/data/masterworks";
+import { RENAISSANCE_ARTISTS } from "@/data/artists-renaissance";
+import { BAROQUE_ARTISTS } from "@/data/artists-baroque";
+import { CENTURY_18_19_ARTISTS } from "@/data/artists-18th-19th";
+import { MODERN_ARTISTS } from "@/data/artists-modern";
 
 const GOLD = "#C9A84C";
 
@@ -11,11 +16,11 @@ const NAV_CARDS = [
   { name: "Artists",     desc: "Lives behind the masterworks",      path: "/artists",     accent: "#3060A0" },
 ];
 
-const FEATURED = [
-  { image: "/timeline/mona-lisa.webp",   label: "Masterwork",   title: "Mona Lisa",         subtitle: "Leonardo da Vinci · 1503–1519",  href: "/masterworks/mona-lisa" },
-  { image: "/artists/leonardo.jpg",      label: "Artist",       title: "Leonardo da Vinci", subtitle: "1452–1519 · Italian Renaissance", href: "/artists/leonardo-da-vinci" },
-  { image: "/timeline/renaissance.webp", label: "Civilization", title: "The Renaissance",   subtitle: "1400–1600 · Italy & Europe",      href: "/civilization/renaissance" },
-];
+type FeaturedItem = { image: string; label: string; title: string; subtitle: string; href: string };
+
+function pickRandom<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 function NavCard({ name, desc, path, accent }: (typeof NAV_CARDS)[0]) {
   const [hovered, setHovered] = useState(false);
@@ -56,7 +61,7 @@ function NavCard({ name, desc, path, accent }: (typeof NAV_CARDS)[0]) {
   );
 }
 
-function FeaturedCard({ image, label, title, subtitle, href }: (typeof FEATURED)[0]) {
+function FeaturedCard({ image, label, title, subtitle, href }: FeaturedItem) {
   const [hovered, setHovered] = useState(false);
   return (
     <Link
@@ -100,6 +105,18 @@ function FeaturedCard({ image, label, title, subtitle, href }: (typeof FEATURED)
 
 export default function Index() {
   const todayEvent = getTodayInArt();
+
+  const featured = useMemo((): FeaturedItem[] => {
+    const ALL_ARTISTS = [...RENAISSANCE_ARTISTS, ...BAROQUE_ARTISTS, ...CENTURY_18_19_ARTISTS, ...MODERN_ARTISTS];
+    const work   = pickRandom(MASTERWORKS);
+    const artist = pickRandom(ALL_ARTISTS);
+    const civ    = pickRandom(CIVILIZATIONS);
+    return [
+      { image: work.image,           label: "Masterwork",   title: work.title,   subtitle: `${work.artist} · ${work.year}`,               href: `/masterworks/${work.id}` },
+      { image: artist.portraitImage, label: "Artist",       title: artist.name,  subtitle: `${artist.nationality} · ${artist.movement}`,  href: `/artists/${artist.id}` },
+      { image: civ.image,            label: "Civilization", title: civ.name,     subtitle: `${civ.dates} · ${civ.region}`,                href: `/civilization/${civ.id}` },
+    ];
+  }, []);
 
   return (
     <main style={{ minHeight: "100vh" }}>
@@ -169,7 +186,7 @@ export default function Index() {
             Where would you like to begin?
           </h2>
           <div style={{ maxWidth: "64rem", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
-            {FEATURED.map((item) => (
+            {featured.map((item) => (
               <FeaturedCard key={item.href} {...item} />
             ))}
           </div>
