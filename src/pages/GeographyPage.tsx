@@ -268,7 +268,7 @@ export default function GeographyPage() {
       <div style={{ position: "relative", width: "100%", userSelect: "none" }}>
         <ComposableMap
           projection="geoMercator"
-          projectionConfig={{ scale: 220, center: [20, 45] }}
+          projectionConfig={{ scale: 320, center: [20, 50] }}
           width={800}
           height={500}
           style={{ width: "100%", height: "calc(100vh - 13rem)", minHeight: 420, display: "block", backgroundColor: "#EAE4D8" }}
