@@ -29,6 +29,10 @@ const GEO_COORDS: Record<string, [number, number]> = {
   greece:      [21.8,   39.1],
   japan:       [138.2,  36.2],
   usa:         [-95.7,  37.1],
+  roman:       [11.5,   43.0],
+  "medieval-france": [0.5, 47.8],
+  byzantine:   [27.0,   38.5],
+  iraq:        [44.0,   33.3],
 };
 
 // ISO 3166-1 numeric codes → country id
@@ -44,13 +48,18 @@ const ISO_TO_COUNTRY: Record<string, string> = {
   "300": "greece",
   "392": "japan",
   "840": "usa",
+  "368": "iraq",
 };
 
 // Per-country label offsets to prevent collisions in the dense Northern Europe cluster
 const LABEL_CONFIG: Record<string, { dx: number; dy: number; anchor: string }> = {
-  england:     { dx: -20, dy:  -8, anchor: "middle" },
-  netherlands: { dx:   8, dy: -16, anchor: "middle" },
-  germany:     { dx:  18, dy:   4, anchor: "start"  },
+  england:          { dx: -20, dy:  -8, anchor: "middle" },
+  netherlands:      { dx:   8, dy: -16, anchor: "middle" },
+  germany:          { dx:  18, dy:   4, anchor: "start"  },
+  // Historical overlays — offset from their geographic neighbours
+  roman:            { dx: -16, dy:   6, anchor: "middle" }, // below Italy dot
+  "medieval-france":{ dx: -18, dy:  -8, anchor: "middle" }, // left of France dot
+  byzantine:        { dx:  14, dy:   6, anchor: "start"  }, // right of Greece dot
 };
 
 function getLabelProps(countryId: string) {
@@ -100,41 +109,90 @@ function zoomReducer(state: ZoomState, action: ZoomAction): ZoomState {
 // Pill / stack layout helpers
 // ---------------------------------------------------------------------------
 
-// Maximum labels shown per dot; extras collapse into an overflow indicator
-const MAX_VISIBLE_PILLS = 2;
-// Horizontal distance from dot centre to the nearest pill edge
-const STACK_OFFSET_X = 90;
-// Vertical distance between pill centres in the stack
-const STACK_PILL_GAP = 30;
+const PILL_H    = 23;  // pill box height in SVG units
+const PILL_GAP  = 8;   // gap between pill edges in SVG units
+const PILL_STEP = PILL_H + PILL_GAP; // center-to-center distance
+const DOT_MARGIN = 12; // min SVG units from dot centre to nearest pill edge
 
-/**
- * Countries west of longitude 20 stack their labels to the right (open ocean /
- * land to the east); countries east of 20 stack to the left.
- */
-function getStackSide(longitude: number): "right" | "left" {
-  return longitude < 20 ? "right" : "left";
+// Projected SVG Y below which a dot is considered "in the upper map" and
+// should stack its labels downward instead of upward.
+const UPPER_MAP_Y_THRESHOLD = 175;
+
+// Horizontal distance from dot centre to pill centre for right-side stacking
+const RIGHT_STACK_OFFSET = 95;
+
+type StackDir = "above" | "below" | "right";
+
+interface StackLayout {
+  dir: StackDir;
+  positions: { x: number; y: number }[];
 }
 
 /**
- * Returns SVG positions for the visible pills, centred vertically around dotY.
+ * Compute pill positions for ALL movements of the selected country.
+ * - USA: stack vertically to the right of the dot (ample map space)
+ * - Upper-map dots (lat > ~52°N): stack downward so labels don't run off screen
+ * - All others: stack upward above the dot
  */
-function getStackPositions(
+function getStackLayout(
   dotX: number,
   dotY: number,
+  countryId: string,
   count: number,
-  side: "right" | "left",
-): { x: number; y: number }[] {
-  const visible = Math.min(count, MAX_VISIBLE_PILLS);
-  const pillX   = side === "right" ? dotX + STACK_OFFSET_X : dotX - STACK_OFFSET_X;
-  const totalH  = (visible - 1) * STACK_PILL_GAP;
-  const startY  = dotY - totalH / 2;
-  return Array.from({ length: visible }, (_, i) => ({
-    x: pillX,
-    y: startY + i * STACK_PILL_GAP,
-  }));
+): StackLayout {
+  // USA: vertical stack to the right, centred on dotY
+  if (countryId === "usa") {
+    const pillX  = dotX + RIGHT_STACK_OFFSET;
+    const totalH = (count - 1) * PILL_STEP;
+    const startY = dotY - totalH / 2;
+    return {
+      dir: "right",
+      positions: Array.from({ length: count }, (_, i) => ({
+        x: pillX,
+        y: startY + i * PILL_STEP,
+      })),
+    };
+  }
+
+  // Upper map: stack below the dot
+  if (dotY < UPPER_MAP_Y_THRESHOLD) {
+    const topY = dotY + DOT_MARGIN + PILL_H / 2;
+    return {
+      dir: "below",
+      positions: Array.from({ length: count }, (_, i) => ({
+        x: dotX,
+        y: topY + i * PILL_STEP,
+      })),
+    };
+  }
+
+  // Default: stack above the dot
+  const bottomY = dotY - DOT_MARGIN - PILL_H / 2;
+  return {
+    dir: "above",
+    positions: Array.from({ length: count }, (_, i) => ({
+      x: dotX,
+      y: bottomY - i * PILL_STEP,
+    })),
+  };
 }
 
-const PILL_H = 23;
+/**
+ * Returns the point on the pill's nearest edge that a connector line should
+ * target — so lines attach to the pill boundary, not its centre.
+ */
+function pillEdgePoint(
+  dotX: number,
+  dotY: number,
+  px: number,
+  py: number,
+  pw: number,
+): [number, number] {
+  if (py + PILL_H / 2 < dotY - 2) return [px, py + PILL_H / 2]; // pill is above
+  if (py - PILL_H / 2 > dotY + 2) return [px, py - PILL_H / 2]; // pill is below
+  if (px > dotX)                   return [px - pw / 2, py];      // pill is right
+  return                                  [px + pw / 2, py];      // pill is left
+}
 
 function pillWidth(name: string): number {
   return Math.max(120, name.length * 6 + 20);
@@ -157,11 +215,12 @@ function RayPill({ dotX, dotY, px, py, movement, index, isSelected, hasSelection
   const pillOpacity = hasSelection ? (isSelected ? 1    : 0.2) : 1;
   const pw = pillWidth(movement.name);
   const GOLD_LOCAL = "#C9A84C";
+  const [ex, ey] = pillEdgePoint(dotX, dotY, px, py, pw);
 
   return (
     <g>
       <motion.path
-        d={`M ${dotX} ${dotY} L ${px} ${py}`}
+        d={`M ${dotX} ${dotY} L ${ex} ${ey}`}
         stroke={movement.color}
         strokeWidth={0.9}
         strokeDasharray="3 2"
@@ -241,17 +300,16 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
 
   if (!selectedCountry || !dotPos) return null;
 
-  const coords        = GEO_COORDS[selectedCountry.id];
-  const side          = getStackSide(coords[0]);
-  const visible       = selectedCountry.movements.slice(0, MAX_VISIBLE_PILLS);
-  const overflowCount = Math.max(0, selectedCountry.movements.length - MAX_VISIBLE_PILLS);
-  const positions     = getStackPositions(dotPos.x, dotPos.y, visible.length, side);
-  const stackX        = side === "right" ? dotPos.x + STACK_OFFSET_X : dotPos.x - STACK_OFFSET_X;
-  const lastY         = positions.length > 0 ? positions[positions.length - 1].y : dotPos.y;
+  const { positions } = getStackLayout(
+    dotPos.x,
+    dotPos.y,
+    selectedCountry.id,
+    selectedCountry.movements.length,
+  );
 
   return (
     <>
-      {visible.map((movement, i) => (
+      {selectedCountry.movements.map((movement, i) => (
         <RayPill
           key={`${selectedCountry.id}-${movement.id}`}
           dotX={dotPos.x}
@@ -265,21 +323,6 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
           onClick={() => onPillClick(movement, selectedCountry.name)}
         />
       ))}
-      {overflowCount > 0 && (
-        <text
-          x={stackX}
-          y={lastY + STACK_PILL_GAP * 0.85}
-          textAnchor="middle"
-          fill="#2A1E10"
-          fontSize={5}
-          fontFamily="'Courier New', monospace"
-          letterSpacing="0.06em"
-          fillOpacity={0.38}
-          style={{ userSelect: "none", pointerEvents: "none" }}
-        >
-          + {overflowCount} more
-        </text>
-      )}
     </>
   );
 }

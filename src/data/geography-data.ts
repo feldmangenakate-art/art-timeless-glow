@@ -1,4 +1,4 @@
-// Geography page data — 11 countries, 37 art movements
+// Geography page data — 15 countries, 46 art movements
 // Each country has: id, name, svgPathId, dot position, movements array
 // Each movement has: name, dates, color, activeRange, description, keyArtists, keyWorks, movementPageId
 
@@ -641,6 +641,142 @@ export const GEO_COUNTRIES: GeoCountry[] = [
           { title: "Marilyn Diptych", workId: "marilyn-diptych" },
         ],
         movementPageId: "pop-art",
+      },
+    ],
+  },
+
+  // ─── ROMAN EMPIRE ─────────────────────────────────────────────
+  {
+    id: "roman",
+    name: "Roman Empire",
+    svgPathId: "path-roman",
+    dotX: 0,
+    dotY: 0,
+    movements: [
+      {
+        id: "ro-republican",
+        name: "Republican",
+        dates: "500–27 BC",
+        color: "#A07040",
+        activeRange: [-500, -27],
+        description: "Republican Rome turned portraiture into a philosophical statement. Veristic busts — old senators with lined faces, sagging jowls, and absolute realism — embodied Roman values of experience, authority, and ancestral virtue. This was art that refused to flatter. Architecture on civic scales unprecedented in the ancient Mediterranean: the Forum Romanum, the Circus Maximus, aqueducts stretching across the Italian landscape.",
+        keyArtists: [{ name: "Unknown Roman sculptors" }],
+        keyWorks: [{ title: "Brutus (Capitoline Museums)" }, { title: "Republican Portrait Busts" }],
+      },
+      {
+        id: "ro-imperial",
+        name: "Imperial",
+        dates: "27 BC–476 AD",
+        color: "#C09050",
+        activeRange: [-27, 476],
+        description: "Augustus transformed Rome's visual language into an instrument of empire. The Ara Pacis, the Column of Trajan spiraling with 2,500 carved figures, the Pantheon's unreinforced concrete dome — art and architecture deployed across a territory stretching from Scotland to Mesopotamia. Roman portrait sculpture created the most psychologically searching faces of the ancient world, from the propaganda of Augustus to the philosophical exhaustion on the face of Marcus Aurelius.",
+        keyArtists: [{ name: "Apollodorus of Damascus" }],
+        keyWorks: [{ title: "Ara Pacis" }, { title: "Column of Trajan" }, { title: "Augustus of Prima Porta" }],
+      },
+    ],
+  },
+
+  // ─── MEDIEVAL EUROPE ──────────────────────────────────────────
+  {
+    id: "medieval-france",
+    name: "Medieval Europe",
+    svgPathId: "path-medieval",
+    dotX: 0,
+    dotY: 0,
+    movements: [
+      {
+        id: "me-romanesque",
+        name: "Romanesque",
+        dates: "1000–1150",
+        color: "#8A7060",
+        activeRange: [1000, 1150],
+        description: "The great church-building project of medieval Europe. Heavy walls, rounded arches, crypts and towers, sculpted tympana above western portals with terrifying Last Judgments carved in stone. The pilgrim routes to Santiago de Compostela spread Romanesque from France through Spain to Italy — the first pan-European art style since Rome. Narrative sculpture returned to Western art after centuries of absence.",
+        keyArtists: [{ name: "Gislebertus of Autun" }],
+        keyWorks: [{ title: "Tympanum of Autun Cathedral" }, { title: "Abbey of Cluny" }],
+      },
+      {
+        id: "me-gothic",
+        name: "Gothic",
+        dates: "1150–1400",
+        color: "#607080",
+        activeRange: [1150, 1400],
+        description: "The pointed arch made walls dissolve into windows. Abbot Suger at Saint-Denis had the vision: let light itself become sacred material. Chartres, Notre-Dame, Sainte-Chapelle — stone skeletons holding vast surfaces of colored light. Gothic stained glass is the greatest achievement of medieval architecture. The style radiated from the Île-de-France across all of Europe and transformed it.",
+        keyArtists: [{ name: "Master craftsmen of Chartres" }, { name: "Villard de Honnecourt" }],
+        keyWorks: [{ title: "Chartres Cathedral" }, { title: "Sainte-Chapelle, Paris" }, { title: "Notre-Dame de Paris" }],
+        movementPageId: "gothic",
+      },
+      {
+        id: "me-illumination",
+        name: "Manuscript Illumination",
+        dates: "600–1400",
+        color: "#706090",
+        activeRange: [600, 1400],
+        description: "Before printing, every book was a painted object of almost incomprehensible labor. The Book of Kells, the Lindisfarne Gospels, the illuminated Psalters of the French court — gold leaf, lapis lazuli ground from Afghanistan, marginalia of fantastic invention. Monastic scriptoria preserved ancient knowledge and produced the greatest small-scale art of the medieval world.",
+        keyArtists: [{ name: "Unknown monastic illuminators" }, { name: "Limbourg Brothers" }],
+        keyWorks: [{ title: "Book of Kells" }, { title: "Très Riches Heures du Duc de Berry" }, { title: "Lindisfarne Gospels" }],
+      },
+    ],
+  },
+
+  // ─── BYZANTINE ────────────────────────────────────────────────
+  {
+    id: "byzantine",
+    name: "Byzantine",
+    svgPathId: "path-byzantine",
+    dotX: 0,
+    dotY: 0,
+    movements: [
+      {
+        id: "bz-early",
+        name: "Early Byzantine",
+        dates: "330–730 AD",
+        color: "#806090",
+        activeRange: [330, 730],
+        description: "When Constantine moved the Roman capital to Constantinople in 330 AD, Western art went East and became gold and transcendent. The mosaic became the supreme medium — Ravenna's Sant'Apollinare Nuovo, the Hagia Sophia's shimmering interior. Flat, frontal, hieratic figures hovering in fields of gold. Art that refused earthly naturalism in order to point toward the eternal.",
+        keyArtists: [{ name: "Unknown Byzantine craftsmen" }],
+        keyWorks: [{ title: "Mosaics of Ravenna" }, { title: "Hagia Sophia, Constantinople" }],
+      },
+      {
+        id: "bz-middle",
+        name: "Middle Byzantine",
+        dates: "843–1204 AD",
+        color: "#9060A0",
+        activeRange: [843, 1204],
+        description: "After the Iconoclast controversy ended in 843, Byzantine art resumed and reached its most refined expression. The Deësis mosaic at Hagia Sophia — Christ flanked by the Virgin and John the Baptist — is one of the most humanistic images of the medieval world. The Christ Pantocrator staring from the domes of churches across the Byzantine empire was the defining image of medieval Christian authority.",
+        keyArtists: [{ name: "Unknown Constantinople workshops" }],
+        keyWorks: [{ title: "Deësis Mosaic, Hagia Sophia" }, { title: "Psalter of Paris" }],
+        movementPageId: "middle-byzantine",
+      },
+    ],
+  },
+
+  // ─── ISLAMIC GOLDEN AGE ───────────────────────────────────────
+  {
+    id: "iraq",
+    name: "Islamic Golden Age",
+    svgPathId: "path-iraq",
+    dotX: 0,
+    dotY: 0,
+    movements: [
+      {
+        id: "iq-abbasid",
+        name: "Abbasid Art",
+        dates: "750–1258 AD",
+        color: "#408070",
+        activeRange: [750, 1258],
+        description: "Baghdad under the Abbasid caliphate was the most sophisticated city in the medieval world — the Round City, a planned capital of extraordinary ambition. Ceramic arts that influenced China and Europe, intricate geometric architectural ornament, and a court culture of philosophical inquiry that kept Greek scientific manuscripts alive when Europe had forgotten them. The Mongol sack of Baghdad in 1258 ended the most brilliant civilization of the medieval world.",
+        keyArtists: [{ name: "Yahya ibn Mahmud al-Wasiti" }],
+        keyWorks: [{ title: "Maqamat of al-Hariri (illustrated by al-Wasiti)" }, { title: "Samarra Stucco Decorations" }],
+      },
+      {
+        id: "iq-manuscript",
+        name: "Islamic Manuscript",
+        dates: "800–1300 AD",
+        color: "#507890",
+        activeRange: [800, 1300],
+        description: "The great illustrated manuscripts of the Islamic world combined scientific inquiry with visual storytelling of extraordinary richness. Astronomical treatises, herbals, and literary works — al-Hariri's Maqamat, the Book of Fixed Stars — emerged from Baghdad and Mosul with vivid humanistic illustrations unlike anything in Western medieval art. Calligraphy itself was considered the supreme art form: the Word of God made visual.",
+        keyArtists: [{ name: "Ibn Muqlah (calligrapher)" }, { name: "Yahya al-Wasiti" }],
+        keyWorks: [{ title: "Book of Fixed Stars (al-Sufi)" }, { title: "Kitab al-Diryaq" }],
       },
     ],
   },
