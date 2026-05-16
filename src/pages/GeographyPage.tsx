@@ -386,7 +386,7 @@ export default function GeographyPage() {
     }
   }
 
-  // Mouse drag (pan when zoomed in)
+  // Mouse drag — pan in any direction at any zoom level
   function handleMouseDown(e: React.MouseEvent) {
     isDragging.current = true;
     lastMousePos.current = { x: e.clientX, y: e.clientY };
@@ -397,15 +397,24 @@ export default function GeographyPage() {
     const dx = e.clientX - lastMousePos.current.x;
     const dy = e.clientY - lastMousePos.current.y;
     lastMousePos.current = { x: e.clientX, y: e.clientY };
-    if (zoomState.scale > 1) {
-      if (!dragging) setDragging(true);
-      dispatch({ type: "drag", dx, dy });
-    }
+    if (!dragging) setDragging(true);
+    dispatch({ type: "drag", dx, dy });
   }
 
   function stopDrag() {
     isDragging.current = false;
     setDragging(false);
+  }
+
+  // Double-click → zoom in 2× centered on cursor
+  function handleDoubleClick(e: React.MouseEvent) {
+    const rect = mapContainerRef.current!.getBoundingClientRect();
+    dispatch({
+      type: "wheel",
+      factor: 2,
+      ox: e.clientX - rect.left,
+      oy: e.clientY - rect.top,
+    });
   }
 
   // Pinch-to-zoom (touch)
@@ -444,8 +453,8 @@ export default function GeographyPage() {
   // Hide country name labels when zoomed in (countries become self-evident)
   const showLabels = zoomState.scale < 2;
 
-  // Cursor style: grab when zoomed, grabbing while dragging
-  const mapCursor = dragging ? "grabbing" : zoomState.scale > 1 ? "grab" : "default";
+  // Cursor: always grab (map is always pannable), grabbing while actively dragging
+  const mapCursor = dragging ? "grabbing" : "grab";
 
   return (
     <main style={{ minHeight: "100vh", backgroundColor: "#EDE8DF", paddingTop: "4rem" }}>
@@ -508,6 +517,7 @@ export default function GeographyPage() {
         onMouseMove={handleMouseMove}
         onMouseUp={stopDrag}
         onMouseLeave={stopDrag}
+        onDoubleClick={handleDoubleClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
