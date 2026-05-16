@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useReducer, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Plus, Minus } from "lucide-react";
 // @ts-ignore — react-simple-maps has no bundled types
 import { ComposableMap, Geographies, Geography, Marker, useMapContext } from "react-simple-maps";
 import { GEO_COUNTRIES, type GeoMovement } from "@/data/geography-data";
@@ -12,6 +12,9 @@ const MUTED = "rgba(42,30,16,0.45)";
 const PANEL_BG = "#1A1610";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+const MIN_SCALE = 1;
+const MAX_SCALE = 8;
 
 // Geographic coordinates [longitude, latitude] for each country dot
 const GEO_COORDS: Record<string, [number, number]> = {
@@ -43,7 +46,59 @@ const ISO_TO_COUNTRY: Record<string, string> = {
   "840": "usa",
 };
 
+// Per-country label offsets to prevent collisions in the dense Northern Europe cluster
+const LABEL_CONFIG: Record<string, { dx: number; dy: number; anchor: string }> = {
+  england:     { dx: -20, dy:  -8, anchor: "middle" },
+  netherlands: { dx:   8, dy: -16, anchor: "middle" },
+  germany:     { dx:  18, dy:   4, anchor: "start"  },
+};
 
+function getLabelProps(countryId: string) {
+  return LABEL_CONFIG[countryId] ?? { dx: 0, dy: -8, anchor: "middle" };
+}
+
+// ---------------------------------------------------------------------------
+// Zoom / pan state
+// ---------------------------------------------------------------------------
+type ZoomState = { scale: number; x: number; y: number };
+type ZoomAction =
+  | { type: "wheel"; factor: number; ox: number; oy: number }
+  | { type: "pinch"; scale: number; ox: number; oy: number }
+  | { type: "drag";  dx: number; dy: number }
+  | { type: "reset" };
+
+function zoomReducer(state: ZoomState, action: ZoomAction): ZoomState {
+  switch (action.type) {
+    case "wheel": {
+      const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, state.scale * action.factor));
+      if (newScale === state.scale) return state;
+      const ratio = newScale / state.scale;
+      return {
+        scale: newScale,
+        x: action.ox - (action.ox - state.x) * ratio,
+        y: action.oy - (action.oy - state.y) * ratio,
+      };
+    }
+    case "pinch": {
+      const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, action.scale));
+      if (newScale === state.scale) return state;
+      const ratio = newScale / state.scale;
+      return {
+        scale: newScale,
+        x: action.ox - (action.ox - state.x) * ratio,
+        y: action.oy - (action.oy - state.y) * ratio,
+      };
+    }
+    case "drag":
+      return { ...state, x: state.x + action.dx, y: state.y + action.dy };
+    case "reset":
+      return { scale: 1, x: 0, y: 0 };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pill / ray helpers (unchanged from before)
+// ---------------------------------------------------------------------------
 function getPillPositions(dotX: number, dotY: number, country: (typeof GEO_COUNTRIES)[0]) {
   const n = country.movements.length;
   const arcStart = n >= 5 ? -170 : -160;
@@ -80,11 +135,10 @@ interface PillProps {
 }
 
 function RayPill({ dotX, dotY, px, py, movement, index, isSelected, hasSelection, onClick }: PillProps) {
-  const rayOpacity = hasSelection ? (isSelected ? 0.85 : 0.1) : 0.85;
-  const pillOpacity = hasSelection ? (isSelected ? 1 : 0.2) : 1;
+  const rayOpacity  = hasSelection ? (isSelected ? 0.85 : 0.1) : 0.85;
+  const pillOpacity = hasSelection ? (isSelected ? 1    : 0.2) : 1;
   const pw = pillWidth(movement.name);
-
-  const GOLD = "#C9A84C";
+  const GOLD_LOCAL = "#C9A84C";
 
   return (
     <g>
@@ -113,7 +167,7 @@ function RayPill({ dotX, dotY, px, py, movement, index, isSelected, hasSelection
           height={PILL_H}
           rx={3}
           fill="#FAF8F4"
-          stroke={isSelected ? GOLD : `${GOLD}99`}
+          stroke={isSelected ? GOLD_LOCAL : `${GOLD_LOCAL}99`}
           strokeWidth={isSelected ? 1.5 : 1}
         />
         <text
@@ -191,14 +245,45 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
   );
 }
 
+// ---------------------------------------------------------------------------
+// Main page
+// ---------------------------------------------------------------------------
 export default function GeographyPage() {
   const navigate = useNavigate();
   const [selectedCountryId, setSelectedCountryId] = useState<string | null>(null);
-  const [hoveredCountryId, setHoveredCountryId] = useState<string | null>(null);
-  const [sidePanelMovement, setSidePanelMovement] = useState<GeoMovement | null>(null);
-  const [sidePanelCountryName, setSidePanelCountryName] = useState("");
+  const [hoveredCountryId,  setHoveredCountryId]  = useState<string | null>(null);
+  const [sidePanelMovement,     setSidePanelMovement]     = useState<GeoMovement | null>(null);
+  const [sidePanelCountryName,  setSidePanelCountryName]  = useState("");
+  const [dragging, setDragging] = useState(false);
+
+  // Zoom / pan
+  const [zoomState, dispatch] = useReducer(zoomReducer, { scale: 1, x: 0, y: 0 });
+  const mapContainerRef  = useRef<HTMLDivElement>(null);
+  const isDragging       = useRef(false);
+  const lastMousePos     = useRef({ x: 0, y: 0 });
+  const pinchStartDist   = useRef<number | null>(null);
+  const pinchStartMid    = useRef({ x: 0, y: 0 });
+  const pinchStartScale  = useRef(1);
 
   const selectedCountry = GEO_COUNTRIES.find((c) => c.id === selectedCountryId) ?? null;
+
+  // Non-passive wheel listener so we can preventDefault
+  useEffect(() => {
+    const el = mapContainerRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      dispatch({
+        type: "wheel",
+        factor: e.deltaY < 0 ? 1.12 : 1 / 1.12,
+        ox: e.clientX - rect.left,
+        oy: e.clientY - rect.top,
+      });
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
 
   function handleCountryClick(countryId: string) {
     if (selectedCountryId === countryId) {
@@ -218,6 +303,67 @@ export default function GeographyPage() {
       setSidePanelCountryName(countryName);
     }
   }
+
+  // Mouse drag (pan when zoomed in)
+  function handleMouseDown(e: React.MouseEvent) {
+    isDragging.current = true;
+    lastMousePos.current = { x: e.clientX, y: e.clientY };
+  }
+
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!isDragging.current) return;
+    const dx = e.clientX - lastMousePos.current.x;
+    const dy = e.clientY - lastMousePos.current.y;
+    lastMousePos.current = { x: e.clientX, y: e.clientY };
+    if (zoomState.scale > 1) {
+      if (!dragging) setDragging(true);
+      dispatch({ type: "drag", dx, dy });
+    }
+  }
+
+  function stopDrag() {
+    isDragging.current = false;
+    setDragging(false);
+  }
+
+  // Pinch-to-zoom (touch)
+  function handleTouchStart(e: React.TouchEvent) {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      pinchStartDist.current  = Math.hypot(dx, dy);
+      pinchStartMid.current   = {
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+      };
+      pinchStartScale.current = zoomState.scale;
+    }
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    if (e.touches.length === 2 && pinchStartDist.current !== null) {
+      const dx   = e.touches[0].clientX - e.touches[1].clientX;
+      const dy   = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.hypot(dx, dy);
+      const rect = mapContainerRef.current!.getBoundingClientRect();
+      dispatch({
+        type: "pinch",
+        scale: pinchStartScale.current * (dist / pinchStartDist.current),
+        ox: pinchStartMid.current.x - rect.left,
+        oy: pinchStartMid.current.y - rect.top,
+      });
+    }
+  }
+
+  function handleTouchEnd() {
+    pinchStartDist.current = null;
+  }
+
+  // Hide country name labels when zoomed in (countries become self-evident)
+  const showLabels = zoomState.scale < 2;
+
+  // Cursor style: grab when zoomed, grabbing while dragging
+  const mapCursor = dragging ? "grabbing" : zoomState.scale > 1 ? "grab" : "default";
 
   return (
     <main style={{ minHeight: "100vh", backgroundColor: "#EDE8DF", paddingTop: "4rem" }}>
@@ -264,127 +410,221 @@ export default function GeographyPage() {
         }}
       />
 
-      {/* MAP */}
-      <div style={{ position: "relative", width: "100%", userSelect: "none" }}>
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{ scale: 220, center: [20, 45] }}
-          width={800}
-          height={500}
-          style={{ width: "100%", height: "calc(100vh - 13rem)", minHeight: 420, display: "block", backgroundColor: "#EAE4D8" }}
+      {/* MAP — outer container clips overflow and handles pointer events */}
+      <div
+        ref={mapContainerRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "calc(100vh - 13rem)",
+          minHeight: 420,
+          overflow: "hidden",
+          userSelect: "none",
+          cursor: mapCursor,
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={stopDrag}
+        onMouseLeave={stopDrag}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Zoom / pan transform wrapper */}
+        <div
+          style={{
+            transform: `translate(${zoomState.x}px, ${zoomState.y}px) scale(${zoomState.scale})`,
+            transformOrigin: "0 0",
+            willChange: "transform",
+            width: "100%",
+            height: "100%",
+          }}
         >
-          {/* Background click target — deselects everything */}
-          <rect
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ scale: 220, center: [20, 45] }}
             width={800}
             height={500}
-            fill="transparent"
-            style={{ cursor: "default" }}
-            onClick={() => { setSidePanelMovement(null); setSelectedCountryId(null); }}
-          />
+            style={{ width: "100%", height: "100%", display: "block", backgroundColor: "#EAE4D8" }}
+          >
+            {/* Background click target — deselects everything */}
+            <rect
+              width={800}
+              height={500}
+              fill="transparent"
+              style={{ cursor: "default" }}
+              onClick={() => { setSidePanelMovement(null); setSelectedCountryId(null); }}
+            />
 
-          {/* World country fills */}
-          <Geographies geography={GEO_URL}>
-            {({ geographies }: { geographies: any[] }) =>
-              geographies.map((geo) => {
-                const countryId = ISO_TO_COUNTRY[String(geo.id)] ?? null;
-                const isSelected = countryId === selectedCountryId;
-                const isHovered = countryId === hoveredCountryId;
+            {/* World country fills */}
+            <Geographies geography={GEO_URL}>
+              {({ geographies }: { geographies: any[] }) =>
+                geographies.map((geo) => {
+                  const countryId = ISO_TO_COUNTRY[String(geo.id)] ?? null;
+                  const isSelected = countryId === selectedCountryId;
+                  const isHovered  = countryId === hoveredCountryId;
 
-                let fill = "#E8E0D0";
-                if (isSelected) fill = "rgba(201,168,76,0.25)";
-                else if (isHovered) fill = "#DDD5C0";
+                  let fill = "#E8E0D0";
+                  if (isSelected)      fill = "rgba(201,168,76,0.25)";
+                  else if (isHovered)  fill = "#DDD5C0";
 
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    style={{
-                      default: {
-                        fill,
-                        stroke: "rgba(201,168,76,0.4)",
-                        strokeWidth: 0.5,
-                        outline: "none",
-                        cursor: countryId ? "pointer" : "default",
-                      },
-                      hover: {
-                        fill,
-                        stroke: "rgba(201,168,76,0.4)",
-                        strokeWidth: 0.5,
-                        outline: "none",
-                        cursor: countryId ? "pointer" : "default",
-                      },
-                      pressed: {
-                        fill,
-                        stroke: "rgba(201,168,76,0.5)",
-                        strokeWidth: 0.5,
-                        outline: "none",
-                      },
-                    }}
-                    onClick={countryId ? (e: any) => { e.stopPropagation(); handleCountryClick(countryId); } : undefined}
-                    onMouseEnter={countryId ? () => setHoveredCountryId(countryId) : undefined}
-                    onMouseLeave={countryId ? () => setHoveredCountryId(null) : undefined}
-                  />
-                );
-              })
-            }
-          </Geographies>
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      style={{
+                        default:  { fill, stroke: "rgba(201,168,76,0.4)", strokeWidth: 0.5, outline: "none", cursor: countryId ? "pointer" : "default" },
+                        hover:    { fill, stroke: "rgba(201,168,76,0.4)", strokeWidth: 0.5, outline: "none", cursor: countryId ? "pointer" : "default" },
+                        pressed:  { fill, stroke: "rgba(201,168,76,0.5)", strokeWidth: 0.5, outline: "none" },
+                      }}
+                      onClick={countryId ? (e: any) => { e.stopPropagation(); handleCountryClick(countryId); } : undefined}
+                      onMouseEnter={countryId ? () => setHoveredCountryId(countryId) : undefined}
+                      onMouseLeave={countryId ? () => setHoveredCountryId(null) : undefined}
+                    />
+                  );
+                })
+              }
+            </Geographies>
 
-          {/* Rays and pills — needs projection context */}
-          <RayLayer
-            selectedCountryId={selectedCountryId}
-            sidePanelMovement={sidePanelMovement}
-            hasSelection={sidePanelMovement !== null}
-            onPillClick={handlePillClick}
-          />
+            {/* Rays and pills — needs projection context */}
+            <RayLayer
+              selectedCountryId={selectedCountryId}
+              sidePanelMovement={sidePanelMovement}
+              hasSelection={sidePanelMovement !== null}
+              onPillClick={handlePillClick}
+            />
 
-          {/* Country dot markers */}
-          {GEO_COUNTRIES.map((country) => {
-            const coords = GEO_COORDS[country.id];
-            if (!coords) return null;
-            const isSelected = country.id === selectedCountryId;
-            const isHovered = country.id === hoveredCountryId;
+            {/* Country dot markers */}
+            {GEO_COUNTRIES.map((country) => {
+              const coords = GEO_COORDS[country.id];
+              if (!coords) return null;
+              const isSelected  = country.id === selectedCountryId;
+              const isHovered   = country.id === hoveredCountryId;
+              const labelProps  = getLabelProps(country.id);
 
-            return (
-              <Marker key={country.id} coordinates={coords}>
-                {isSelected && (
+              return (
+                <Marker key={country.id} coordinates={coords}>
+                  {isSelected && (
+                    <circle
+                      r={9}
+                      fill="none"
+                      stroke={sidePanelMovement ? sidePanelMovement.color : GOLD}
+                      strokeWidth={sidePanelMovement ? 1.5 : 1}
+                      strokeOpacity={sidePanelMovement ? 0.9 : 0.5}
+                    />
+                  )}
                   <circle
-                    r={9}
-                    fill="none"
-                    stroke={sidePanelMovement ? sidePanelMovement.color : GOLD}
-                    strokeWidth={sidePanelMovement ? 1.5 : 1}
-                    strokeOpacity={sidePanelMovement ? 0.9 : 0.5}
+                    r={isHovered && !isSelected ? 5.5 : 4.5}
+                    fill={GOLD}
+                    stroke={isSelected ? GOLD : "rgba(201,168,76,0.6)"}
+                    strokeWidth={isSelected ? 1.5 : 0.8}
+                    onClick={(e: any) => { e.stopPropagation(); handleCountryClick(country.id); }}
+                    onMouseEnter={() => setHoveredCountryId(country.id)}
+                    onMouseLeave={() => setHoveredCountryId(null)}
+                    style={{ cursor: "pointer" }}
                   />
-                )}
-                <circle
-                  r={isHovered && !isSelected ? 5.5 : 4.5}
-                  fill={GOLD}
-                  stroke={isSelected ? GOLD : "rgba(201,168,76,0.6)"}
-                  strokeWidth={isSelected ? 1.5 : 0.8}
-                  onClick={(e: any) => { e.stopPropagation(); handleCountryClick(country.id); }}
-                  onMouseEnter={() => setHoveredCountryId(country.id)}
-                  onMouseLeave={() => setHoveredCountryId(null)}
-                  style={{ cursor: "pointer" }}
-                />
-                <text
-                  textAnchor="middle"
-                  y={-8}
-                  style={{
-                    fontFamily: "'Courier New', monospace",
-                    fontSize: 6,
-                    fill: isSelected || isHovered ? DARK : MUTED,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    userSelect: "none",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {country.name}
-                </text>
-              </Marker>
-            );
-          })}
-        </ComposableMap>
+                  {showLabels && (
+                    <text
+                      textAnchor={labelProps.anchor as any}
+                      x={labelProps.dx}
+                      y={labelProps.dy}
+                      style={{
+                        fontFamily: "'Courier New', monospace",
+                        fontSize: 5.5,
+                        fill: isSelected || isHovered ? DARK : MUTED,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        userSelect: "none",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      {country.name}
+                    </text>
+                  )}
+                </Marker>
+              );
+            })}
+          </ComposableMap>
+        </div>
 
+        {/* Zoom controls — bottom-right corner of map */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 16,
+            right: 16,
+            zIndex: 10,
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+          }}
+        >
+          <button
+            onClick={() => {
+              const rect = mapContainerRef.current!.getBoundingClientRect();
+              dispatch({ type: "wheel", factor: 1.3, ox: rect.width / 2, oy: rect.height / 2 });
+            }}
+            title="Zoom in"
+            style={{
+              width: 32,
+              height: 32,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(250,248,244,0.92)",
+              border: "1px solid rgba(201,168,76,0.4)",
+              borderRadius: 3,
+              cursor: "pointer",
+              color: DARK,
+            }}
+          >
+            <Plus size={14} />
+          </button>
+          <button
+            onClick={() => {
+              const rect = mapContainerRef.current!.getBoundingClientRect();
+              dispatch({ type: "wheel", factor: 1 / 1.3, ox: rect.width / 2, oy: rect.height / 2 });
+            }}
+            title="Zoom out"
+            style={{
+              width: 32,
+              height: 32,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(250,248,244,0.92)",
+              border: "1px solid rgba(201,168,76,0.4)",
+              borderRadius: 3,
+              cursor: "pointer",
+              color: DARK,
+            }}
+          >
+            <Minus size={14} />
+          </button>
+          {zoomState.scale > 1 && (
+            <button
+              onClick={() => dispatch({ type: "reset" })}
+              title="Reset zoom"
+              style={{
+                width: 32,
+                height: 32,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(250,248,244,0.92)",
+                border: "1px solid rgba(201,168,76,0.4)",
+                borderRadius: 3,
+                cursor: "pointer",
+                color: MUTED,
+                fontFamily: "'Courier New', monospace",
+                fontSize: "0.55rem",
+                letterSpacing: "0.05em",
+              }}
+            >
+              1:1
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Click-outside backdrop — closes movement panel when clicking anywhere outside it */}
