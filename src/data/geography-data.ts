@@ -1,4 +1,4 @@
-// Geography page data — 15 countries, 46 art movements
+// Geography page data — 14 countries, 44 art movements
 // Each country has: id, name, svgPathId, dot position, movements array
 // Each movement has: name, dates, color, activeRange, description, keyArtists, keyWorks, movementPageId
 
@@ -750,34 +750,4 @@ export const GEO_COUNTRIES: GeoCountry[] = [
     ],
   },
 
-  // ─── ISLAMIC GOLDEN AGE ───────────────────────────────────────
-  {
-    id: "iraq",
-    name: "Islamic Golden Age",
-    svgPathId: "path-iraq",
-    dotX: 0,
-    dotY: 0,
-    movements: [
-      {
-        id: "iq-abbasid",
-        name: "Abbasid Art",
-        dates: "750–1258 AD",
-        color: "#408070",
-        activeRange: [750, 1258],
-        description: "Baghdad under the Abbasid caliphate was the most sophisticated city in the medieval world — the Round City, a planned capital of extraordinary ambition. Ceramic arts that influenced China and Europe, intricate geometric architectural ornament, and a court culture of philosophical inquiry that kept Greek scientific manuscripts alive when Europe had forgotten them. The Mongol sack of Baghdad in 1258 ended the most brilliant civilization of the medieval world.",
-        keyArtists: [{ name: "Yahya ibn Mahmud al-Wasiti" }],
-        keyWorks: [{ title: "Maqamat of al-Hariri (illustrated by al-Wasiti)" }, { title: "Samarra Stucco Decorations" }],
-      },
-      {
-        id: "iq-manuscript",
-        name: "Islamic Manuscript",
-        dates: "800–1300 AD",
-        color: "#507890",
-        activeRange: [800, 1300],
-        description: "The great illustrated manuscripts of the Islamic world combined scientific inquiry with visual storytelling of extraordinary richness. Astronomical treatises, herbals, and literary works — al-Hariri's Maqamat, the Book of Fixed Stars — emerged from Baghdad and Mosul with vivid humanistic illustrations unlike anything in Western medieval art. Calligraphy itself was considered the supreme art form: the Word of God made visual.",
-        keyArtists: [{ name: "Ibn Muqlah (calligrapher)" }, { name: "Yahya al-Wasiti" }],
-        keyWorks: [{ title: "Book of Fixed Stars (al-Sufi)" }, { title: "Kitab al-Diryaq" }],
-      },
-    ],
-  },
 ];

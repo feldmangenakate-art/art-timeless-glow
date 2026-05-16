@@ -32,7 +32,6 @@ const GEO_COORDS: Record<string, [number, number]> = {
   roman:       [11.5,   43.0],
   "medieval-france": [0.5, 47.8],
   byzantine:   [27.0,   38.5],
-  iraq:        [44.0,   33.3],
 };
 
 // ISO 3166-1 numeric codes → country id
@@ -48,17 +47,22 @@ const ISO_TO_COUNTRY: Record<string, string> = {
   "300": "greece",
   "392": "japan",
   "840": "usa",
-  "368": "iraq",
 };
 
 // Per-country label offsets to prevent collisions in the dense Northern Europe cluster
+// Each entry positions the country NAME label to avoid collisions in dense clusters.
+// dx/dy are SVG offsets from the dot centre; anchor is SVG text-anchor.
+// Vertical spread between the five northern-Europe labels (approx dot SVG Y):
+//   England≈137  Netherlands≈148  Germany≈155  Medieval≈158  Roman≈190
+// Target label Y after dy: England 117 | Netherlands 132 | Germany 151 | Medieval 173 | Roman 202
 const LABEL_CONFIG: Record<string, { dx: number; dy: number; anchor: string }> = {
-  england:          { dx: -20, dy:  -8, anchor: "middle" },
-  netherlands:      { dx:   8, dy: -16, anchor: "middle" },
-  germany:          { dx:  18, dy:   4, anchor: "start"  },
-  // Historical overlays — offset from their geographic neighbours
-  roman:            { dx: -16, dy:   6, anchor: "middle" }, // below Italy dot
-  "medieval-france":{ dx: -18, dy:  -8, anchor: "middle" }, // left of France dot
+  // Northern Europe cluster — fanned out both horizontally and vertically
+  england:          { dx: -35, dy: -20, anchor: "end"    }, // upper-left  (Y≈117)
+  netherlands:      { dx:   0, dy: -16, anchor: "middle" }, // directly above dot  (Y≈132)
+  germany:          { dx:  20, dy:  -4, anchor: "start"  }, // right side   (Y≈151)
+  // Historical overlays — pushed away from their geographic neighbours
+  "medieval-france":{ dx: -20, dy:  15, anchor: "end"    }, // lower-left   (Y≈173)
+  roman:            { dx:  16, dy:  12, anchor: "start"  }, // lower-right  (Y≈202)
   byzantine:        { dx:  14, dy:   6, anchor: "start"  }, // right of Greece dot
 };
 
@@ -278,14 +282,19 @@ function RayPill({ dotX, dotY, px, py, movement, index, isSelected, hasSelection
 }
 
 // Inner component that accesses the map projection context
+// Countries with more movements than this show a collapse indicator until expanded
+const MAX_COLLAPSED_PILLS = 3;
+
 interface RayLayerProps {
   selectedCountryId: string | null;
   sidePanelMovement: GeoMovement | null;
   hasSelection: boolean;
+  isExpanded: boolean;
+  onExpand: () => void;
   onPillClick: (movement: GeoMovement, countryName: string) => void;
 }
 
-function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillClick }: RayLayerProps) {
+function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, isExpanded, onExpand, onPillClick }: RayLayerProps) {
   const { projection } = useMapContext();
   const selectedCountry = GEO_COUNTRIES.find((c) => c.id === selectedCountryId) ?? null;
 
@@ -300,16 +309,24 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
 
   if (!selectedCountry || !dotPos) return null;
 
-  const { positions } = getStackLayout(
-    dotPos.x,
-    dotPos.y,
-    selectedCountry.id,
-    selectedCountry.movements.length,
-  );
+  const totalCount  = selectedCountry.movements.length;
+  const showCount   = (!isExpanded && totalCount > MAX_COLLAPSED_PILLS)
+    ? MAX_COLLAPSED_PILLS
+    : totalCount;
+  const overflow    = totalCount - showCount;
+  const shownMoves  = selectedCountry.movements.slice(0, showCount);
+
+  const { dir, positions } = getStackLayout(dotPos.x, dotPos.y, selectedCountry.id, showCount);
+
+  // Position for the overflow indicator: one step beyond the last visible pill
+  const lastPos = positions[positions.length - 1] ?? { x: dotPos.x, y: dotPos.y };
+  const overflowPos = dir === "above"
+    ? { x: lastPos.x, y: lastPos.y - PILL_STEP }
+    : { x: lastPos.x, y: lastPos.y + PILL_STEP };
 
   return (
     <>
-      {selectedCountry.movements.map((movement, i) => (
+      {shownMoves.map((movement, i) => (
         <RayPill
           key={`${selectedCountry.id}-${movement.id}`}
           dotX={dotPos.x}
@@ -323,6 +340,26 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
           onClick={() => onPillClick(movement, selectedCountry.name)}
         />
       ))}
+      {overflow > 0 && (
+        <g
+          onClick={(e: any) => { e.stopPropagation(); onExpand(); }}
+          style={{ cursor: "pointer" }}
+        >
+          <text
+            x={overflowPos.x}
+            y={overflowPos.y}
+            textAnchor="middle"
+            fill="#2A1E10"
+            fontSize={5.5}
+            fontFamily="'Courier New', monospace"
+            letterSpacing="0.08em"
+            fillOpacity={0.45}
+            style={{ userSelect: "none" }}
+          >
+            · · · +{overflow} more
+          </text>
+        </g>
+      )}
     </>
   );
 }
@@ -336,6 +373,7 @@ export default function GeographyPage() {
   const [hoveredCountryId,  setHoveredCountryId]  = useState<string | null>(null);
   const [sidePanelMovement,     setSidePanelMovement]     = useState<GeoMovement | null>(null);
   const [sidePanelCountryName,  setSidePanelCountryName]  = useState("");
+  const [expandedCountryId,     setExpandedCountryId]     = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
 
   // Zoom / pan
@@ -369,12 +407,26 @@ export default function GeographyPage() {
 
   function handleCountryClick(countryId: string) {
     if (selectedCountryId === countryId) {
-      setSelectedCountryId(null);
-      setSidePanelMovement(null);
+      // Already selected: if collapsed and expandable, expand on next click
+      const country = GEO_COUNTRIES.find((c) => c.id === countryId);
+      const isExpandable = (country?.movements.length ?? 0) > MAX_COLLAPSED_PILLS;
+      if (isExpandable && expandedCountryId !== countryId) {
+        setExpandedCountryId(countryId);
+      } else {
+        // Already expanded, or not expandable — deselect
+        setSelectedCountryId(null);
+        setExpandedCountryId(null);
+        setSidePanelMovement(null);
+      }
     } else {
       setSelectedCountryId(countryId);
+      setExpandedCountryId(null); // new selection starts collapsed
       setSidePanelMovement(null);
     }
+  }
+
+  function handleExpandCountry() {
+    if (selectedCountryId) setExpandedCountryId(selectedCountryId);
   }
 
   function handlePillClick(movement: GeoMovement, countryName: string) {
@@ -583,6 +635,8 @@ export default function GeographyPage() {
               selectedCountryId={selectedCountryId}
               sidePanelMovement={sidePanelMovement}
               hasSelection={sidePanelMovement !== null}
+              isExpanded={expandedCountryId === selectedCountryId}
+              onExpand={handleExpandCountry}
               onPillClick={handlePillClick}
             />
 
