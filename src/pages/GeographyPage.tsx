@@ -97,23 +97,41 @@ function zoomReducer(state: ZoomState, action: ZoomAction): ZoomState {
 }
 
 // ---------------------------------------------------------------------------
-// Pill / ray helpers (unchanged from before)
+// Pill / stack layout helpers
 // ---------------------------------------------------------------------------
-function getPillPositions(dotX: number, dotY: number, country: (typeof GEO_COUNTRIES)[0]) {
-  const n = country.movements.length;
-  const arcStart = n >= 5 ? -170 : -160;
-  const arcEnd   = n >= 5 ?  -10 :  -20;
-  const arcRange = arcEnd - arcStart;
-  const angleStep = n > 1 ? arcRange / (n - 1) : 0;
-  const rayLength = 110;
-  return country.movements.map((_, i) => {
-    const deg = arcStart + angleStep * i;
-    const rad = (deg * Math.PI) / 180;
-    return {
-      x: dotX + rayLength * Math.cos(rad),
-      y: dotY + rayLength * Math.sin(rad),
-    };
-  });
+
+// Maximum labels shown per dot; extras collapse into an overflow indicator
+const MAX_VISIBLE_PILLS = 2;
+// Horizontal distance from dot centre to the nearest pill edge
+const STACK_OFFSET_X = 90;
+// Vertical distance between pill centres in the stack
+const STACK_PILL_GAP = 30;
+
+/**
+ * Countries west of longitude 20 stack their labels to the right (open ocean /
+ * land to the east); countries east of 20 stack to the left.
+ */
+function getStackSide(longitude: number): "right" | "left" {
+  return longitude < 20 ? "right" : "left";
+}
+
+/**
+ * Returns SVG positions for the visible pills, centred vertically around dotY.
+ */
+function getStackPositions(
+  dotX: number,
+  dotY: number,
+  count: number,
+  side: "right" | "left",
+): { x: number; y: number }[] {
+  const visible = Math.min(count, MAX_VISIBLE_PILLS);
+  const pillX   = side === "right" ? dotX + STACK_OFFSET_X : dotX - STACK_OFFSET_X;
+  const totalH  = (visible - 1) * STACK_PILL_GAP;
+  const startY  = dotY - totalH / 2;
+  return Array.from({ length: visible }, (_, i) => ({
+    x: pillX,
+    y: startY + i * STACK_PILL_GAP,
+  }));
 }
 
 const PILL_H = 23;
@@ -223,17 +241,23 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
 
   if (!selectedCountry || !dotPos) return null;
 
-  const pills = getPillPositions(dotPos.x, dotPos.y, selectedCountry);
+  const coords        = GEO_COORDS[selectedCountry.id];
+  const side          = getStackSide(coords[0]);
+  const visible       = selectedCountry.movements.slice(0, MAX_VISIBLE_PILLS);
+  const overflowCount = Math.max(0, selectedCountry.movements.length - MAX_VISIBLE_PILLS);
+  const positions     = getStackPositions(dotPos.x, dotPos.y, visible.length, side);
+  const stackX        = side === "right" ? dotPos.x + STACK_OFFSET_X : dotPos.x - STACK_OFFSET_X;
+  const lastY         = positions.length > 0 ? positions[positions.length - 1].y : dotPos.y;
 
   return (
     <>
-      {selectedCountry.movements.map((movement, i) => (
+      {visible.map((movement, i) => (
         <RayPill
           key={`${selectedCountry.id}-${movement.id}`}
           dotX={dotPos.x}
           dotY={dotPos.y}
-          px={pills[i].x}
-          py={pills[i].y}
+          px={positions[i].x}
+          py={positions[i].y}
           movement={movement}
           index={i}
           isSelected={sidePanelMovement?.id === movement.id}
@@ -241,6 +265,21 @@ function RayLayer({ selectedCountryId, sidePanelMovement, hasSelection, onPillCl
           onClick={() => onPillClick(movement, selectedCountry.name)}
         />
       ))}
+      {overflowCount > 0 && (
+        <text
+          x={stackX}
+          y={lastY + STACK_PILL_GAP * 0.85}
+          textAnchor="middle"
+          fill="#2A1E10"
+          fontSize={5}
+          fontFamily="'Courier New', monospace"
+          letterSpacing="0.06em"
+          fillOpacity={0.38}
+          style={{ userSelect: "none", pointerEvents: "none" }}
+        >
+          + {overflowCount} more
+        </text>
+      )}
     </>
   );
 }
