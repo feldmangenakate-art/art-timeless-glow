@@ -13,6 +13,7 @@ import ArtistDetailPage from "./pages/ArtistDetailPage";
 import MovementPage from "./pages/MovementPage";
 import CivilizationPage from "./pages/CivilizationPage";
 import GeographyPage from "./pages/GeographyPage";
+import CollectionDetailPage from "./pages/CollectionDetailPage";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/masterworks/:id" element={<MasterworkDetailPage />} />
           <Route path="/artists" element={<ArtistsPage />} />
           <Route path="/artists/:id" element={<ArtistDetailPage />} />
+          <Route path="/collection/:id" element={<CollectionDetailPage />} />
           <Route path="/movement/:id" element={<MovementPage />} />
           <Route path="/civilization/:id" element={<CivilizationPage />} />
           <Route path="*" element={<NotFound />} />
