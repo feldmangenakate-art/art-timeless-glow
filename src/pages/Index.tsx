@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import Footer from "@/components/Footer";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { CIVILIZATIONS, getTodayInArt, getTodayDetail } from "@/data/civilizations";
 import { MASTERWORKS } from "@/data/masterworks";
@@ -17,7 +19,7 @@ const NAV_CARDS = [
   { name: "Artists",     desc: "Lives behind the masterworks",      path: "/artists",     accent: "#3060A0" },
 ];
 
-type FeaturedItem = { image: string; label: string; title: string; subtitle: string; href: string };
+type FeaturedItem = { image: string; label: string; title: string; subtitle: string; href: string; imagePosition?: string };
 
 function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -62,8 +64,12 @@ function NavCard({ name, desc, path, accent }: (typeof NAV_CARDS)[0]) {
   );
 }
 
-function FeaturedCard({ image, label, title, subtitle, href }: FeaturedItem) {
+function FeaturedCard({ image, label, title, subtitle, href, imagePosition }: FeaturedItem) {
   const [hovered, setHovered] = useState(false);
+  // Artist cards show portraits — anchor to top so the face is never cropped.
+  // Civilization cards use per-entry imagePosition when set (e.g. Roman Empire statue needs "top").
+  // Masterwork and Civilization images default to center.
+  const objectPosition = imagePosition ?? (label === "Artist" ? "top" : "center");
   return (
     <Link
       to={href}
@@ -79,11 +85,11 @@ function FeaturedCard({ image, label, title, subtitle, href }: FeaturedItem) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div style={{ height: 200, overflow: "hidden" }}>
+      <div style={{ aspectRatio: "1 / 1", overflow: "hidden" }}>
         <img
           src={image}
           alt={title}
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", transition: "transform 0.4s ease", transform: hovered ? "scale(1.04)" : "scale(1)" }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition, transition: "transform 0.4s ease", transform: hovered ? "scale(1.04)" : "scale(1)" }}
         />
       </div>
       <div style={{ padding: "1rem 1.25rem 1.25rem", backgroundColor: "#FAF8F4" }}>
@@ -105,6 +111,7 @@ function FeaturedCard({ image, label, title, subtitle, href }: FeaturedItem) {
 }
 
 export default function Index() {
+  const isMobile = useIsMobile();
   const todayEvent = getTodayInArt();
   const todayDetail = getTodayDetail();
   const [expanded, setExpanded] = useState(false);
@@ -119,7 +126,7 @@ export default function Index() {
     return [
       { image: work.image,           label: "Masterwork",   title: work.title,   subtitle: `${work.artist} · ${work.year}`,               href: `/masterworks/${work.id}` },
       { image: artist.portraitImage, label: "Artist",       title: artist.name,  subtitle: `${artist.nationality} · ${artist.movement}`,  href: `/artists/${artist.id}` },
-      { image: civ.image,            label: "Civilization", title: civ.name,     subtitle: `${civ.dates} · ${civ.region}`,                href: `/civilization/${civ.id}` },
+      { image: civ.image,            label: "Civilization", title: civ.name,     subtitle: `${civ.dates} · ${civ.region}`,                href: `/civilization/${civ.id}`, imagePosition: civ.imagePosition },
     ];
   }, []);
 
@@ -142,13 +149,13 @@ export default function Index() {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(12,10,7,0.4) 0%, rgba(12,10,7,0.62) 55%, rgba(245,240,232,1) 100%)", zIndex: 1 }} />
 
         {/* zIndex raised to 51 when expanded so card sits above the z-50 backdrop */}
-        <div style={{ position: "relative", zIndex: expanded ? 51 : 2, textAlign: "center", maxWidth: "56rem", padding: "0 2rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ position: "relative", zIndex: expanded ? 51 : 2, textAlign: "center", width: "100%", maxWidth: "56rem", padding: isMobile ? "0 1.25rem" : "0 2rem", boxSizing: "border-box", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
-          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: "72px", lineHeight: 1.05, color: "#F0EAD6", letterSpacing: "-0.01em", marginBottom: "0.9rem", textShadow: "0 2px 24px rgba(0,0,0,0.6)" }}>
+          <h1 className="hero-title" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: "72px", lineHeight: 1.05, color: "#F0EAD6", letterSpacing: "-0.01em", marginBottom: "0.9rem", textShadow: "0 2px 24px rgba(0,0,0,0.6)", width: "100%" }}>
             Art Through the Ages
           </h1>
 
-          <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: "italic", fontSize: "1rem", color: "rgba(240,234,214,0.7)", lineHeight: 1.5, marginBottom: "1.5rem" }}>
+          <p style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontStyle: "italic", fontSize: "clamp(0.8rem, 3vw, 1rem)", color: "rgba(240,234,214,0.7)", lineHeight: 1.5, marginBottom: "1.5rem", width: "100%" }}>
             From cave walls to the present &#8212; 40,000 years of human creativity
           </p>
 
@@ -227,8 +234,10 @@ export default function Index() {
                       backdropFilter: "blur(10px)",
                       border: "1px solid rgba(201,168,76,0.2)",
                       borderRadius: 4,
-                      padding: "1.75rem 2.5rem",
+                      padding: isMobile ? "1.25rem 1rem" : "1.75rem 2.5rem",
                       maxWidth: "44rem",
+                      width: "100%",
+                      boxSizing: "border-box",
                       margin: "0 auto",
                       textAlign: "center",
                     }}>
@@ -310,9 +319,9 @@ export default function Index() {
       </section>
 
       {/* ABOVE-FOLD CARDS — 35vh */}
-      <div style={{ backgroundColor: "#F5F0E8", padding: "28px 40px 20px", display: "flex", flexDirection: "column", alignItems: "center", boxSizing: "border-box" }}>
+      <div style={{ backgroundColor: "#F5F0E8", padding: isMobile ? "28px 16px 20px" : "28px 40px 20px", display: "flex", flexDirection: "column", alignItems: "center", boxSizing: "border-box" }}>
 
-        <div style={{ width: "100%", maxWidth: "72rem", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
+        <div style={{ width: "100%", maxWidth: "72rem", display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "16px" }}>
           {NAV_CARDS.map((card) => (
             <NavCard key={card.path} {...card} />
           ))}
@@ -326,11 +335,11 @@ export default function Index() {
 
       {/* FEATURED — below the fold */}
       <div style={{ backgroundColor: "#F5F0E8" }}>
-        <section style={{ padding: "0.75rem 2rem 2rem" }}>
+        <section style={{ padding: isMobile ? "0.75rem 1rem 2rem" : "0.75rem 2rem 2rem" }}>
           <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 700, fontSize: "1.9rem", color: "rgba(42,30,16,0.45)", textAlign: "center", marginBottom: "2.75rem" }}>
             Where would you like to begin?
           </h2>
-          <div style={{ maxWidth: "64rem", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          <div style={{ maxWidth: "64rem", margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: "1.5rem" }}>
             {featured.map((item) => (
               <FeaturedCard key={item.href} {...item} />
             ))}
@@ -377,6 +386,7 @@ export default function Index() {
             maxWidth: "900px",
             margin: "0 auto",
             display: "flex",
+            flexDirection: isMobile ? "column" : "row" as React.CSSProperties["flexDirection"],
             background: "#FAF8F4",
             border: "1px solid rgba(201,168,76,0.2)",
             borderRadius: 3,
@@ -384,7 +394,7 @@ export default function Index() {
             boxShadow: "0 1px 3px rgba(42,30,16,0.04)",
           }}>
             {/* Image */}
-            <div style={{ flexShrink: 0, width: "42%", minHeight: 340 }}>
+            <div style={{ flexShrink: 0, width: isMobile ? "100%" : "42%", minHeight: isMobile ? 220 : 340 }}>
               <img
                 src="/timeline/las-meninas.webp"
                 alt="Las Meninas"
@@ -464,6 +474,7 @@ export default function Index() {
         </section>
       </div>
 
+      <Footer />
     </main>
   );
 }

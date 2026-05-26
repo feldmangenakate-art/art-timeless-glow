@@ -38,7 +38,8 @@ He was not a lovable rebel. The Roman police records — which survive — show 
 
 But Caravaggio's deeper influence was conceptual: the idea that sacred subjects should be shown with unflinching physical realism, that saints should look like the people who prayed to them, that the divine could enter the most ordinary human moment. That idea runs through Rembrandt, through Velázquez, through every religious painting that has the courage to be specific and human rather than generically beautiful. It also runs through cinema — the chiaroscuro lighting of film noir, of Kubrick, of Gordon Willis's work with Coppola — is Caravaggio's legacy to a medium he never imagined.`,
 
-    masterworksIds: ["calling-saint-matthew", "judith-holofernes"],
+    masterworksIds: ["calling-saint-matthew"],
+    collectionIds: ["bacchus-caravaggio"],
   },
 
   // ─── REMBRANDT ────────────────────────────────────────────────
@@ -71,6 +72,7 @@ His bankruptcy in 1656 was the direct result of catastrophic financial managemen
 His influence on subsequent painting is immeasurable. Velázquez admired him. Turner copied him. Van Gogh wrote about him with reverence. Every painter who has tried to paint the interior life — the soul visible in a face, the weight of experience in an expression — has worked in Rembrandt's shadow. And his self-portraits remain, as the art historian Kenneth Clark wrote, "the most searching and honest record of a human being's inner life that art has given us."`,
 
     masterworksIds: ["anatomy-lesson", "night-watch"],
+    collectionIds: ["jewish-bride"],
   },
 
   // ─── VELÁZQUEZ ────────────────────────────────────────────────
@@ -103,6 +105,7 @@ Las Meninas, his greatest painting, contains a puzzle that has generated more sc
 But his deepest influence is philosophical. Las Meninas posed questions about seeing, representation, and the relationship between painter, subject, and viewer that no subsequent painter could ignore. Picasso painted 58 variations of it. It appears in Foucault, in Borges, in Quevedo — it has entered the permanent vocabulary of Western thought about images and how they work. No other painting has generated so much thinking about what painting is.`,
 
     masterworksIds: ["las-meninas"],
+    collectionIds: ["surrender-breda", "rokeby-venus"],
   },
 
   // ─── VERMEER ──────────────────────────────────────────────────
@@ -135,6 +138,7 @@ For nearly two centuries after his death, Vermeer was almost entirely forgotten.
 But his formal achievement is as significant as his popular appeal. His paintings are studies in the relationship between light and silence, between the domestic and the transcendent. He found in the interior of a Dutch house — in the fall of northern light on a white wall, in the texture of a tablecloth, in the absorbed expression of a woman reading — something that looks, unmistakably, like the sacred. How he achieved this with such economy — with such refusal of drama, narrative, or explicit meaning — is the central mystery of Dutch painting.`,
 
     masterworksIds: ["girl-pearl-earring"],
+    collectionIds: ["milkmaid", "view-of-delft"],
   },
 
   // ─── ARTEMISIA GENTILESCHI ────────────────────────────────────
@@ -167,6 +171,40 @@ What is documentable is that Artemisia was largely written out of art history fo
 As a historical figure, she represents something even larger: the systematic exclusion of women from the art-historical canon, and the possibility of recovery. Her story — the rape, the trial, the torture, the career built in spite of everything — has made her a cultural symbol whose meaning extends far beyond art history. She appears in novels, films, plays, and operas. She has been cited in feminist legal theory and in discussions of trauma and creative survival. She is the most famous woman artist who ever lived, and she earned it twice: once in the 17th century, and once again in the 20th.`,
 
     masterworksIds: ["judith-holofernes"],
+    collectionIds: ["susanna-elders", "self-portrait-allegory"],
+  },
+
+  // ─── PETER PAUL RUBENS ────────────────────────────────────────
+
+  {
+    id: "peter-paul-rubens",
+    name: "Peter Paul Rubens",
+    born: "June 28, 1577 · Siegen, County of Nassau-Dillenburg",
+    died: "May 30, 1640 · Antwerp, Spanish Netherlands · aged 62",
+    nationality: "Flemish",
+    movement: "Baroque",
+    era: "Baroque",
+    eraColor: "#B87040",
+    portraitImage: "/timeline/rubens.webp",
+    portraitWikimedia: "Peter_Paul_Rubens_-_Self-Portrait_-_Google_Art_Project.jpg",
+    tagline: "The most prolific and powerful painter of the Baroque — diplomat, scholar, and master of flesh, myth, and motion.",
+
+    biography: `Peter Paul Rubens was, by any measure, the most successful painter of the 17th century — and possibly of any century. Born in Siegen in 1577 to a Flemish father who had fled Antwerp during the religious wars, he returned to Antwerp as a child after his father's death and was raised Catholic. He trained under minor Flemish masters, was admitted to the Antwerp painters' guild in 1598, and then spent eight transformative years in Italy — in Mantua, in Rome, in Genoa, in Madrid — where he absorbed Titian, Michelangelo, Caravaggio, and the ancient sculptural tradition simultaneously.
+
+When he returned to Antwerp in 1608, he had been fully formed by Italy and was ready to remake Flemish painting in his own image. He set up a studio that functioned more like a factory than an atelier — dozens of assistants, a rigorous division of labor, a system in which Rubens would conceive a composition, paint the key passages (faces, hands, the most critical figures) with his own hand, and leave the rest to specialists in landscape, armor, animals, and drapery. The system was completely transparent: paintings were sold with or without Rubens's own hand indicated in the price. It was not considered scandalous. It was considered efficient.
+
+The output was staggering: somewhere between 1,500 and 2,000 paintings, depending on how you count his studio's work. The Descent from the Cross for Antwerp Cathedral. The great mythological cycles. The Marie de' Medici cycle — 24 enormous canvases for the Luxembourg Palace in Paris. Portraits of kings and ambassadors. Altarpieces for churches across Catholic Europe. And, simultaneously, a parallel career as a diplomat: he was sent on secret missions to Spain, England, and the Dutch Republic, was knighted by both Philip IV of Spain and Charles I of England, and played a significant role in negotiating the peace between England and Spain in 1630.`,
+
+    shockingTruth: `At 53, Rubens married a 16-year-old girl. Her name was Hélène Fourment, the daughter of a silk merchant and the niece of his first wife, Isabella Brant, who had died four years earlier. The marriage was not considered scandalous by the standards of the time — age gaps of this magnitude were common among wealthy men — but the intensity of Rubens's response to his young wife was noticed by everyone. He painted her obsessively: as Aphrodite, as Venus, as the Three Graces, as herself in a fur coat with nothing underneath (the painting he called Het Pelsken, "The Little Fur," which he kept for himself and which was found in his studio after his death).
+
+The painting known as Het Pelsken — in which Hélène stands naked except for a fur wrap, looking directly at the viewer — is one of the most intimate images in the history of art. It is clearly a private painting, made for the painter's own contemplation, and it has an erotic directness that is surprising even now. Rubens specified in his will that it should not be sold outside the family. His son eventually sold it to the Habsburg imperial collection, where it remains in Vienna. It is one of the most visited paintings in the Kunsthistorisches Museum — intimate, private, and now seen by millions.`,
+
+    whyTheyMatter: `Rubens defined the visual language of Counter-Reformation Catholicism and shaped the Baroque style across Europe. His paintings — monumental in scale, exuberant in color, physically overwhelming in their energy — were the Catholic Church's answer to Protestant austerity: an art of sensation, emotion, and overwhelming physical presence that was designed to move the faithful and overwhelm the skeptical.
+
+Beyond his religious work, Rubens transformed the representation of the human body in European painting. The "Rubenesque" figure — full-figured, physically present, alive — was his counter-proposal to the idealized proportions of Italian Renaissance painting, and it remained a standard of beauty for a century after his death. His influence on subsequent painters was immense: Van Dyck was his student, Watteau studied him obsessively, Delacroix called him the greatest of all painters, and Cézanne made pilgrimages to study his work. To paint with energy, with color, with physical exuberance — for 200 years, that meant painting in Rubens's shadow.`,
+
+    masterworksIds: ["the-three-graces-rubens", "descent-from-cross", "rape-of-daughters-leucippus"],
+    collectionIds: ["three-graces-rubens"],
   },
 
 ];

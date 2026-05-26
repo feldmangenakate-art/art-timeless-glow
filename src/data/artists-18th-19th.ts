@@ -39,6 +39,7 @@ What makes the Black Paintings inexplicable is their context. Goya painted them 
 He also invented the idea of the artist as a critical intelligence rather than a craftsman serving power. His Caprichos and Black Paintings are works of private vision, made without commission and outside any established tradition. The freedom they represent — the freedom to make work that nobody asked for, that serves no patron and illustrates no text, that exists purely because the artist needed to make it — is the defining condition of modern art. Goya claimed it first, in a house outside Madrid, in paint on plaster walls that no one was supposed to see.`,
 
     masterworksIds: ["third-of-may"],
+    collectionIds: ["saturn-devouring", "sleep-of-reason", "witches-sabbath"],
   },
 
   // ─── J.M.W. TURNER ────────────────────────────────────────────
@@ -71,6 +72,7 @@ His will, when it was finally settled after years of legal dispute, revealed the
 The second stream is deeper and less easily traced: the idea that landscape — weather, water, light, the inhuman scale of natural forces — could be the vehicle for the most profound emotional and philosophical experiences that art could provide. Before Turner, landscape was a minor genre, a backdrop for historical or mythological scenes. After Turner, it was capable of expressing what religion had previously expressed: the sublime, the terrible, the overwhelming encounter with forces beyond human comprehension. That elevation of landscape — which runs through Friedrich, through the Hudson River School, through Cézanne's Mont Sainte-Victoire, through Rothko's color fields — is Turner's permanent contribution to the history of feeling.`,
 
     masterworksIds: ["fighting-temeraire"],
+    collectionIds: [],
   },
 
   // ─── EUGÈNE DELACROIX ─────────────────────────────────────────
@@ -102,7 +104,8 @@ His feud with Ingres was the defining artistic controversy of 19th-century Franc
 
 Liberty Leading the People has a separate immortality as a political image. It was the model for the Statue of Liberty (which carries a torch as Liberty carries a musket), the inspiration for Marianne — the allegorical figure of the French Republic — and has been reproduced in posters, murals, and political imagery across two centuries. The bare-breasted woman striding over the bodies of the fallen with a flag in one hand and a weapon in the other is one of the most powerful political images ever created, and it has never lost its charge. When Charlie Hebdo was attacked in 2015, the image immediately appeared in solidarity demonstrations across the world.`,
 
-    masterworksIds: ["liberty-leading", "raft-of-medusa"],
+    masterworksIds: ["liberty-leading"],
+    collectionIds: ["death-sardanapalus"],
   },
 
 ];

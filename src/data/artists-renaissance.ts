@@ -21,6 +21,7 @@ export interface Artist {
   shockingTruth: string;       // scandals, rumors, surprising facts — 2 paragraphs
   whyTheyMatter: string;       // legacy, influence — 1–2 paragraphs
   masterworksIds: string[];    // IDs from masterworks.ts for cross-linking
+  collectionIds?: string[];   // IDs from collection.ts for cross-linking
 }
 
 export const RENAISSANCE_ARTISTS: Artist[] = [
@@ -54,7 +55,8 @@ Leonardo wrote almost nothing personal in his notebooks — they are observation
 
 His notebooks, rediscovered and gradually published from the 19th century onward, shaped how subsequent generations understood both art and science. Bill Gates purchased the Codex Leicester for $30.8 million in 1994. The Mona Lisa is the most visited painting in human history, protected behind bulletproof glass, seen by 10 million people a year — and still, somehow, intimate. That intimacy, that sense of a specific person looking back at you across 500 years, is Leonardo's greatest achievement.`,
 
-    masterworksIds: ["mona-lisa", "last-supper", "creation-of-adam"],
+    masterworksIds: ["mona-lisa", "last-supper"],
+    collectionIds: ["lady-with-ermine", "virgin-of-the-rocks"],
   },
 
   // ─── MICHELANGELO ─────────────────────────────────────────────
@@ -119,6 +121,7 @@ He was also the most socially successful artist of his age in a way that bordere
 His death at 37 made him a symbol of unfulfilled genius, the counterpoint to Leonardo's unfinished projects and Michelangelo's extreme longevity. What he achieved in those 37 years — the Vatican Stanze, the Sistine Madonna, the Transfiguration, the portraits, the architectural projects — would constitute a full career for any other artist. For Raphael it was a beginning cut short. "How much more he would have done," Vasari wrote, "God alone knows."`,
 
     masterworksIds: ["school-of-athens"],
+    collectionIds: ["sistine-madonna", "transfiguration"],
   },
 
   // ─── ALBRECHT DÜRER ───────────────────────────────────────────
@@ -151,6 +154,7 @@ His marriage to Agnes Frey, arranged by their fathers in 1494, was almost certai
 His prints — particularly the Three Master Engravings of 1513–14 (Knight, Death and the Devil; Saint Jerome in His Study; Melencolia I) — are the most intellectually ambitious graphic works ever made, dense with symbolic meaning that scholars are still unpacking. Melencolia I in particular, with its brooding winged figure surrounded by the tools of geometry and construction, has been interpreted as a self-portrait, a meditation on creative frustration, an astrological allegory, and a statement about the limits of human knowledge. It is the Northern Renaissance in a single image.`,
 
     masterworksIds: ["self-portrait-durer"],
+    collectionIds: ["young-hare", "praying-hands"],
   },
 
   // ─── TITIAN ───────────────────────────────────────────────────
@@ -183,6 +187,40 @@ His relationship with his illegitimate son Orazio was close and warm, but his tr
 The Venus of Urbino in particular has a strange immortality. Manet painted a direct confrontation with it in Olympia (1863). Every reclining nude in Western art since 1538 — whether acknowledged or not — is in dialogue with Titian's relaxed, direct, completely un-self-conscious figure, who looks back at the viewer with an expression of absolute composure. She is, as the art historian Rona Goffen wrote, "the most influential painting in the history of the nude."`,
 
     masterworksIds: ["venus-of-urbino"],
+    collectionIds: ["bacchus-ariadne", "assumption-virgin", "sacred-profane-love"],
+  },
+
+  // ─── JAN VAN EYCK ─────────────────────────────────────────────────────────
+
+  {
+    id: "jan-van-eyck",
+    name: "Jan van Eyck",
+    born: "c. 1390 · Maaseik, Flanders",
+    died: "July 9, 1441 · Bruges, Flanders · aged approximately 50",
+    nationality: "Flemish",
+    movement: "Early Netherlandish",
+    era: "Northern Renaissance",
+    eraColor: "#B09040",
+    portraitImage: "/artists/van-eyck.webp",
+    portraitWikimedia: "Portrait_of_a_Man_by_Jan_van_Eyck.jpg",
+    tagline: "He perfected oil painting so completely that two centuries of painters believed he had invented it.",
+
+    biography: `Jan van Eyck did not invent oil painting — but he perfected it so completely that for two centuries painters believed he had. Working in Bruges at the court of Philip the Good, Duke of Burgundy, he developed a technique of layering translucent oil glazes that could achieve a depth, luminosity, and detail impossible in tempera. His surfaces glow as if lit from within — the velvet looks like velvet, the fur looks like fur, the gold looks like it could be lifted from the panel.
+
+Very little is known about his early life. He was born around 1390, probably in Maaseik in what is now Belgium, and first appears in historical records as court painter to John of Bavaria in The Hague in 1422. By 1425 he had entered the service of Philip the Good of Burgundy — the most powerful ruler in Northern Europe — who valued him so highly that he paid him a salary four times that of other court artists and sent him on diplomatic missions, including a secret embassy to Portugal to paint a portrait of the princess Philip intended to marry.
+
+He settled in Bruges around 1430 and remained there until his death in 1441. His output was not large — roughly two dozen surviving works with confident attribution — but every one is a revolution in the history of seeing. The Ghent Altarpiece, completed in 1432, is the largest and most complex panel painting of the early 15th century. The Arnolfini Portrait, made in 1434, invented the domestic interior as a subject for serious art.`,
+
+    shockingTruth: `Van Eyck's most famous painting generates one of art history's most contested debates: who, exactly, is in the Arnolfini Portrait? The couple were traditionally identified as the Italian merchant Giovanni di Nicolao Arnolfini and his wife — but the identification was convincingly challenged by the scholar Margaret Koster in 2003, who argued that the woman depicted could not be Arnolfini's wife Costanza, who was already dead before the painting's 1434 date. She proposed instead that the painting commemorates Costanza herself, as a kind of memorial.
+
+The inscription above the mirror — 'Johannes de Eyck fuit hic 1434,' in the ornate lettering of a legal document — has also been interpreted as a declaration of witness, as if Van Eyck were signing a contract or certificate. The two figures reflected in the mirror, entering the room, may be the painter himself and a companion. Or they may be the viewer. Nearly 600 years later, the painting refuses to give up its secrets — which is exactly what Van Eyck intended.`,
+
+    whyTheyMatter: `Van Eyck's technical revolution changed everything. The ability to render light falling on silk, the grain of wood, the reflection in a convex mirror, the individual hairs of a fur collar — these became the ambitions of every Northern European painter for the next two centuries. He established the panel painting as a vehicle for psychological complexity and philosophical depth, not just devotional imagery.
+
+Without Van Eyck there is no Vermeer, no Rembrandt, no Dutch Golden Age. The tradition of close observation, of loving fidelity to the visible world, of painting as an act of witnessing — all of it flows from his workshop in Bruges. Giorgio Vasari, writing in 1550, credited him with the invention of oil painting itself. The credit was wrong, but it captures something true: Van Eyck made oil paint do things it had never done before, and painters were still learning from him a century after his death.`,
+
+    masterworksIds: ["arnolfini-portrait"],
+    collectionIds: ["ghent-altarpiece", "man-red-turban"],
   },
 
 ];

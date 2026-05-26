@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
+import Footer from "@/components/Footer";
 import { RENAISSANCE_ARTISTS } from "@/data/artists-renaissance";
 import { BAROQUE_ARTISTS } from "@/data/artists-baroque";
 import { CENTURY_18_19_ARTISTS } from "@/data/artists-18th-19th";
@@ -12,14 +14,15 @@ const MUTED = "rgba(42,30,16,0.45)";
 const ALL_ARTISTS = [...RENAISSANCE_ARTISTS, ...BAROQUE_ARTISTS, ...CENTURY_18_19_ARTISTS, ...MODERN_ARTISTS];
 
 export default function ArtistsPage() {
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
 
   return (
     <main style={{ background: "#EDE8DF", minHeight: "100vh" }} className="pt-16">
 
       {/* Header */}
-      <section className="px-8 pt-8 pb-4 max-w-6xl mx-auto text-center">
-        <h1 className="font-display text-6xl tracking-wide" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, color: DARK, marginBottom: "1.25rem", lineHeight: 1.0 }}>
+      <section className={isMobile ? "px-4 pt-8 pb-4 max-w-6xl mx-auto text-center" : "px-8 pt-8 pb-4 max-w-6xl mx-auto text-center"}>
+        <h1 className="font-display text-6xl tracking-wide page-title" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, color: DARK, marginBottom: "1.25rem", lineHeight: 1.0, fontSize: isMobile ? "2.25rem" : undefined }}>
           Artists
         </h1>
         <p style={{
@@ -42,7 +45,7 @@ export default function ArtistsPage() {
       }} />
 
       {/* Grid */}
-      <section className="px-8 pb-16 max-w-6xl mx-auto">
+      <section className={isMobile ? "px-4 pb-16 max-w-6xl mx-auto" : "px-8 pb-16 max-w-6xl mx-auto"}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {ALL_ARTISTS.map((artist, i) => (
             <motion.div
@@ -67,22 +70,22 @@ export default function ArtistsPage() {
               }}
             >
               {/* Portrait */}
-              <div style={{ height: "320px", overflow: "hidden", background: `${artist.eraColor}18`, position: "relative" }}>
+              <div style={{ aspectRatio: "1 / 1", overflow: "hidden", background: `${artist.eraColor}18`, position: "relative" }}>
                 <img
                   src={artist.portraitImage}
                   alt={artist.name}
                   loading="lazy"
                   width={360}
-                  height={320}
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
                     objectPosition: (({
-                      "rembrandt": "center 10%",
-                      "velazquez": "center 10%",
-                      "rubens": "center 10%",
-                    } as Record<string, string>)[artist.id] ?? "center 15%"),
+                      "rembrandt":     "center 10%",
+                      "velazquez":     "center 10%",
+                      "rubens":        "center 10%",
+                      "rene-magritte": "center 40%",
+                    } as Record<string, string>)[artist.id] ?? "top center"),
                     opacity: 0.9,
                   }}
                   onError={(e) => {
@@ -133,6 +136,7 @@ export default function ArtistsPage() {
           ))}
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

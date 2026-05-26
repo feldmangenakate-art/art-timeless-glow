@@ -1,5 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ChevronLeft } from "lucide-react";
 import { RENAISSANCE_ARTISTS } from "@/data/artists-renaissance";
@@ -7,6 +9,7 @@ import { BAROQUE_ARTISTS } from "@/data/artists-baroque";
 import { CENTURY_18_19_ARTISTS } from "@/data/artists-18th-19th";
 import { MODERN_ARTISTS } from "@/data/artists-modern";
 import { MASTERWORKS } from "@/data/masterworks";
+import { collectionWorks } from "@/data/collection";
 
 const GOLD = "#C9A84C";
 const WARM_WHITE = "#F0EAD6";
@@ -16,6 +19,14 @@ const ALL_ARTISTS = [...RENAISSANCE_ARTISTS, ...BAROQUE_ARTISTS, ...CENTURY_18_1
 export default function ArtistDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const locationState = location.state as {
+    from?: string;
+    masterworkId?: string;
+    masterworkTitle?: string;
+  } | null;
+  const cameFromMasterwork = locationState?.from === "masterwork";
 
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
@@ -30,13 +41,42 @@ export default function ArtistDetailPage() {
     );
   }
 
+  const isMobile = useIsMobile();
+
   const prev = idx > 0 ? ALL_ARTISTS[idx - 1] : null;
   const next = idx < ALL_ARTISTS.length - 1 ? ALL_ARTISTS[idx + 1] : null;
 
-  // Find cross-linked masterworks that actually exist in our data
-  const linkedWorks = artist.masterworksIds
-    .map((mid) => MASTERWORKS.find((m) => m.id === mid))
-    .filter(Boolean) as typeof MASTERWORKS;
+  // Resolve works from both masterworks and collection datasets
+  const linkedWorks = [
+    ...artist.masterworksIds.map((mid) => {
+      const masterwork = MASTERWORKS.find((m) => m.id === mid);
+      if (masterwork) return { ...masterwork, isCollection: false };
+      const collectionWork = collectionWorks.find((c) => c.id === mid);
+      if (collectionWork) return {
+        id: collectionWork.id,
+        title: collectionWork.title,
+        artist: collectionWork.artist,
+        year: collectionWork.year,
+        image: collectionWork.image,
+        isCollection: true,
+      };
+      return null;
+    }),
+    ...(artist.collectionIds ?? []).map((cid) => {
+      const collectionWork = collectionWorks.find((c) => c.id === cid);
+      if (collectionWork) return {
+        id: collectionWork.id,
+        title: collectionWork.title,
+        artist: collectionWork.artist,
+        year: collectionWork.year,
+        image: collectionWork.image,
+        isCollection: true,
+      };
+      const masterwork = MASTERWORKS.find((m) => m.id === cid);
+      if (masterwork) return { ...masterwork, isCollection: false };
+      return null;
+    }),
+  ].filter(Boolean) as { id: string; title: string; artist: string; year: string; image: string; isCollection: boolean }[];
 
   const sections = [
     { label: "Biography", icon: "◎", content: artist.biography },
@@ -48,7 +88,7 @@ export default function ArtistDetailPage() {
     <div style={{ background: "#0F0D0A", minHeight: "100vh" }} className="pt-16">
 
       {/* Back nav — fixed */}
-      <div style={{ position: "fixed", top: "72px", left: "32px", zIndex: 50 }}>
+      <div style={{ position: "fixed", top: isMobile ? "62px" : "72px", left: isMobile ? "16px" : "32px", zIndex: 50 }}>
         <button
           onClick={() => navigate("/artists")}
           className="flex items-center gap-2 transition-colors duration-200"
@@ -62,8 +102,8 @@ export default function ArtistDetailPage() {
       </div>
 
       {/* Main content */}
-      <div className="px-8 py-8 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className={isMobile ? "px-4 py-6 max-w-6xl mx-auto" : "px-8 py-8 max-w-6xl mx-auto"}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${isMobile ? "gap-6" : "gap-12"}`}>
 
           {/* Left: Portrait */}
           <motion.div
@@ -81,7 +121,15 @@ export default function ArtistDetailPage() {
               <img
                 src={artist.portraitImage}
                 alt={artist.name}
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  objectFit: "cover",
+                  objectPosition: ({
+                    "rene-magritte": "center 40%",
+                  } as Record<string, string>)[artist.id] ?? "center top",
+                }}
                 onError={(e) => {
                   const img = e.currentTarget as HTMLImageElement;
                   img.style.display = "none";
@@ -141,7 +189,7 @@ export default function ArtistDetailPage() {
             <h1 style={{
               fontFamily: "'Playfair Display', Georgia, serif",
               fontWeight: 700,
-              fontSize: "3.75rem",
+              fontSize: isMobile ? "2.25rem" : "3.75rem",
               color: WARM_WHITE,
               lineHeight: 1.0,
               letterSpacing: "0.025em",
@@ -214,7 +262,7 @@ export default function ArtistDetailPage() {
                   {linkedWorks.map((work) => (
                     <button
                       key={work.id}
-                      onClick={() => navigate(`/masterworks/${work.id}`, { state: { from: "artist", artistName: artist.name, artistId: artist.id } })}
+                      onClick={() => navigate(work.isCollection ? `/collection/${work.id}` : `/masterworks/${work.id}`, { state: { from: "artist", artistName: artist.name, artistId: artist.id } })}
                       className="flex items-center gap-3 transition-all duration-200"
                       style={{
                         background: "rgba(255,255,255,0.04)",
@@ -268,7 +316,7 @@ export default function ArtistDetailPage() {
       {/* Prev / Next navigation */}
       <div
         style={{ borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "3rem" }}
-        className="px-8 py-6 max-w-6xl mx-auto flex items-center justify-between"
+        className={`${isMobile ? "px-4" : "px-8"} py-6 max-w-6xl mx-auto flex items-center justify-between`}
       >
         {prev ? (
           <button
@@ -302,6 +350,7 @@ export default function ArtistDetailPage() {
           </button>
         ) : <div />}
       </div>
+      <Footer />
     </div>
   );
 }
