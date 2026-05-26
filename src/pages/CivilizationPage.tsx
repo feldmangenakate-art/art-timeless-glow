@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import Footer from "@/components/Footer";
 import StickyBreadcrumb from "@/components/StickyBreadcrumb";
 import { RENAISSANCE_CIVILIZATION } from "@/data/renaissance-content";
 import { PREHISTORIC_CIVILIZATION } from "@/data/prehistoric-content";
@@ -58,15 +59,26 @@ export default function CivilizationPage() {
 
   // Left breadcrumb content for sticky bar (all civ pages: ← Timeline)
   const civStickyLeft = (
-    <button
-      onClick={() => navigate("/timeline")}
-      style={{ color: MUTED, fontFamily: "'Raleway', sans-serif", fontWeight: 300, fontSize: "0.8rem", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: "6px" }}
-      onMouseEnter={(e) => (e.currentTarget.style.color = DARK)}
-      onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
-    >
-      <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
-      Timeline
-    </button>
+    <>
+      <button
+        onClick={() => navigate("/timeline")}
+        style={{ color: MUTED, fontFamily: "'Raleway', sans-serif", fontWeight: 300, fontSize: "0.8rem", background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: "6px" }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = DARK)}
+        onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
+      >
+        <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
+        Timeline
+      </button>
+      <span style={{ color: "rgba(42,30,16,0.20)", fontSize: "0.72rem" }}>/</span>
+      <button
+        onClick={() => navigate("/geography")}
+        style={{ color: "rgba(42,30,16,0.40)", fontFamily: "'Raleway', sans-serif", fontWeight: 300, fontSize: "0.72rem", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = DARK)}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(42,30,16,0.40)")}
+      >
+        Geography
+      </button>
+    </>
   );
 
   // ── Prehistoric page ───────────────────────────────────────────────────────
@@ -1036,6 +1048,7 @@ export default function CivilizationPage() {
           ))}
         </div>
 
+      <Footer />
       <StickyBreadcrumb isSticky={isSticky} left={civStickyLeft} right={civPageTitle} />
       <TimelineButton />
       </div>

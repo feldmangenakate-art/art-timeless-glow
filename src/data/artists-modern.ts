@@ -1,6 +1,6 @@
 // artists-modern.ts
 // Era 4 of 4: Modern (1860–1970s)
-// 7 artists: Monet · Van Gogh · Klimt · Picasso · Dalí · Kahlo · Warhol
+// 8 artists: Monet · Van Gogh · Klimt · Picasso · Dalí · Magritte · Kahlo · Warhol
 // portraitWikimedia: exact filename on Wikimedia Commons — download from:
 // https://commons.wikimedia.org/wiki/File:[filename]
 // All images are public domain or Creative Commons
@@ -39,6 +39,7 @@ More disturbing is the account of what happened when Monet's cataracts became se
 The second level is more specific and more beautiful. The Water Lilies at the Orangerie in Paris — eight paintings installed in two oval rooms exactly as Monet specified — are one of the few genuinely transcendent experiences that art offers. The rooms are silent. The light is controlled. The paintings surround you completely. You are inside them, not in front of them. Standing there, you understand what Monet meant by "refuge of peaceful meditation" — and you understand why he spent the last decade of his life, half-blind, in a garden in Normandy, trying to get it right.`,
 
     masterworksIds: ["water-lilies"],
+    collectionIds: ["impression-sunrise", "haystacks", "rouen-cathedral", "japanese-bridge"],
   },
 
   // ─── VINCENT VAN GOGH ─────────────────────────────────────────
@@ -71,6 +72,7 @@ The death is even more mysterious than commonly told. The official account — t
 Commercially, he is the artist against whom auction records are measured. His Portrait of Dr. Gachet sold for $82.5 million in 1990; his portraits and landscapes regularly appear in the top ten most expensive paintings ever sold. The Starry Night at MoMA is the single most visited painting in the United States. And mythologically — the mad genius, the suffering artist, the genius unrecognized in his lifetime — he is the figure against whom every subsequent narrative of the tortured artist is measured. Whether that myth serves his work or obscures it is the central question of Van Gogh studies. The paintings themselves, when you stand before them, cut through the myth with extraordinary directness. They are not the work of madness. They are the work of a man looking at the world with absolute attention and painting exactly what he saw.`,
 
     masterworksIds: ["starry-night", "sunflowers"],
+    collectionIds: ["bedroom-arles", "potato-eaters", "portrait-gachet"],
   },
 
   // ─── GUSTAV KLIMT ─────────────────────────────────────────────
@@ -103,6 +105,7 @@ The most dramatic episode of his afterlife is the Bloch-Bauer story. His Portrai
 As a cultural figure, he represents the late Habsburg world at its most brilliant and most anxious — the golden surface over the abyss, the beautiful object made in the shadow of collapse. Vienna in 1900 produced, in a generation, Klimt and Schiele in painting, Freud in psychology, Wittgenstein in philosophy, Mahler and Schoenberg in music, and Adolf Loos in architecture. Klimt was the most visible representative of that extraordinary moment, and his paintings — particularly The Kiss, which hangs in the Belvedere like a secular altarpiece — have become the most reproduced images of that civilization.`,
 
     masterworksIds: ["the-kiss-klimt"],
+    collectionIds: ["adele-bloch-bauer", "judith-klimt", "tree-of-life-klimt"],
   },
 
   // ─── PABLO PICASSO ────────────────────────────────────────────
@@ -135,6 +138,7 @@ Françoise Gilot, who had two children with him and was the only partner who eve
 Guernica deserves separate consideration. It is not just a painting but a moral event — the moment when a major artist used his full technical and emotional resources to document a war crime and demand that the world not look away. Its power has not diminished in 80 years. When Colin Powell presented the case for the Iraq War at the UN Security Council in 2003, the tapestry reproduction of Guernica that hangs outside the chamber was covered with a blue curtain. Someone understood what it meant to make that argument in front of that painting.`,
 
     masterworksIds: ["guernica", "demoiselles-avignon"],
+    collectionIds: ["three-musicians"],
   },
 
   // ─── SALVADOR DALÍ ────────────────────────────────────────────
@@ -148,7 +152,7 @@ Guernica deserves separate consideration. It is not just a painting but a moral 
     movement: "Surrealism",
     era: "Modern",
     eraColor: "#6080A0",
-    portraitImage: "/artists/dali.jpg",
+    portraitImage: "/artists/dali.webp",
     portraitWikimedia: "Salvador_Dali_NYWTS.webp",
     tagline: "The showman who made Surrealism famous — and the most technically gifted painter of the 20th century.",
 
@@ -167,6 +171,40 @@ His relationship with Gala was, by multiple accounts, deeply strange. She was ol
 His technical achievement is less celebrated than it should be, partly because the showmanship distracts from it. The late paintings — the nuclear mysticism series of the 1950s and 60s, the stereoscopic works of the 70s — are among the most technically ambitious of the 20th century, combining hyper-realistic detail with genuine scientific curiosity about optics and perception. He corresponded with Watson and Crick about the structure of DNA. He studied holography. He was, underneath the mustache, a serious and rigorous visual thinker.`,
 
     masterworksIds: ["persistence-of-memory"],
+    collectionIds: ["elephants-dali", "metamorphosis-narcissus", "dream-bee-pomegranate"],
+  },
+
+  // ─── RENÉ MAGRITTE ────────────────────────────────────────────
+
+  {
+    id: "rene-magritte",
+    name: "René Magritte",
+    born: "November 21, 1898 · Lessines, Belgium",
+    died: "August 15, 1967 · Brussels, Belgium · aged 68",
+    nationality: "Belgian",
+    movement: "Surrealism",
+    era: "Modern",
+    eraColor: "#7a8c6e",
+    portraitImage: "/artists/magritte.webp",
+    portraitWikimedia: "René_Magritte_en_juin_1922_(cropped)_(Remini_enhanced).jpg",
+    tagline: "The painter who proved that everything we see hides something else — and that a pipe is never just a pipe.",
+
+    biography: `René Magritte was born in Lessines, a small industrial town in the Belgian province of Hainaut, the eldest of three sons of a tailor and a milliner. When he was thirteen, his mother Régina drowned herself in the Sambre river — she had attempted suicide several times before, and this time she succeeded. According to an account that circulated in his lifetime and that Magritte never fully confirmed or denied, he was present when her body was pulled from the water, her nightgown or dress wound around her face so that her features were obscured. Whether or not he witnessed this directly, the image of the veiled face — a face that should reveal but conceals, a face hidden by the very fabric that surrounds it — became the most persistent motif of his mature work. He studied at the Académie Royale des Beaux-Arts in Brussels from 1916 to 1918, where he absorbed the standard academic techniques without particular distinction.
+
+For most of the 1920s, Magritte supported himself and his wife Georgette — his childhood sweetheart, whom he had known since he was fifteen and married in 1922 — by working as a commercial artist: designing wallpaper patterns for a Brussels factory and producing advertising posters and catalogue illustrations. This was not a transitional phase he later disowned; the clear, flat, illustration-like quality of his mature painting style is directly descended from commercial art. He made his first Surrealist pictures around 1925, and in 1927, with a contract from the Brussels dealer Paul-Gustave van Hecke, he moved to Perreux-sur-Marne, outside Paris, for three years. He met André Breton, became close to Paul Éluard, Jean Arp, and Joan Miró, exhibited with the Surrealists, and was immediately identified as a significant new voice. In 1930, without explanation and with little fanfare, he returned to Brussels and lived there for the rest of his life.
+
+That decision to return — and to stay — defined everything. While Dalí cultivated New York society and Breton held court in Paris, Magritte painted in a small suburban house in the commune of Jette in a borrowed jacket and tie, working at an easel set up in his dining room, walking his Pomeranian dog in the afternoons, playing chess at weekends. He was deliberately, obstinately bourgeois — the suit and bowler hat were not an ironic costume but an aggressive statement of ordinariness. He had no studio separate from his living quarters until late in his career. He painted The Treachery of Images at thirty, The Son of Man at sixty-five, and hundreds of variations on the same handful of obsessions — windows, curtains, apples, bowler hats, pipes, birds, men in suits — with the patient determination of someone who understood that the mystery of the visible world was inexhaustible.`,
+
+    shockingTruth: `The two most embarrassing episodes of Magritte's career are rarely given the prominence they deserve. During the Nazi occupation of Belgium between 1940 and 1944, he made a deliberate and sustained change of style: abandoning the cold, precise imagery of his Surrealist period and adopting a warm, loose Impressionist palette derived explicitly from Renoir. He called this his "Renoir period" and believed it represented a form of defiance — an affirmation of pleasure and sunlight in conditions of occupation and fear. His Surrealist colleagues found it bewildering and, frankly, embarrassing; Breton condemned it as a capitulation to bourgeois taste. The paintings are genuinely strange — Magritte's impossible subjects (floating men, petrified forests, inverted landscapes) rendered in dappled Impressionist light — and they have never been comfortably incorporated into his received legacy.
+
+Equally suppressed is the story of his 1948 Paris exhibition, the so-called "vache period." For his long-awaited solo debut in Paris — at the Galerie du Faubourg — Magritte produced in a matter of weeks a body of work in a deliberately crude, aggressive, almost ugly style: thick impasto, garish color, cartoon-like distortion, figures that seemed designed to offend. It was a provocation aimed at what he perceived as the pretensions and snobberies of the Parisian art world he had escaped in 1930. It was received as a catastrophe. Critics were baffled or contemptuous; sales were negligible; the show was widely regarded as a failure of nerve or a bizarre miscalculation. Magritte returned to Brussels and his habitual style almost immediately. He rarely discussed either period afterward, and they remain the most confusing chapters of an otherwise remarkably consistent career.`,
+
+    whyTheyMatter: `Magritte's influence on the second half of the twentieth century operates less through stylistic imitation — his flat, deadpan manner is easily parodied but difficult to genuinely extend — than through the conceptual framework he established. The central proposition of his work: that the image is not the thing it depicts, that representation is always a kind of betrayal, that what we see is always a screen between us and what is hidden — became the foundational problem of Conceptual art. When Joseph Kosuth placed a physical chair, a photograph of a chair, and a dictionary definition of a chair side by side in One and Three Chairs (1965), he was working through an argument Magritte had made in paint a generation earlier. His "This is not a pipe" anticipated Foucault's analysis of it (published 1973) and the entire semiotic turn of late-twentieth-century art theory.
+
+More immediately visible is his influence on graphic design, advertising, and popular visual culture. The visual pun — the image that means one thing on first reading and another on reflection — is the basic unit of modern advertising, and Magritte is its principal inventor. His direct influence on René Barjavel, the Belgian school of comic art (particularly Hergé), British Surrealist advertising of the 1960s and 70s, and the visual vocabulary of album cover design (John Lennon's Walls and Bridges, The Beatles' Apple Corps logo) is well documented. He died of pancreatic cancer in Brussels on August 15, 1967, still largely unknown to the mass public outside Belgium and a small circle of collectors. His posthumous fame has expanded so far beyond anything he experienced in his lifetime that it constitutes its own kind of surrealism — a pipe dreamed of by a man who is no longer there to see it.`,
+
+    masterworksIds: ["son-of-man"],
+    collectionIds: ["treachery-images"],
   },
 
   // ─── FRIDA KAHLO ──────────────────────────────────────────────
@@ -199,6 +237,7 @@ Her global fame is almost entirely posthumous — and specifically a creation of
 She also invented, almost single-handedly, a visual language for the intersection of personal and political identity that has been enormously influential on subsequent artists — particularly artists from marginalized communities who recognized in her work the possibility of using autobiographical painting as a form of cultural resistance. The Chicano art movement, feminist art, Indigenous art movements across Latin America — all have claimed her as a foremother. Whether she would have accepted these claims is unknowable; she was too specific, too Frida, to be comfortably claimed by any movement.`,
 
     masterworksIds: ["two-fridas", "self-portrait-thorn"],
+    collectionIds: ["broken-column", "self-portrait-monkey"],
   },
 
   // ─── ANDY WARHOL ──────────────────────────────────────────────
@@ -231,6 +270,7 @@ He was also the victim of a significant and long-unacknowledged theft. After his
 His specific prediction — "in the future, everyone will be world-famous for 15 minutes" — was made in 1968, before the internet, before reality television, before social media. Its accuracy is now so complete that the statement has become a cliché, which is itself very Warhol. He understood something about the logic of media and image reproduction that would not become universally visible for another 40 years. The selfie, the viral moment, the influencer, the celebrity chef — all of it is Warhol's world, built on Warhol's principles, whether its inhabitants know it or not.`,
 
     masterworksIds: ["campbells-soup", "marilyn-diptych"],
+    collectionIds: ["brillo-boxes", "mao-warhol", "self-portrait-warhol"],
   },
 
 ];

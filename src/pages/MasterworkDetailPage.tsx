@@ -1,5 +1,7 @@
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ChevronLeft } from "lucide-react";
 import { MASTERWORKS } from "@/data/masterworks";
@@ -23,9 +25,16 @@ export default function MasterworkDetailPage() {
 
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
-  const locationState = location.state as { from?: string; artistName?: string; artistId?: string } | null;
+  const locationState = location.state as {
+    from?: string;
+    artistName?: string;
+    artistId?: string;
+    movementId?: string;
+    movementName?: string;
+    civilizationId?: string;
+  } | null;
   const cameFromArtist = locationState?.from === "artist";
-  const cameFromMasterworks = locationState?.from === "masterworks";
+  const cameFromMovement = locationState?.from === "movement";
 
   // Find the artist associated with this work (for secondary link)
   const associatedArtist = ALL_ARTISTS.find((a) => a.masterworksIds.includes(id ?? ""));
@@ -37,6 +46,8 @@ export default function MasterworkDetailPage() {
       </div>
     );
   }
+
+  const isMobile = useIsMobile();
 
   const prev = idx > 0 ? MASTERWORKS[idx - 1] : null;
   const next = idx < MASTERWORKS.length - 1 ? MASTERWORKS[idx + 1] : null;
@@ -52,8 +63,9 @@ export default function MasterworkDetailPage() {
     <div style={{ background: "#0F0D0A", minHeight: "100vh" }} className="pt-16">
 
       {/* Breadcrumb nav — fixed so always visible while scrolling */}
-      <div style={{ position: "fixed", top: "72px", left: "32px", zIndex: 50 }}>
-        {/* Primary: always Back to Masterworks */}
+      <div style={{ position: "fixed", top: isMobile ? "62px" : "72px", left: isMobile ? "16px" : "32px", zIndex: 50 }}>
+        {/* Context-aware back button */}
+        {/* Primary: always back to Masterworks */}
         <button
           onClick={() => navigate("/masterworks")}
           className="flex items-center gap-2 transition-colors duration-200"
@@ -62,13 +74,14 @@ export default function MasterworkDetailPage() {
           onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}50`)}
         >
           <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
-          Back to Masterworks
+          Masterworks
         </button>
 
-        {/* Secondary: Back to Artist — only if navigated from an artist page */}
-        {cameFromArtist && (
+
+        {/* Secondary: back to movement — only if navigated from a movement page */}
+        {cameFromMovement && (
           <button
-            onClick={() => navigate(`/artists/${locationState?.artistId}`)}
+            onClick={() => navigate(`/movement/${locationState?.movementId}`)}
             style={{
               display: "block",
               marginTop: "4px",
@@ -86,14 +99,14 @@ export default function MasterworkDetailPage() {
             onMouseEnter={(e) => (e.currentTarget.style.color = `${WARM_WHITE}55`)}
             onMouseLeave={(e) => (e.currentTarget.style.color = `${WARM_WHITE}28`)}
           >
-            ← Back to {locationState?.artistName}
+            ← Back to {locationState?.movementName}
           </button>
         )}
       </div>
 
       {/* Main content */}
-      <div className="px-8 py-8 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className={isMobile ? "px-4 py-6 max-w-6xl mx-auto" : "px-8 py-8 max-w-6xl mx-auto"}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${isMobile ? "gap-6" : "gap-12"}`}>
 
           {/* Left: Image */}
           <motion.div
@@ -165,7 +178,7 @@ export default function MasterworkDetailPage() {
             <h1 style={{
               fontFamily: "'Playfair Display', Georgia, serif",
               fontWeight: 700,
-              fontSize: "3.75rem",
+              fontSize: isMobile ? "2.25rem" : "3.75rem",
               color: WARM_WHITE,
               lineHeight: 1.0,
               letterSpacing: "0.025em",
@@ -178,6 +191,7 @@ export default function MasterworkDetailPage() {
             {work.artistId ? (
               <Link
                 to={`/artists/${work.artistId}`}
+                state={{ from: "masterwork", masterworkId: id, masterworkTitle: work.title }}
                 style={{
                   fontFamily: "'Raleway', system-ui, sans-serif",
                   fontWeight: 300,
@@ -240,7 +254,7 @@ export default function MasterworkDetailPage() {
       {/* Prev / Next navigation */}
       <div
         style={{ borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "3rem" }}
-        className="px-8 py-6 max-w-6xl mx-auto flex items-center justify-between"
+        className={`${isMobile ? "px-4" : "px-8"} py-6 max-w-6xl mx-auto flex items-center justify-between`}
       >
         {prev ? (
           <button
@@ -274,6 +288,7 @@ export default function MasterworkDetailPage() {
           </button>
         ) : <div />}
       </div>
+      <Footer />
     </div>
   );
 }

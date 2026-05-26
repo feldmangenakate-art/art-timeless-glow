@@ -1,6 +1,7 @@
-import { Search } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { MASTERWORKS } from "@/data/masterworks";
 import { RENAISSANCE_ARTISTS } from "@/data/artists-renaissance";
 import { BAROQUE_ARTISTS } from "@/data/artists-baroque";
@@ -25,8 +26,10 @@ export default function Navigation() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [query, setQuery] = useState("");
   const [overlayOpen, setOverlayOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const isMobile = useIsMobile();
   const isHome = location.pathname === "/";
 
   const q = query.toLowerCase().trim();
@@ -49,6 +52,8 @@ export default function Navigation() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => { setMenuOpen(false); }, [location.pathname]);
+
   function goTo(path: string) {
     setOverlayOpen(false);
     setQuery("");
@@ -59,7 +64,7 @@ export default function Navigation() {
   return (
     <>
       <nav
-        className="fixed top-0 w-full z-50 h-14 px-8 flex items-center justify-between"
+        className="fixed top-0 w-full z-50 h-14 flex items-center justify-between px-4 md:px-8"
         style={{
           background: isHome ? "rgba(12, 10, 7, 0.4)" : "rgba(12, 10, 7, 0.92)",
           borderBottom: isHome ? "1px solid rgba(201, 168, 76, 0.08)" : "1px solid rgba(201, 168, 76, 0.12)",
@@ -74,14 +79,15 @@ export default function Navigation() {
           style={{
             fontFamily: "'Playfair Display', Georgia, serif",
             fontWeight: 600,
-            fontSize: "1.1rem",
+            fontSize: "clamp(0.8rem, 3.5vw, 1.1rem)",
             color: isHome ? WARM_WHITE : GOLD,
             letterSpacing: "0.02em",
             textDecoration: "none",
             transition: "color 0.3s ease",
+            flexShrink: 0,
           }}
         >
-          Art Through the Ages
+          {isMobile ? "Art Through Ages" : "Art Through the Ages"}
         </Link>
 
         {/* Nav links */}
@@ -111,6 +117,15 @@ export default function Navigation() {
           })}
         </div>
 
+        <button
+          className="md:hidden flex items-center justify-center"
+          onClick={() => setMenuOpen((o) => !o)}
+          style={{ background: "none", border: "none", cursor: "pointer", color: WARM_WHITE, padding: "4px", marginLeft: "8px" }}
+          aria-label="Menu"
+        >
+          {menuOpen ? <X className="w-5 h-5" strokeWidth={1.5} /> : <Menu className="w-5 h-5" strokeWidth={1.5} />}
+        </button>
+
         {/* Search */}
         <div
           className="flex items-center gap-2 px-3 py-1 transition-colors duration-200"
@@ -129,7 +144,7 @@ export default function Navigation() {
             type="text"
             placeholder="Search..."
             value={query}
-            className="outline-none w-20 focus:w-32 transition-all duration-300 placeholder:text-[rgba(240,234,214,0.35)]"
+            className={isMobile ? "outline-none w-16 focus:w-24 transition-all duration-300 placeholder:text-[rgba(240,234,214,0.35)]" : "outline-none w-20 focus:w-32 transition-all duration-300 placeholder:text-[rgba(240,234,214,0.35)]"}
             style={{
               fontSize: "11px",
               fontFamily: "'Raleway', system-ui, sans-serif",
@@ -241,6 +256,49 @@ export default function Navigation() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: "56px",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 48,
+            background: "rgba(8, 6, 4, 0.97)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            display: "flex",
+            flexDirection: "column",
+            padding: "1.5rem 2rem",
+          }}
+          onClick={() => setMenuOpen(false)}
+        >
+          {NAV_LINKS.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontWeight: 400,
+                  fontSize: "1.75rem",
+                  color: isActive ? GOLD : WARM_WHITE,
+                  textDecoration: "none",
+                  padding: "1rem 0",
+                  borderBottom: "1px solid rgba(255,255,255,0.07)",
+                  letterSpacing: "0.02em",
+                  transition: "color 0.2s",
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
       )}
     </>
