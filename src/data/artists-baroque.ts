@@ -38,7 +38,7 @@ He was not a lovable rebel. The Roman police records — which survive — show 
 
 But Caravaggio's deeper influence was conceptual: the idea that sacred subjects should be shown with unflinching physical realism, that saints should look like the people who prayed to them, that the divine could enter the most ordinary human moment. That idea runs through Rembrandt, through Velázquez, through every religious painting that has the courage to be specific and human rather than generically beautiful. It also runs through cinema — the chiaroscuro lighting of film noir, of Kubrick, of Gordon Willis's work with Coppola — is Caravaggio's legacy to a medium he never imagined.`,
 
-    masterworksIds: ["calling-saint-matthew"],
+    masterworksIds: ["medusa-caravaggio", "judith-caravaggio", "calling-saint-matthew"],
     collectionIds: ["bacchus-caravaggio"],
   },
 
