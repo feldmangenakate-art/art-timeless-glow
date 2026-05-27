@@ -109,10 +109,11 @@ export const CIVILIZATIONS: Civilization[] = [
     quality: 'Art as cosmic order — eternal truth over observed reality',
     legacy: 'Influenced Greek, Roman, and all Western art; revived in every era of Egyptomania',
     movements: [
-      { name: 'Old Kingdom', dates: '2686–2181 BC', color: '#D4A843' },
-      { name: 'Middle Kingdom', dates: '2055–1650 BC', color: '#C4983A' },
-      { name: 'New Kingdom', dates: '1550–1070 BC', color: '#B48830' },
-      { name: 'Amarna Period', dates: '1353–1336 BC', color: '#A47828' },
+      { name: 'Predynastic', dates: 'c. 3500–2686 BC', color: '#B8922A' },
+      { name: 'Old Kingdom', dates: 'c. 2686–2181 BC', color: '#D4A843' },
+      { name: 'Middle Kingdom', dates: 'c. 2055–1650 BC', color: '#C49830' },
+      { name: 'New Kingdom', dates: 'c. 1550–1070 BC', color: '#C9A84C' },
+      { name: 'Amarna Period', dates: 'c. 1353–1336 BC', color: '#E8C050' },
     ],
   },
   {
