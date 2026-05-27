@@ -79,7 +79,12 @@ export const CIVILIZATIONS: Civilization[] = [
     duration: '~3,000 years',
     quality: 'Power made visible — art as propaganda for god-kings',
     legacy: 'The first narrative art, the first portrait, the first written stories',
-    movements: [],
+    movements: [
+      { name: 'Sumerian', dates: '3500–2340 BC', color: '#C4A060' },
+      { name: 'Akkadian', dates: '2340–2100 BC', color: '#B88C50' },
+      { name: 'Neo-Assyrian', dates: '911–609 BC', color: '#A87840' },
+      { name: 'Neo-Babylonian', dates: '626–539 BC', color: '#987030' },
+    ],
   },
   {
     id: 'egypt',
@@ -103,7 +108,12 @@ export const CIVILIZATIONS: Civilization[] = [
     duration: '~3,000 years',
     quality: 'Art as cosmic order — eternal truth over observed reality',
     legacy: 'Influenced Greek, Roman, and all Western art; revived in every era of Egyptomania',
-    movements: [],
+    movements: [
+      { name: 'Old Kingdom', dates: '2686–2181 BC', color: '#D4A843' },
+      { name: 'Middle Kingdom', dates: '2055–1650 BC', color: '#C4983A' },
+      { name: 'New Kingdom', dates: '1550–1070 BC', color: '#B48830' },
+      { name: 'Amarna Period', dates: '1353–1336 BC', color: '#A47828' },
+    ],
   },
   {
     id: 'greece',
@@ -182,7 +192,11 @@ export const CIVILIZATIONS: Civilization[] = [
     duration: '1,100 years',
     quality: 'Gold as divine light — art as theology, not representation',
     legacy: 'Defined the visual language of Eastern Orthodox Christianity, unchanged today',
-    movements: [],
+    movements: [
+      { name: 'Early Byzantine', dates: '330–730 AD', color: '#8070A0' },
+      { name: 'Middle Byzantine', dates: '843–1204 AD', color: '#706090' },
+      { name: 'Late Byzantine', dates: '1261–1453 AD', color: '#605080' },
+    ],
   },
   {
     id: 'medieval',
