@@ -21,6 +21,21 @@ export const collectionWorks: CollectionWork[] = [
     movementId: "venus-figurines"
   },
   {
+    id: "chauvet-cave-paintings",
+    title: "Chauvet Cave Paintings",
+    artist: "Unknown",
+    artistId: null,
+    year: "c. 32,000 BC",
+    era: "Prehistoric Art",
+    eraColor: "#8B7355",
+    location: "Chauvet Cave, Ardèche, France",
+    medium: "Pigment on limestone",
+    image: "/timeline/chauvet.webp",
+    caption: "The oldest known paintings made by human hands — over 400 animal images painted with astonishing confidence and naturalism, predating Lascaux by 15,000 years. Discovered in 1994, they remain sealed to preserve them.",
+    civilizationId: "prehistoric",
+    movementId: "cave-painting"
+  },
+  {
     id: "lascaux-hall-of-bulls",
     title: "Lascaux Hall of the Bulls",
     artist: "Unknown",
