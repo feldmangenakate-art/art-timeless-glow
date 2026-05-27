@@ -168,6 +168,22 @@ export const collectionWorks: CollectionWork[] = [
     movementId: "classical"
   },
 
+  {
+    id: "winged-victory",
+    title: "Winged Victory of Samothrace",
+    artist: "Unknown",
+    artistId: null,
+    year: "c. 190 BC",
+    era: "Ancient Greece",
+    eraColor: "#6B8E9F",
+    location: "Louvre Museum, Paris",
+    medium: "Parian marble",
+    image: "/timeline/winged-victory.webp",
+    caption: "Nike, goddess of victory, lands on the prow of a warship — her wings still beating, drapery blown back by the sea wind. Found in 118 pieces on Samothrace in 1863, she has no head and no arms, and remains the most breathtaking object in the Louvre.",
+    civilizationId: "ancient-greece",
+    movementId: "hellenistic"
+  },
+
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // ROMAN EMPIRE
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
