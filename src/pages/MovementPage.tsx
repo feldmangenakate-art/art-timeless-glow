@@ -630,7 +630,7 @@ export default function MovementPage() {
             <div key={artist.id + artist.name} style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
               <div style={{ width: "52px", height: "52px", borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: `1px solid ${mc.color}30`, background: "rgba(42,30,16,0.06)" }}>
                 {ARTIST_PORTRAITS[artist.id] && (
-                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
                 )}
               </div>
               <div style={{ flex: 1, paddingTop: "4px" }}>
@@ -669,7 +669,7 @@ export default function MovementPage() {
             >
               <div style={{ width: "52px", height: "52px", borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: `1px solid ${mc.color}30`, background: "rgba(42,30,16,0.06)" }}>
                 {ARTIST_PORTRAITS[artist.id] && (
-                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
                 )}
               </div>
               <div style={{ flex: 1, paddingTop: "4px" }}>
@@ -738,7 +738,7 @@ export default function MovementPage() {
             >
               <div style={{ width: "52px", height: "52px", borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: `1px solid ${mc.color}30`, background: "rgba(42,30,16,0.06)" }}>
                 {ARTIST_PORTRAITS[artist.id] && (
-                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
                 )}
               </div>
               <div style={{ flex: 1, paddingTop: "4px" }}>
@@ -791,7 +791,7 @@ export default function MovementPage() {
             >
               <div style={{ width: "52px", height: "52px", borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: `1px solid ${mc.color}30`, background: "rgba(42,30,16,0.06)" }}>
                 {ARTIST_PORTRAITS[artist.id] && (
-                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+                  <img src={ARTIST_PORTRAITS[artist.id]} alt={artist.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
                 )}
               </div>
               <div style={{ flex: 1, paddingTop: "4px" }}>
