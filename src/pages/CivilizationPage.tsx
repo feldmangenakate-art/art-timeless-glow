@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import { CIVILIZATIONS } from "@/data/civilizations";
 import Footer from "@/components/Footer";
 import StickyBreadcrumb from "@/components/StickyBreadcrumb";
 import { RENAISSANCE_CIVILIZATION } from "@/data/renaissance-content";
@@ -17,6 +18,64 @@ import TimelineButton from "@/components/TimelineButton";
 const GOLD = "#C9A84C";
 const DARK = "#2A1E10";
 const MUTED = "rgba(42,30,16,0.45)";
+
+const toSlug = (name: string) =>
+  name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+function MovementsSection({ civId }: { civId: string }) {
+  const nav = useNavigate();
+  const civ = CIVILIZATIONS.find((c) => c.id === civId);
+  const movements = civ?.movements ?? [];
+  if (movements.length === 0) return null;
+  return (
+    <>
+      <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "3rem" }} />
+      <div style={{ marginBottom: "3rem" }}>
+        <p className="font-mono uppercase tracking-widest mb-5" style={{ fontSize: "9px", color: MUTED }}>
+          Art Movements
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+          {movements.map((m) => (
+            <button
+              key={m.name}
+              onClick={() => nav(`/movement/${toSlug(m.name)}`, { state: { civName: civ!.name, civId: civ!.id } })}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 16px",
+                background: "rgba(255,255,255,0.55)",
+                border: "1px solid rgba(42,30,16,0.10)",
+                borderRadius: "4px",
+                cursor: "pointer",
+                textAlign: "left",
+                transition: "border-color 0.15s, background 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = `${m.color}80`;
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.85)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(42,30,16,0.10)";
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.55)";
+              }}
+            >
+              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: m.color, flexShrink: 0 }} />
+              <span>
+                <span style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 600, fontSize: "0.8rem", color: DARK, display: "block", lineHeight: 1.2 }}>
+                  {m.name}
+                </span>
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: "9px", color: MUTED, letterSpacing: "0.06em" }}>
+                  {m.dates}
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default function CivilizationPage() {
   const { id } = useParams();
@@ -221,6 +280,9 @@ export default function CivilizationPage() {
             </div>
           </div>
 
+          {/* Movements */}
+          <MovementsSection civId="prehistoric" />
+
           {/* Thin divider */}
           <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "2.5rem" }} />
 
@@ -385,6 +447,9 @@ export default function CivilizationPage() {
             </div>
           </div>
 
+          {/* Movements */}
+          <MovementsSection civId={ac.id} />
+
           {/* Thin divider */}
           <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "2.5rem" }} />
 
@@ -509,6 +574,9 @@ export default function CivilizationPage() {
               </div>
             ))}
           </div>
+
+          {/* Movements */}
+          <MovementsSection civId="baroque" />
 
           {/* Thin divider */}
           <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "2.5rem" }} />
@@ -660,6 +728,9 @@ export default function CivilizationPage() {
             </div>
           </div>
 
+          {/* Movements */}
+          <MovementsSection civId="impressionism" />
+
           {/* Thin divider */}
           <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "2.5rem" }} />
 
@@ -780,6 +851,9 @@ export default function CivilizationPage() {
               </div>
             ))}
           </div>
+
+          {/* Movements */}
+          <MovementsSection civId={mc.id} />
 
           {/* Thin divider */}
           <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "2.5rem" }} />
@@ -905,6 +979,9 @@ export default function CivilizationPage() {
               </div>
             ))}
           </div>
+
+          {/* Movements */}
+          <MovementsSection civId="modern" />
 
           {/* Thin divider */}
           <div style={{ height: "1px", background: "rgba(42,30,16,0.08)", marginBottom: "2.5rem" }} />
@@ -1047,6 +1124,9 @@ export default function CivilizationPage() {
             </div>
           ))}
         </div>
+
+        {/* Movements */}
+        <MovementsSection civId="renaissance" />
 
       <Footer />
       <StickyBreadcrumb isSticky={isSticky} left={civStickyLeft} right={civPageTitle} />
