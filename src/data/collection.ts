@@ -903,14 +903,14 @@ export const collectionWorks: CollectionWork[] = [
     artist: "Vincent van Gogh",
     artistId: "vincent-van-gogh",
     year: "1885",
-    era: "Impressionism",
+    era: "Dutch Realism",
     eraColor: "#7a8c6e",
     location: "Van Gogh Museum, Amsterdam",
     medium: "Oil on canvas",
     image: "/timeline/potato-eaters.webp",
     caption: "Five peasants eating potatoes by lamplight — Van Gogh's first major work, deliberately ugly, the figures' hands as dark and rough as the earth they dig, insisting that honest labor deserves the dignity of art.",
     civilizationId: "impressionism",
-    movementId: "post-impressionism"
+    movementId: "realism"
   },
   {
     id: "large-bathers",
@@ -1189,21 +1189,6 @@ export const collectionWorks: CollectionWork[] = [
     caption: "A swirling golden tree fills the entire canvas, its branches dissolving into spirals and geometric patterns — Klimt's most decorative work and the centerpiece of the Stoclet Frieze, his greatest commission.",
     civilizationId: "modern-contemporary",
     movementId: "art-nouveau"
-  },
-  {
-    id: "brillo-boxes",
-    title: "Brillo Boxes",
-    artist: "Andy Warhol",
-    artistId: "andy-warhol",
-    year: "1964",
-    era: "Modern & Contemporary",
-    eraColor: "#7a8c6e",
-    location: "Various collections",
-    medium: "Silkscreen ink on wood",
-    image: "",
-    caption: "Exact replicas of supermarket shipping boxes stacked in a gallery — philosopher Arthur Danto asked: if Brillo boxes and Warhol's Brillo Boxes look identical, what makes one art and the other not? The question changed art theory forever.",
-    civilizationId: "modern-contemporary",
-    movementId: "pop-art"
   },
   {
     id: "mao-warhol",
