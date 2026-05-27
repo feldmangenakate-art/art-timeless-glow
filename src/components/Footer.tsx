@@ -13,33 +13,41 @@ const ROW1_LINKS = [
 const ROW2_LINKS = [
   { label: "About", to: "/about" },
   { label: "Legal", to: "/legal" },
+  { label: "Support the project", to: "https://ko-fi.com/artthroughtheages", external: true },
 ];
 
-function NavLink({ label, to }: { label: string; to: string }) {
+function NavLink({ label, to, external }: { label: string; to: string; external?: boolean }) {
+  const style = {
+    fontFamily: "'Raleway', system-ui, sans-serif",
+    fontWeight: 300,
+    fontSize: "10px",
+    letterSpacing: "0.12em",
+    textTransform: "uppercase" as const,
+    color: "rgba(201,168,76,0.38)",
+    textDecoration: "none",
+    padding: "2px 10px",
+    borderRadius: "2px",
+    transition: "color 0.15s, background 0.15s",
+  };
+  const onEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.color = GOLD;
+    e.currentTarget.style.background = "rgba(201,168,76,0.07)";
+  };
+  const onLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.color = "rgba(201,168,76,0.38)";
+    e.currentTarget.style.background = "transparent";
+  };
+
+  if (external) {
+    return (
+      <a href={to} target="_blank" rel="noopener noreferrer"
+        style={style} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        {label}
+      </a>
+    );
+  }
   return (
-    <Link
-      to={to}
-      style={{
-        fontFamily: "'Raleway', system-ui, sans-serif",
-        fontWeight: 300,
-        fontSize: "10px",
-        letterSpacing: "0.12em",
-        textTransform: "uppercase",
-        color: "rgba(201,168,76,0.38)",
-        textDecoration: "none",
-        padding: "2px 10px",
-        borderRadius: "2px",
-        transition: "color 0.15s, background 0.15s",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.color = GOLD;
-        (e.currentTarget as HTMLAnchorElement).style.background = "rgba(201,168,76,0.07)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLAnchorElement).style.color = "rgba(201,168,76,0.38)";
-        (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
-      }}
-    >
+    <Link to={to} style={style} onMouseEnter={onEnter} onMouseLeave={onLeave}>
       {label}
     </Link>
   );
@@ -48,93 +56,58 @@ function NavLink({ label, to }: { label: string; to: string }) {
 export default function Footer() {
   return (
     <footer style={{ background: "#1A1208", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
-      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0.85rem 2rem" }}>
+      <div style={{
+        maxWidth: "72rem",
+        margin: "0 auto",
+        padding: "0.85rem 2rem",
+        display: "grid",
+        gridTemplateColumns: "1fr auto 1fr",
+        alignItems: "center",
+        gap: "1rem",
+      }}>
 
-        {/* Row 1: main nav */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "0.45rem",
+        {/* Left: wordmark */}
+        <p style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontWeight: 700,
+          fontSize: "1rem",
+          letterSpacing: "0.03em",
+          color: GOLD,
         }}>
-          <nav style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+          Art Through the Ages
+        </p>
+
+        {/* Centre: two rows of links */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem" }}>
+          {/* Row 1 */}
+          <nav style={{ display: "flex", alignItems: "center" }}>
             {ROW1_LINKS.map((link) => (
               <NavLink key={link.to} {...link} />
             ))}
           </nav>
 
-          <p style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 700,
-            fontSize: "0.85rem",
-            letterSpacing: "0.03em",
-            color: `${GOLD}55`,
-            flexShrink: 0,
-          }}>
-            Art Through the Ages
-          </p>
-        </div>
+          <div style={{ height: "1px", width: "100%", background: "rgba(201,168,76,0.07)" }} />
 
-        {/* Divider */}
-        <div style={{ height: "1px", background: "rgba(201,168,76,0.07)", marginBottom: "0.45rem" }} />
-
-        {/* Row 2: About · Support · Legal · copyright */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "0.5rem",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0", flexWrap: "wrap" }}>
+          {/* Row 2 */}
+          <nav style={{ display: "flex", alignItems: "center" }}>
             {ROW2_LINKS.map((link) => (
               <NavLink key={link.to} {...link} />
             ))}
-
-            {/* Ko-fi link — same style as other footer links */}
-            <a
-              href="https://ko-fi.com/artthroughtheages"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: "'Raleway', system-ui, sans-serif",
-                fontWeight: 300,
-                fontSize: "10px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "rgba(201,168,76,0.38)",
-                textDecoration: "none",
-                padding: "2px 10px",
-                borderRadius: "2px",
-                transition: "color 0.15s, background 0.15s",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.color = GOLD;
-                el.style.background = "rgba(201,168,76,0.07)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.color = "rgba(201,168,76,0.38)";
-                el.style.background = "transparent";
-              }}
-            >
-              Support the project
-            </a>
-          </div>
-
-          <p style={{
-            fontFamily: "'Raleway', system-ui, sans-serif",
-            fontWeight: 300,
-            fontSize: "9px",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "rgba(201,168,76,0.18)",
-            flexShrink: 0,
-          }}>
-            © {new Date().getFullYear()} Art Through the Ages
-          </p>
+          </nav>
         </div>
+
+        {/* Right: copyright */}
+        <p style={{
+          fontFamily: "'Raleway', system-ui, sans-serif",
+          fontWeight: 300,
+          fontSize: "9px",
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: "rgba(201,168,76,0.18)",
+          textAlign: "right",
+        }}>
+          © {new Date().getFullYear()} Art Through the Ages
+        </p>
 
       </div>
     </footer>
