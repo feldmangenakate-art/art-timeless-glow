@@ -189,6 +189,7 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                     lineHeight: 1.75,
                     color: "rgba(42,30,16,0.8)",
                     margin: 0,
+                    marginTop: civ.movements.length === 0 ? "0.75rem" : 0,
                   }}
                 >
                   {civ.longDescription || civ.description}
