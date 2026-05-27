@@ -14,6 +14,7 @@ import MovementPage from "./pages/MovementPage";
 import CivilizationPage from "./pages/CivilizationPage";
 import GeographyPage from "./pages/GeographyPage";
 import CollectionDetailPage from "./pages/CollectionDetailPage";
+import AboutPage from "./pages/AboutPage";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/collection/:id" element={<CollectionDetailPage />} />
           <Route path="/movement/:id" element={<MovementPage />} />
           <Route path="/civilization/:id" element={<CivilizationPage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
