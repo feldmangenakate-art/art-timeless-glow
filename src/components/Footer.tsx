@@ -25,7 +25,7 @@ function NavLink({ label, to, external }: { label: string; to: string; external?
     textTransform: "uppercase" as const,
     color: "rgba(201,168,76,0.65)",
     textDecoration: "none",
-    padding: "2px 10px",
+    padding: "4px 10px",
     borderRadius: "2px",
     transition: "color 0.15s, background 0.15s",
   };
@@ -55,61 +55,80 @@ function NavLink({ label, to, external }: { label: string; to: string; external?
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#1A1208", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
-      <div style={{
-        maxWidth: "72rem",
-        margin: "0 auto",
-        padding: "1.5rem 2rem",
-        display: "grid",
-        gridTemplateColumns: "1fr auto 1fr",
-        alignItems: "center",
-        gap: "1rem",
-      }}>
+    <>
+      <style>{`
+        .footer-inner {
+          max-width: 72rem;
+          margin: 0 auto;
+          padding: 1.5rem 2rem;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          gap: 1rem;
+        }
+        .footer-wordmark {
+          font-family: 'Playfair Display', Georgia, serif;
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: 0.03em;
+          color: ${GOLD};
+          white-space: nowrap;
+        }
+        .footer-copyright {
+          font-family: 'Raleway', system-ui, sans-serif;
+          font-weight: 300;
+          font-size: 9px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(201,168,76,0.4);
+          text-align: right;
+        }
+        @media (max-width: 640px) {
+          .footer-inner {
+            grid-template-columns: 1fr;
+            justify-items: center;
+            text-align: center;
+            gap: 1rem;
+            padding: 1.5rem 1rem;
+          }
+          .footer-wordmark {
+            font-size: 0.9rem;
+          }
+          .footer-copyright {
+            text-align: center;
+          }
+        }
+      `}</style>
+      <footer style={{ background: "#1A1208", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
+        <div className="footer-inner">
 
-        {/* Left: wordmark */}
-        <p style={{
-          fontFamily: "'Playfair Display', Georgia, serif",
-          fontWeight: 700,
-          fontSize: "1rem",
-          letterSpacing: "0.03em",
-          color: GOLD,
-        }}>
-          Art Through the Ages
-        </p>
+          {/* Wordmark */}
+          <p className="footer-wordmark">Art Through the Ages</p>
 
-        {/* Centre: two rows of links */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem" }}>
-          {/* Row 1 */}
-          <nav style={{ display: "flex", alignItems: "center" }}>
-            {ROW1_LINKS.map((link) => (
-              <NavLink key={link.to} {...link} />
-            ))}
-          </nav>
+          {/* Centre: two rows of links */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3rem" }}>
+            <nav style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              {ROW1_LINKS.map((link) => (
+                <NavLink key={link.to} {...link} />
+              ))}
+            </nav>
 
-          <div style={{ height: "1px", width: "100%", background: "rgba(201,168,76,0.07)" }} />
+            <div style={{ height: "1px", width: "100%", background: "rgba(201,168,76,0.07)" }} />
 
-          {/* Row 2 */}
-          <nav style={{ display: "flex", alignItems: "center" }}>
-            {ROW2_LINKS.map((link) => (
-              <NavLink key={link.to} {...link} />
-            ))}
-          </nav>
+            <nav style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              {ROW2_LINKS.map((link) => (
+                <NavLink key={link.to} {...link} />
+              ))}
+            </nav>
+          </div>
+
+          {/* Copyright */}
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} Art Through the Ages
+          </p>
+
         </div>
-
-        {/* Right: copyright */}
-        <p style={{
-          fontFamily: "'Raleway', system-ui, sans-serif",
-          fontWeight: 300,
-          fontSize: "9px",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "rgba(201,168,76,0.4)",
-          textAlign: "right",
-        }}>
-          © {new Date().getFullYear()} Art Through the Ages
-        </p>
-
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }

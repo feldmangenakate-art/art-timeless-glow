@@ -186,7 +186,7 @@ His technical achievement is less celebrated than it should be, partly because t
     era: "Modern",
     eraColor: "#7a8c6e",
     portraitImage: "/artists/magritte.webp",
-    portraitWikimedia: "René_Magritte_en_juin_1922_(cropped)_(Remini_enhanced).jpg",
+    portraitWikimedia: "Portrait_en_buste_du_peintre_surréaliste_René_Magritte_(1898-1967)_le_18_octobre_1961_devant_une_de_ses_toiles,_PH19994.jpg",
     tagline: "The painter who proved that everything we see hides something else — and that a pipe is never just a pipe.",
 
     biography: `René Magritte was born in Lessines, a small industrial town in the Belgian province of Hainaut, the eldest of three sons of a tailor and a milliner. When he was thirteen, his mother Régina drowned herself in the Sambre river — she had attempted suicide several times before, and this time she succeeded. According to an account that circulated in his lifetime and that Magritte never fully confirmed or denied, he was present when her body was pulled from the water, her nightgown or dress wound around her face so that her features were obscured. Whether or not he witnessed this directly, the image of the veiled face — a face that should reveal but conceals, a face hidden by the very fabric that surrounds it — became the most persistent motif of his mature work. He studied at the Académie Royale des Beaux-Arts in Brussels from 1916 to 1918, where he absorbed the standard academic techniques without particular distinction.

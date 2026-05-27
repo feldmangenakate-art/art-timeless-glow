@@ -71,7 +71,7 @@ His will, when it was finally settled after years of legal dispute, revealed the
 
 The second stream is deeper and less easily traced: the idea that landscape — weather, water, light, the inhuman scale of natural forces — could be the vehicle for the most profound emotional and philosophical experiences that art could provide. Before Turner, landscape was a minor genre, a backdrop for historical or mythological scenes. After Turner, it was capable of expressing what religion had previously expressed: the sublime, the terrible, the overwhelming encounter with forces beyond human comprehension. That elevation of landscape — which runs through Friedrich, through the Hudson River School, through Cézanne's Mont Sainte-Victoire, through Rothko's color fields — is Turner's permanent contribution to the history of feeling.`,
 
-    masterworksIds: ["fighting-temeraire"],
+    masterworksIds: ["fighting-temeraire", "snow-storm-turner", "rain-steam-speed"],
     collectionIds: [],
   },
 

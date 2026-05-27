@@ -38,7 +38,7 @@ He was not a lovable rebel. The Roman police records — which survive — show 
 
 But Caravaggio's deeper influence was conceptual: the idea that sacred subjects should be shown with unflinching physical realism, that saints should look like the people who prayed to them, that the divine could enter the most ordinary human moment. That idea runs through Rembrandt, through Velázquez, through every religious painting that has the courage to be specific and human rather than generically beautiful. It also runs through cinema — the chiaroscuro lighting of film noir, of Kubrick, of Gordon Willis's work with Coppola — is Caravaggio's legacy to a medium he never imagined.`,
 
-    masterworksIds: ["calling-saint-matthew"],
+    masterworksIds: ["medusa-caravaggio", "judith-caravaggio", "calling-saint-matthew"],
     collectionIds: ["bacchus-caravaggio"],
   },
 
@@ -185,8 +185,8 @@ As a historical figure, she represents something even larger: the systematic exc
     movement: "Baroque",
     era: "Baroque",
     eraColor: "#B87040",
-    portraitImage: "/timeline/rubens.webp",
-    portraitWikimedia: "Peter_Paul_Rubens_-_Self-Portrait_-_Google_Art_Project.jpg",
+    portraitImage: "/artists/rubens.webp",
+    portraitWikimedia: "Peter_Paul_Rubens_-_Self-portrait_-_RH.S.180_-_Rubenshuis_(after_restoration).jpg",
     tagline: "The most prolific and powerful painter of the Baroque — diplomat, scholar, and master of flesh, myth, and motion.",
 
     biography: `Peter Paul Rubens was, by any measure, the most successful painter of the 17th century — and possibly of any century. Born in Siegen in 1577 to a Flemish father who had fled Antwerp during the religious wars, he returned to Antwerp as a child after his father's death and was raised Catholic. He trained under minor Flemish masters, was admitted to the Antwerp painters' guild in 1598, and then spent eight transformative years in Italy — in Mantua, in Rome, in Genoa, in Madrid — where he absorbed Titian, Michelangelo, Caravaggio, and the ancient sculptural tradition simultaneously.

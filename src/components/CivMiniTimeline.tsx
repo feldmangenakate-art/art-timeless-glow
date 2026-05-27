@@ -31,11 +31,11 @@ const CIV_STRIPS: Record<string, CivStrip> = {
     label: "Ancient Egypt",
     bandColor: "rgba(212,168,67,0.28)",
     movements: [
-      { id: "predynastic",     name: "Predynastic",  pct: 10, color: "#B8922A", above: true  },
-      { id: "old-kingdom",     name: "Old Kingdom",  pct: 28, color: "#D4A843", above: false },
-      { id: "middle-kingdom",  name: "Middle Kingdom",pct: 48, color: "#C49830", above: true  },
-      { id: "amarna",          name: "Amarna",        pct: 68, color: "#E8C050", above: false },
-      { id: "new-kingdom-egypt", name: "New Kingdom", pct: 86, color: "#C9A84C", above: true  },
+      { id: "predynastic",       name: "Predynastic",   pct:  8, color: "#B8922A", above: true  },
+      { id: "old-kingdom",       name: "Old Kingdom",   pct: 24, color: "#D4A843", above: false },
+      { id: "middle-kingdom",    name: "Middle Kingdom",pct: 44, color: "#C49830", above: true  },
+      { id: "new-kingdom-egypt", name: "New Kingdom",   pct: 62, color: "#C9A84C", above: false },
+      { id: "amarna",            name: "Amarna",        pct: 80, color: "#E8C050", above: true  },
     ],
   },
   greece: {

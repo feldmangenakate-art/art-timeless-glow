@@ -21,6 +21,21 @@ export const collectionWorks: CollectionWork[] = [
     movementId: "venus-figurines"
   },
   {
+    id: "chauvet-cave-paintings",
+    title: "Chauvet Cave Paintings",
+    artist: "Unknown",
+    artistId: null,
+    year: "c. 32,000 BC",
+    era: "Prehistoric Art",
+    eraColor: "#8B7355",
+    location: "Chauvet Cave, Ardèche, France",
+    medium: "Pigment on limestone",
+    image: "/timeline/chauvet.webp",
+    caption: "The oldest known paintings made by human hands — over 400 animal images painted with astonishing confidence and naturalism, predating Lascaux by 15,000 years. Discovered in 1994, they remain sealed to preserve them.",
+    civilizationId: "prehistoric",
+    movementId: "cave-painting"
+  },
+  {
     id: "lascaux-hall-of-bulls",
     title: "Lascaux Hall of the Bulls",
     artist: "Unknown",
@@ -166,6 +181,22 @@ export const collectionWorks: CollectionWork[] = [
     caption: "A 160-metre carved marble band depicting the Panathenaic procession — the finest example of Classical Greek relief sculpture, showing horsemen, gods, and citizens in a continuous narrative of extraordinary quality.",
     civilizationId: "ancient-greece",
     movementId: "classical"
+  },
+
+  {
+    id: "winged-victory",
+    title: "Winged Victory of Samothrace",
+    artist: "Unknown",
+    artistId: null,
+    year: "c. 190 BC",
+    era: "Ancient Greece",
+    eraColor: "#6B8E9F",
+    location: "Louvre Museum, Paris",
+    medium: "Parian marble",
+    image: "/timeline/winged-victory.webp",
+    caption: "Nike, goddess of victory, lands on the prow of a warship — her wings still beating, drapery blown back by the sea wind. Found in 118 pieces on Samothrace in 1863, she has no head and no arms, and remains the most breathtaking object in the Louvre.",
+    civilizationId: "ancient-greece",
+    movementId: "hellenistic"
   },
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -872,14 +903,14 @@ export const collectionWorks: CollectionWork[] = [
     artist: "Vincent van Gogh",
     artistId: "vincent-van-gogh",
     year: "1885",
-    era: "Impressionism",
+    era: "Dutch Realism",
     eraColor: "#7a8c6e",
     location: "Van Gogh Museum, Amsterdam",
     medium: "Oil on canvas",
     image: "/timeline/potato-eaters.webp",
     caption: "Five peasants eating potatoes by lamplight — Van Gogh's first major work, deliberately ugly, the figures' hands as dark and rough as the earth they dig, insisting that honest labor deserves the dignity of art.",
     civilizationId: "impressionism",
-    movementId: "post-impressionism"
+    movementId: "realism"
   },
   {
     id: "large-bathers",
@@ -1158,21 +1189,6 @@ export const collectionWorks: CollectionWork[] = [
     caption: "A swirling golden tree fills the entire canvas, its branches dissolving into spirals and geometric patterns — Klimt's most decorative work and the centerpiece of the Stoclet Frieze, his greatest commission.",
     civilizationId: "modern-contemporary",
     movementId: "art-nouveau"
-  },
-  {
-    id: "brillo-boxes",
-    title: "Brillo Boxes",
-    artist: "Andy Warhol",
-    artistId: "andy-warhol",
-    year: "1964",
-    era: "Modern & Contemporary",
-    eraColor: "#7a8c6e",
-    location: "Various collections",
-    medium: "Silkscreen ink on wood",
-    image: "",
-    caption: "Exact replicas of supermarket shipping boxes stacked in a gallery — philosopher Arthur Danto asked: if Brillo boxes and Warhol's Brillo Boxes look identical, what makes one art and the other not? The question changed art theory forever.",
-    civilizationId: "modern-contemporary",
-    movementId: "pop-art"
   },
   {
     id: "mao-warhol",
