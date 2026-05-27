@@ -23,7 +23,7 @@ function NavLink({ label, to, external }: { label: string; to: string; external?
     fontSize: "10px",
     letterSpacing: "0.12em",
     textTransform: "uppercase" as const,
-    color: "rgba(201,168,76,0.38)",
+    color: "rgba(201,168,76,0.65)",
     textDecoration: "none",
     padding: "2px 10px",
     borderRadius: "2px",
@@ -59,7 +59,7 @@ export default function Footer() {
       <div style={{
         maxWidth: "72rem",
         margin: "0 auto",
-        padding: "0.85rem 2rem",
+        padding: "1.5rem 2rem",
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",
         alignItems: "center",
@@ -103,7 +103,7 @@ export default function Footer() {
           fontSize: "9px",
           letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "rgba(201,168,76,0.18)",
+          color: "rgba(201,168,76,0.4)",
           textAlign: "right",
         }}>
           © {new Date().getFullYear()} Art Through the Ages
