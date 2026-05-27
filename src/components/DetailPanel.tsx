@@ -228,6 +228,31 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                           (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
                         }}
                       >
+                        {/* Thumbnail */}
+                        <div style={{
+                          width: "44px",
+                          height: "44px",
+                          borderRadius: "2px",
+                          overflow: "hidden",
+                          flexShrink: 0,
+                          background: "#E8E4DC",
+                        }}>
+                          {work.image ? (
+                            <img
+                              src={work.image}
+                              alt={work.title}
+                              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            />
+                          ) : (
+                            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="18" height="18" rx="2" stroke="rgba(42,30,16,0.25)" strokeWidth="1.5"/>
+                                <circle cx="8.5" cy="8.5" r="1.5" stroke="rgba(42,30,16,0.25)" strokeWidth="1.5"/>
+                                <path d="M21 15l-5-5L5 21" stroke="rgba(42,30,16,0.25)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </div>
+                          )}
+                        </div>
                         {/* Text */}
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{
