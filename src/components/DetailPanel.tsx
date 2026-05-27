@@ -296,24 +296,61 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                     Art Movements
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                    {civ.artMovementTags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
+                    {(() => {
+                      const linkedNames = new Set(civ.movements.map((m) => m.name));
+                      return civ.artMovementTags.map((tag) => {
+                        const hasPage = linkedNames.has(tag);
+                        const baseStyle = {
                           fontFamily: "'Raleway', system-ui, sans-serif",
                           fontWeight: 300,
                           fontSize: "10px",
                           padding: "3px 10px",
-                          border: "1px solid rgba(201,168,76,0.35)",
                           borderRadius: "2px",
-                          color: "rgba(201,168,76,0.75)",
-                          background: "rgba(201,168,76,0.04)",
                           letterSpacing: "0.04em",
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                          transition: "background 0.15s, border-color 0.15s, color 0.15s",
+                        };
+                        if (hasPage) {
+                          return (
+                            <button
+                              key={tag}
+                              onClick={() => navigate(`/movement/${toSlug(tag)}`, { state: { civName: civ.name, civId: civ.id } })}
+                              style={{
+                                ...baseStyle,
+                                border: `1px solid rgba(201,168,76,0.5)`,
+                                color: "rgba(201,168,76,0.9)",
+                                background: "rgba(201,168,76,0.06)",
+                                cursor: "pointer",
+                              }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLButtonElement).style.background = "rgba(201,168,76,0.14)";
+                                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(201,168,76,0.75)";
+                                (e.currentTarget as HTMLButtonElement).style.color = "#C9A84C";
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLButtonElement).style.background = "rgba(201,168,76,0.06)";
+                                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(201,168,76,0.5)";
+                                (e.currentTarget as HTMLButtonElement).style.color = "rgba(201,168,76,0.9)";
+                              }}
+                            >
+                              {tag} →
+                            </button>
+                          );
+                        }
+                        return (
+                          <span
+                            key={tag}
+                            style={{
+                              ...baseStyle,
+                              border: "1px solid rgba(201,168,76,0.2)",
+                              color: "rgba(201,168,76,0.45)",
+                              background: "transparent",
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               )}
