@@ -205,7 +205,7 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                     {civ.keyWorks.map((work, i) => (
                       <div
                         key={i}
-                        onClick={() => work.masterId && navigate(`/masterworks/${work.masterId}`)}
+                        onClick={() => work.collectionId && navigate(`/collection/${work.collectionId}`)}
                         style={{
                           display: "flex",
                           alignItems: "center",
@@ -214,11 +214,11 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                           background: "#FAF8F4",
                           border: "1px solid rgba(42,30,16,0.1)",
                           borderRadius: "2px",
-                          cursor: work.masterId ? "pointer" : "default",
+                          cursor: work.collectionId ? "pointer" : "default",
                           transition: "border-color 0.15s, box-shadow 0.15s",
                         }}
                         onMouseEnter={(e) => {
-                          if (work.masterId) {
+                          if (work.collectionId) {
                             (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(201,168,76,0.45)";
                             (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 8px rgba(42,30,16,0.07)";
                           }
@@ -234,7 +234,7 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                             fontFamily: "'Raleway', system-ui, sans-serif",
                             fontWeight: 400,
                             fontSize: "0.75rem",
-                            color: work.masterId ? DARK : "rgba(42,30,16,0.7)",
+                            color: work.collectionId ? DARK : "rgba(42,30,16,0.7)",
                             lineHeight: 1.3,
                             marginBottom: "2px",
                             whiteSpace: "nowrap",
@@ -253,7 +253,7 @@ export default function DetailPanel({ civ, onClose, onSelect }: DetailPanelProps
                           </p>
                         </div>
                         {/* Arrow for linked works */}
-                        {work.masterId && (
+                        {work.collectionId && (
                           <span style={{ fontFamily: "monospace", fontSize: "10px", color: "rgba(201,168,76,0.5)", flexShrink: 0 }}>
                             →
                           </span>
